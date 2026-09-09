@@ -1,0 +1,23 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      # Fails the build if src/tyranny.html was edited without rebuilding.
+      # This is what makes the published page and the source unable to drift.
+      - name: index.html is in sync with src/
+        run: node build.js --check
+
+      - name: rule and engine suites
+        run: node tests/run-all.js

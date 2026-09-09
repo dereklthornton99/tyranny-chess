@@ -60,6 +60,37 @@ needs is correct *terminal* scoring: stalemate 0, mate −MATE+ply, dead materia
 repetition 0. That is what lets it reach for a stalemate swindle when lost and refuse one
 when winning.
 
+## Working on it
+
+There is exactly **one authored file**: `src/tyranny.html`. Everything else is generated
+or supporting.
+
+```
+src/tyranny.html      the whole game - markup, CSS, rules engine, AI
+build.js              src/ -> index.html
+index.html            GENERATED. do not edit; your changes will be overwritten
+tests/                Node suites, run against src/ not against the built page
+```
+
+`src/tyranny.html` is deliberately a *fragment* — it has no `<!doctype>`, `<html>`,
+`<head>` or `<body>`. That is the shape the Claude Artifact host wants, since it supplies
+that skeleton itself. GitHub Pages wants a complete document, so `build.js` wraps the
+fragment into `index.html`.
+
+To change anything: edit `src/tyranny.html`, then
+
+```
+node tests/run-all.js     rebuilds index.html, re-extracts the engine, runs every suite
+git commit -am "..." && git push
+```
+
+Pages redeploys in about a minute.
+
+**The published page cannot drift from the source.** `node build.js --check` rebuilds in
+memory and exits non-zero if `index.html` does not match, and CI runs that check on every
+push. A commit that edits the source without rebuilding fails loudly instead of quietly
+shipping a stale page.
+
 ## Tests
 
 The page has a **Run tests** button that executes 48 rule checks in the browser. The same
