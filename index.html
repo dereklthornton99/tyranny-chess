@@ -103,24 +103,29 @@ body{
   font-size:clamp(24px,5.6vw,50px); line-height:1;
   background:var(--sq-l); transition:background .12s ease;
 }
-/* Size the pieces off the BOARD, not the viewport, so a phone gets the same
-   glyph-to-square ratio a desktop does. A square is 12.5% of the board, so
-   11cqw puts the glyph at 88% of its square at every size. */
-@supports (container-type:inline-size){
-  .board{container-type:inline-size}
-  .sq{font-size:11cqw}
-}
 .sq.d{background:var(--sq-d)}
 .sq:focus-visible{outline:2px solid var(--brass); outline-offset:-3px; z-index:4}
 .sq[disabled]{cursor:default}
 
+/* Pieces are inline SVG, not Unicode glyphs. U+265F (the pawn) is a standard
+   emoji, so iOS substitutes Apple Color Emoji for it, which ignores fill and
+   text-stroke and brings its own metrics. Drawing the pieces removes every
+   font dependency, so they render identically on any device. */
 .pc{
   position:relative; z-index:2; pointer-events:none;
-  -webkit-text-stroke:1.4px var(--pc-b-line); paint-order:stroke fill;
-  color:var(--pc-b);
-  filter:drop-shadow(0 1px 1px rgba(0,0,0,.28));
+  width:86%; height:86%; display:block;
+  fill:var(--pc-b); stroke:var(--pc-b-line);
+  stroke-width:1.25; stroke-linejoin:round; stroke-linecap:round;
+  filter:drop-shadow(0 1px 1.5px rgba(0,0,0,.3));
 }
-.pc.w{color:var(--pc-w); -webkit-text-stroke-color:var(--pc-w-line)}
+.pc.w{fill:var(--pc-w); stroke:var(--pc-w-line)}
+.pc .eye{fill:var(--pc-b-line); stroke:none}
+.pc.w .eye{fill:var(--pc-w-line); stroke:none}
+.pc .cut{fill:none}
+.pc.mini{display:inline-block; width:1.15em; height:1.15em; vertical-align:-.2em; stroke-width:1.8; filter:none}
+.pc.exec{fill:var(--brass); stroke:var(--brass)}
+.pc.exec .eye{fill:var(--surface)}
+.pc.big{width:46px; height:46px; stroke-width:1.4}
 
 /* last move */
 .sq.last::before{content:''; position:absolute; inset:0; background:var(--brass-wash); opacity:.55}
@@ -179,9 +184,7 @@ body{
 .tally-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px}
 .tally-head span{font-family:var(--f-mono); font-size:10.5px; letter-spacing:.08em; text-transform:uppercase; color:var(--ink-3)}
 .tally-head b{font-family:var(--f-display); font-size:14px; font-weight:600}
-.lost{margin-top:5px; min-height:24px; font-size:20px; line-height:1.15; letter-spacing:-.02em; color:var(--ink-3)}
-.lost i{font-style:normal}
-.lost i.self{color:var(--brass)}
+.lost{margin-top:5px; min-height:26px; font-size:19px; line-height:1.3; color:var(--ink-3)}
 .frat{font-family:var(--f-mono); font-size:11px; color:var(--ink-3); margin-top:3px}
 .frat b{color:var(--brass); font-weight:700}
 
@@ -398,7 +401,36 @@ var DIAG = [[-1,-1],[-1,1],[1,-1],[1,1]];
 var ORTH = [[-1,0],[1,0],[0,-1],[0,1]];
 var ALL8 = DIAG.concat(ORTH);
 var VALUE = {p:1,n:3,b:3,r:5,q:9,k:0};
-var GLYPH = {k:"♚",q:"♛",r:"♜",b:"♝",n:"♞",p:"♟"};
+/* Pieces are drawn, not typed. See the .pc CSS for why: the pawn codepoint is
+   an emoji on iOS, and an emoji font ignores fill, stroke and sizing.
+   Geometry is a 45x45 box with the piece standing on y=39.5. */
+var _BASE   = '<path d="M13 34.9h19l3 4.6H10z"/>';
+var _COLLAR = '<path d="M15.4 30.6h14.2l1.8 3.7H13.6z"/>';
+var PIECE_SVG = {
+  p: '<circle cx="22.5" cy="12.6" r="4.7"/>'
+   + '<path d="M18.6 17.7h7.8c-.3 1.1-.9 2-1.7 2.7 2.8 2.7 4.4 6.3 4.6 10.3H15.7c.2-4 1.8-7.6 4.6-10.3-.8-.7-1.4-1.6-1.7-2.7z"/>'
+   + _COLLAR + _BASE,
+  r: '<path d="M11.5 8h5.2v3.1h4.2V8h3.2v3.1h4.2V8h5.2v6.6l-2.9 2.6v10.9l2.9 2.6H11.5l2.9-2.6V17.2l-2.9-2.6z"/>'
+   + _COLLAR + _BASE,
+  b: '<circle cx="22.5" cy="7.7" r="2.3"/>'
+   + '<path d="M22.5 10.7c-4.7 3.4-7.3 7.7-7.3 11.8 0 3.6 2.1 6.6 5.2 8.3h4.2c3.1-1.7 5.2-4.7 5.2-8.3 0-4.1-2.6-8.4-7.3-11.8z"/>'
+   + '<path class="cut" d="M25.9 15.8l-4.3 5.3" stroke-width="1.7"/>'
+   + _COLLAR + _BASE,
+  n: '<path d="M28.1 7c2.5 1.5 4.4 3.6 5.5 6.3 1.2 2.9 1.7 6.4 1.7 10.4v6.9H15.3v-4.3c0-2.7.7-5.2 2.1-7.4l-5.5 2.8c-2 1-4.4.2-5.4-1.8s-.2-4.4 1.8-5.4l9.6-4.9c2.4-1.2 4.3-3.1 5.3-5.6z"/>'
+   + '<circle class="eye" cx="27.4" cy="15" r="1.4"/>'
+   + _COLLAR + _BASE,
+  q: '<circle cx="22.5" cy="6.4" r="2.1"/><circle cx="12.6" cy="9.4" r="2"/><circle cx="32.4" cy="9.4" r="2"/>'
+   + '<circle cx="7.3" cy="14.7" r="2"/><circle cx="37.7" cy="14.7" r="2"/>'
+   + '<path d="M8.7 16.6l2.7 13.9h22.2l2.7-13.9-5.6 4.8-3.2-9.9-4.6 8.7-4.6-8.7-3.2 9.9z"/>'
+   + _COLLAR + _BASE,
+  k: '<path class="cut" d="M22.5 4.6v7.4M19.3 7.9h6.4" stroke-width="2.2"/>'
+   + '<path d="M22.5 13.6c-1.6-2.3-4.7-3.1-7.1-1.8-2.5 1.3-3.5 4.4-2.3 6.9.6 1.3 1.7 2.3 2.9 2.8-1.5 2.7-2.4 5.8-2.6 9.1h17.2c-.2-3.3-1.1-6.4-2.6-9.1 1.2-.5 2.3-1.5 2.9-2.8 1.2-2.5.2-5.6-2.3-6.9-2.4-1.3-5.5-.5-7.1 1.8z"/>'
+   + _COLLAR + _BASE
+};
+function pieceSVG(piece, extra){
+  return '<svg class="pc ' + piece[0] + (extra ? " " + extra : "") +
+         '" viewBox="0 0 45 45" aria-hidden="true">' + PIECE_SVG[piece[1]] + '</svg>';
+}
 
 function startState(){
   var b = new Array(64).fill(null);
@@ -941,7 +973,7 @@ function render(){
     if(t) cls += (t.kind === "self") ? " hl-self" : (t.kind === "enemy" ? " hl-take" : " hl-move");
     if((checked || (overTxt && overTxt.indexOf("checkmate") >= 0)) && i === kSq) cls += " chk";
     el.className = cls;
-    el.innerHTML = p ? '<span class="pc ' + p[0] + '">' + GLYPH[p[1]] + "</span>" : "";
+    el.innerHTML = p ? pieceSVG(p) : "";
     el.setAttribute("aria-label", sqName(i) + (p ? " " + (p[0] === "w" ? "white" : "black") + " " + p[1] : " empty"));
   }
 
@@ -958,7 +990,7 @@ function render(){
     played.forEach(function(mv){
       if(mv.capPiece && mv.capPiece[0] === side){
         var own = (mv.kind === "self");
-        glyphs += '<i class="' + (own ? "self" : "") + '">' + GLYPH[mv.capPiece[1]] + "</i>";
+        glyphs += pieceSVG(mv.capPiece, own ? "mini exec" : "mini");
         pts += VALUE[mv.capPiece[1]];
       }
       if(mv.side === side && mv.kind === "self") frat++;
@@ -1041,7 +1073,7 @@ function renderPromo(){
   ["q","r","b","n"].forEach(function(t){
     var b = document.createElement("button");
     b.type = "button";
-    b.innerHTML = '<span class="pc ' + side + '">' + GLYPH[t] + "</span>";
+    b.innerHTML = pieceSVG(side + t, "big");
     b.onclick = function(){
       var m = pending.opts.filter(function(x){ return x.promo === t; })[0];
       pending = null;

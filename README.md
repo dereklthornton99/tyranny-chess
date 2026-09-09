@@ -81,8 +81,18 @@ where the 39 matches a hand derivation written out in the source.
   (up to ~2s) while it thinks.
 - There is **no networked multiplayer**. Two people play on one screen, or each plays
   the engine.
-- Mobile layout is proportional by construction (pieces are sized off the board, not the
-  viewport) but has not been tested on a physical phone.
+- Verified on desktop Chrome only. The iPad bug described below is fixed *by
+  construction* — there is no longer any font to substitute — but that fix has not
+  been re-tested on an iPad, and nothing here has been tested on Android.
+
+## A note on the pieces
+
+They are inline SVG rather than the Unicode chess characters, and that is deliberate.
+**U+265F (♟) became a standard emoji in 2018**, so iOS has a colour-emoji glyph for it and
+prefers that font. An emoji glyph ignores CSS `fill` and `-webkit-text-stroke` and carries
+its own metrics, so on iPad the pawns rendered black on *both* sides and larger than the
+back rank, while the other five chess codepoints — which are not emoji — rendered fine.
+Drawing the pieces removes the font dependency entirely.
 
 ## License
 
