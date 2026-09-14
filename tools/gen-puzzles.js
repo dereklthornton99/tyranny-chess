@@ -198,16 +198,22 @@ function sweep(opts) {
 
 /* ------------------------------ --inline ------------------------------ */
 
-function inline() {
-  if (!fs.existsSync(OUT_DEFAULT)) { console.error('inline: ' + OUT_DEFAULT + ' does not exist'); process.exit(1); }
-  const doc = fs.readFileSync(OUT_DEFAULT, 'utf8');
+/* srcPath/docPath are overridable so this path can be TESTED without editing the
+   real src/tyranny.html, which the generating seat is not allowed to touch.
+   Defaults are the real files, so the orchestrator's plain `--inline` is
+   unchanged. */
+function inline(srcPath, docPath) {
+  const SRCF = srcPath || SRC;
+  const DOCF = docPath || OUT_DEFAULT;
+  if (!fs.existsSync(DOCF)) { console.error('inline: ' + DOCF + ' does not exist'); process.exit(1); }
+  const doc = fs.readFileSync(DOCF, 'utf8');
   let src;
-  try { src = fs.readFileSync(SRC, 'utf8'); }
-  catch (e) { console.error('inline: cannot read ' + SRC); process.exit(1); }
+  try { src = fs.readFileSync(SRCF, 'utf8'); }
+  catch (e) { console.error('inline: cannot read ' + SRCF); process.exit(1); }
 
   const a = src.indexOf(MARK_BEGIN), b = src.indexOf(MARK_END);
   if (a < 0 || b < 0 || b < a) {
-    console.error('inline: PUZZLE-DATA markers not found in src/tyranny.html.');
+    console.error('inline: PUZZLE-DATA markers not found in ' + SRCF + '.');
     console.error('  Expected, on their own lines, in this order:');
     console.error('    ' + MARK_BEGIN);
     console.error('    ' + MARK_END);
@@ -215,11 +221,13 @@ function inline() {
     console.error('  added by the UI lane, and --inline is meant to run after that merge.');
     process.exit(1);
   }
-  const payload = MARK_BEGIN + '\n<script>window.TYRANNY_PUZZLES = ' +
-                  JSON.stringify(JSON.parse(doc)) + ';</script>\n' + MARK_END;
+  /* same "</" escape build.js uses: an unescaped one would close the tag early */
+  const json = JSON.stringify(JSON.parse(doc)).replace(/<\//g, '<\\/');
+  const payload = MARK_BEGIN + '\n<script>window.TYRANNY_PUZZLES = ' + json + ';</script>\n' + MARK_END;
   const next = src.slice(0, a) + payload + src.slice(b + MARK_END.length);
-  fs.writeFileSync(SRC, next, 'utf8');
-  console.log('inline: wrote ' + JSON.parse(doc).puzzles.length + ' puzzles into src/tyranny.html between the PUZZLE-DATA markers');
+  fs.writeFileSync(SRCF, next, 'utf8');
+  console.log('inline: wrote ' + JSON.parse(doc).puzzles.length + ' puzzles into ' +
+              path.basename(SRCF) + ' between the PUZZLE-DATA markers');
 }
 
 /* ------------------------------ cli ------------------------------ */
@@ -230,7 +238,10 @@ function arg(name, dflt) {
 }
 
 if (require.main === module) {
-  if (process.argv.includes('--inline')) { inline(); process.exit(0); }
+  if (process.argv.includes('--inline')) {
+    inline(arg('--src', null), arg('--out', null));
+    process.exit(0);
+  }
 
   const opts = {
     games: parseInt(arg('--games', '2500'), 10),

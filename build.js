@@ -18,7 +18,36 @@ const path = require('path');
 
 const SRC = path.join(__dirname, 'src', 'tyranny.html');
 const OUT = path.join(__dirname, 'index.html');
+const PUZZLES = path.join(__dirname, 'puzzles', 'puzzles.json');
 const SPLIT = '<div class="wrap">';
+
+/*
+ * The puzzle set is inlined into the head as `window.TYRANNY_PUZZLES`.
+ *
+ * CONTRACT, so the page never has to feature-detect: the global is ALWAYS
+ * defined. It is the parsed puzzles document when puzzles/puzzles.json exists,
+ * and `null` when it does not. A reader branches on null, never on undefined.
+ *
+ * Minified on purpose — the pretty-printed file is roughly twice the size and
+ * nothing reads index.html by hand.
+ *
+ * Note this widens what --check guards: index.html is now downstream of BOTH
+ * src/tyranny.html and puzzles/puzzles.json, so regenerating puzzles without
+ * rebuilding is caught the same way a source edit is.
+ */
+function puzzleScript() {
+  if (!fs.existsSync(PUZZLES)) {
+    return '<script>window.TYRANNY_PUZZLES = null;</script>';
+  }
+  const raw = fs.readFileSync(PUZZLES, 'utf8');
+  let doc;
+  try { doc = JSON.parse(raw); }
+  catch (e) { throw new Error('puzzles/puzzles.json is not valid JSON: ' + e.message); }
+  /* "</script>" inside the payload would close the tag early; no current field
+     can contain it, but the escape costs nothing and removes the class. */
+  const json = JSON.stringify(doc).replace(/<\//g, '<\\/');
+  return '<script>window.TYRANNY_PUZZLES = ' + json + ';</script>';
+}
 
 function build() {
   const src = fs.readFileSync(SRC, 'utf8').replace(/\r\n/g, '\n');
@@ -32,6 +61,7 @@ function build() {
     '<meta name="viewport" content="width=device-width, initial-scale=1">',
     '<style>html{color-scheme:light dark}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>',
     src.slice(0, cut).trim(),
+    puzzleScript(),
     '</head>',
     '<body>',
     src.slice(cut).trim(),
@@ -46,12 +76,15 @@ const out = build();
 if (process.argv.includes('--check')) {
   const cur = fs.existsSync(OUT) ? fs.readFileSync(OUT, 'utf8').replace(/\r\n/g, '\n') : '';
   if (cur !== out) {
-    console.error('index.html is STALE - it does not match a fresh build of src/tyranny.html.');
+    console.error('index.html is STALE - it does not match a fresh build of');
+    console.error('src/tyranny.html + puzzles/puzzles.json.');
     console.error('Fix:  node build.js   then commit the result.');
     process.exit(1);
   }
-  console.log('index.html matches src/tyranny.html');
+  console.log('index.html matches src/tyranny.html + puzzles/puzzles.json');
 } else {
   fs.writeFileSync(OUT, out, 'utf8');
-  console.log('built index.html (' + Buffer.byteLength(out) + ' bytes) from src/tyranny.html');
+  const n = fs.existsSync(PUZZLES) ? (JSON.parse(fs.readFileSync(PUZZLES, 'utf8')).puzzles || []).length : 0;
+  console.log('built index.html (' + Buffer.byteLength(out) + ' bytes) from src/tyranny.html, ' +
+              n + ' puzzles inlined as window.TYRANNY_PUZZLES');
 }
