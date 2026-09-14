@@ -208,6 +208,28 @@ body{
 .ai-line b{color:var(--brass); font-weight:700}
 .ai-line:empty{display:none}
 .state.think{color:var(--brass)}
+
+/* ---------- puzzle mode ---------- */
+.puz{border:1px solid var(--line); background:var(--surface); border-radius:3px; padding:11px 12px}
+.puz.live{border-color:var(--brass)}
+.puz-note{margin:7px 0 0; font-size:12px; color:var(--ink-3); line-height:1.45}
+.puz-note.warn{color:var(--carmine)}
+.puz-head{display:flex; align-items:baseline; justify-content:space-between; gap:8px}
+.puz-fam{
+  font-family:var(--f-mono); font-size:10px; letter-spacing:.09em; text-transform:uppercase;
+  color:var(--brass); font-weight:700;
+}
+.puz-prog{font-family:var(--f-mono); font-size:11px; color:var(--ink-3); font-variant-numeric:tabular-nums}
+.puz-diff{display:flex; gap:3px; margin:6px 0 8px}
+.puz-diff i{width:16px; height:3px; border-radius:2px; background:var(--line); display:block}
+.puz-diff i.on{background:var(--brass)}
+.puz-say{font-size:13px; line-height:1.5; color:var(--ink-2); min-height:34px}
+.puz-say b{color:var(--ink); font-weight:600}
+.puz-say.good{color:var(--brass)}
+.puz-say.bad{color:var(--carmine)}
+.puz-acts{display:grid; grid-template-columns:1fr 1fr; gap:7px; margin-top:9px}
+.puz-acts .wide{grid-column:1/-1}
+.seg.locked{opacity:.4; pointer-events:none}
 .btn{
   font-family:var(--f-ui); font-size:12.5px; font-weight:500;
   padding:9px 10px; border:1px solid var(--line); background:var(--surface); color:var(--ink);
@@ -307,6 +329,27 @@ h3{
         <button class="btn" type="button" data-level="easy">Easy</button>
         <button class="btn on" type="button" data-level="medium">Medium</button>
         <button class="btn" type="button" data-level="hard">Hard</button>
+      </div>
+
+      <div class="seg-label">Puzzles</div>
+      <div class="puz" id="puzPanel">
+        <div class="puz-off" id="puzOff">
+          <button class="btn wide" id="puzStart" type="button">Start puzzles</button>
+          <p class="puz-note" id="puzNote">Positions where executing your own piece is the answer.</p>
+        </div>
+        <div class="puz-on" id="puzOn" hidden>
+          <div class="puz-head">
+            <span class="puz-fam" id="puzFam">escape</span>
+            <span class="puz-prog" id="puzProg">1 / 8</span>
+          </div>
+          <div class="puz-diff" id="puzDiff" aria-label="difficulty"></div>
+          <div class="puz-say" id="puzSay">Find the move.</div>
+          <div class="puz-acts">
+            <button class="btn" id="puzReveal" type="button">Reveal</button>
+            <button class="btn" id="puzNext" type="button">Next</button>
+            <button class="btn wide" id="puzQuit" type="button">Leave puzzles</button>
+          </div>
+        </div>
       </div>
 
       <div class="tallies">
@@ -863,6 +906,10 @@ function think(S, opts){
 /* ============================================================
    GAME / UI
    ============================================================ */
+
+/* PUZZLE-DATA-BEGIN */
+/* PUZZLE-DATA-END */
+
 var hist    = [startState()];
 var played  = [];                 // {san, kind, side, capPiece}
 var sel     = -1;
@@ -877,7 +924,19 @@ var mode     = "hh";            // hh = two players, hw = human is White, hb = h
 var level    = "medium";
 var LEVELS   = { easy:{ms:150,depth:2}, medium:{ms:600,depth:6}, hard:{ms:1800,depth:9} };
 var thinking = false, aiToken = 0, aiInfo = null;
-function aiSide(){ return mode==="hw" ? "b" : mode==="hb" ? "w" : null; }
+
+/* Puzzle mode. `puz` is null unless a puzzle is loaded, and that null check is
+   the whole on/off switch — every puzzle behaviour below is gated on it.
+   Data arrives ONLY as window.TYRANNY_PUZZLES, injected at build time into the
+   marker region above. There is no fetch: the page must work from file:// and
+   as a single-file Artifact, where fetch cannot reach a sibling JSON. */
+var puz = null;
+var puzPrevSelfCap = null;    // selfCap is restored to this on leaving
+
+function aiSide(){
+  if(puz) return null;        // a puzzle is never played against the engine
+  return mode==="hw" ? "b" : mode==="hb" ? "w" : null;
+}
 function cancelAI(){ aiToken++; thinking = false; }
 
 var boardEl = document.getElementById("board");
@@ -935,6 +994,9 @@ function onSquare(e){
 }
 
 function doMove(m){
+  // In puzzle mode the attempt is judged BEFORE it is applied, so a wrong move
+  // never lands on the board and the player simply retries.
+  if(puz && !puzJudge(m)){ render(); return; }
   var S = cur();
   played.push({ san: san(S, m, selfCap), kind: m.kind, side: S.turn, capPiece: m.cap || null });
   hist.push(apply(S, m));
@@ -1015,8 +1077,19 @@ function render(){
     log.scrollTop = log.scrollHeight;
   }
 
-  document.getElementById("undoBtn").disabled = hist.length < 2;
+  document.getElementById("undoBtn").disabled = puz ? true : (hist.length < 2);
   document.getElementById("aiLine").innerHTML = aiInfo ? aiLineText(aiInfo) : "";
+
+  if(puz){
+    puzRenderPanel();
+    if(puz.state === "solved" && !puz.said){ puz.said = true; puzAfterSolve(); }
+    else if(puz.state === "open" && !puz.tries){
+      puzSay((cur().turn === "w" ? "White" : "Black") + " to move. Find the move." +
+             (puz.warn ? "<br><span style=\"color:var(--carmine)\">" + puz.warn + "</span>" : ""));
+    }
+    if(puz.state !== "solved") puz.said = false;
+  }
+
   renderPromo();
   scheduleAI();
 }
@@ -1148,6 +1221,214 @@ document.getElementById("themeBtn").onclick = function(){
 document.addEventListener("keydown", function(e){
   if(e.key === "Escape"){ sel = -1; targets = []; pending = null; render(); }
 });
+
+/* ---------- puzzle mode ----------
+   Reads window.TYRANNY_PUZZLES, which the build injects into the marker region
+   near the top of this section. Absent is a normal state, not an error: the
+   panel says so and the Start button stays disabled. Nothing here throws when
+   the global is missing, which is the condition the page is in right now until
+   the build-time injection lands. */
+
+var PUZ_STORE = "tyranny.puzzles.solved.v1";
+
+/* Every field this reader consumes, and what it does without it. Kept as data
+   so a schema drift shows up as a named missing field rather than a crash. */
+function puzRead(){
+  var raw = (typeof window !== "undefined") ? window.TYRANNY_PUZZLES : null;
+  if(!raw) return { ok:false, why:"no-global", list:[] };
+  var list = Array.isArray(raw) ? raw : (Array.isArray(raw.puzzles) ? raw.puzzles : null);
+  if(!list) return { ok:false, why:"no-puzzles-array", list:[] };
+  var good = [], bad = 0;
+  for(var i=0;i<list.length;i++){
+    var p = list[i];
+    // fen and a non-empty solutions ARRAY are the only hard requirements
+    if(!p || typeof p.fen !== "string" || !Array.isArray(p.solutions) || !p.solutions.length){ bad++; continue; }
+    good.push(p);
+  }
+  return { ok:good.length > 0, why: good.length ? "" : "no-usable-puzzles",
+           list:good, skipped:bad, schema: raw && raw.schema };
+}
+
+function puzSolvedSet(){
+  try { return JSON.parse(localStorage.getItem(PUZ_STORE) || "{}") || {}; }
+  catch(e){ return {}; }     // private mode, blocked storage — a convenience, never load-bearing
+}
+function puzMarkSolved(id){
+  if(!id) return;
+  try { var s = puzSolvedSet(); s[id] = 1; localStorage.setItem(PUZ_STORE, JSON.stringify(s)); }
+  catch(e){}
+}
+
+/* An attempt matches if it equals ANY entry in solutions. For an ESCAPE every
+   entry is correct and that is the lesson of the family — never pick one. */
+function puzMatches(p, m){
+  var mp = m.promo || null;
+  for(var i=0;i<p.solutions.length;i++){
+    var s = p.solutions[i];
+    if(s && s.from === m.from && s.to === m.to && (s.promo || null) === mp) return true;
+  }
+  return false;
+}
+
+function puzCurrent(){ return puz ? puz.list[puz.i] : null; }
+
+function puzLoad(i){
+  var p = puz.list[i];
+  puz.i = i;
+  puz.state = "open";          // open | solved | revealed
+  puz.tries = 0;
+  resetTo(fen(p.fen));
+  // Side to move comes from the FEN itself; sideToMove is advisory, so disagreement
+  // is worth surfacing rather than silently trusting either one.
+  if(p.sideToMove && cur().turn !== p.sideToMove){
+    puz.warn = "fen says " + cur().turn + " to move, sideToMove says " + p.sideToMove;
+  } else { puz.warn = ""; }
+  var wantFlip = (cur().turn === "b");
+  if(flipped !== wantFlip){ flipped = wantFlip; layout(); }
+  render();
+}
+
+function puzEnter(){
+  var r = puzRead();
+  if(!r.ok) return;
+  puzPrevSelfCap = selfCap;
+  selfCap = true;                       // every puzzle is unsolvable with it off
+  puz = { list:r.list, i:0, state:"open", tries:0, warn:"", solved:puzSolvedSet() };
+  puzSyncControls();
+  puzLoad(0);
+}
+
+function puzLeave(){
+  puz = null;
+  if(puzPrevSelfCap !== null){ selfCap = puzPrevSelfCap; puzPrevSelfCap = null; }
+  puzSyncControls();
+  resetTo(startState());
+  if(flipped){ flipped = false; layout(); }
+  render();
+}
+
+/* Lock the controls a puzzle cannot survive: self-capture OFF makes every
+   puzzle unsolvable with no error, and opponent/strength are meaningless here. */
+function puzSyncControls(){
+  var live = !!puz;
+  document.getElementById("puzPanel").className = "puz" + (live ? " live" : "");
+  document.getElementById("puzOff").hidden = live;
+  document.getElementById("puzOn").hidden = !live;
+  document.getElementById("modeSeg").className = "seg" + (live ? " locked" : "");
+  document.getElementById("levelSeg").className = "seg" + (live ? " locked" : "");
+  var rb = document.getElementById("ruleBtn");
+  rb.disabled = live;
+  rb.textContent = "Self-capture: " + (selfCap ? "ON" : "OFF") + (live ? " (locked)" : "");
+  rb.className = "btn wide" + (selfCap ? " on" : "");
+  ["newBtn","demoBtn","demo2Btn","undoBtn"].forEach(function(id){
+    document.getElementById(id).disabled = live;
+  });
+}
+
+function puzSay(msg, cls){
+  var el = document.getElementById("puzSay");
+  el.innerHTML = msg;
+  el.className = "puz-say" + (cls ? " " + cls : "");
+}
+
+function puzRenderPanel(){
+  if(!puz) return;
+  var p = puzCurrent();
+  document.getElementById("puzFam").textContent = p.family || "puzzle";
+  var solvedN = 0;
+  for(var i=0;i<puz.list.length;i++) if(puz.solved[puz.list[i].id]) solvedN++;
+  document.getElementById("puzProg").textContent =
+    (puz.i + 1) + " / " + puz.list.length + (solvedN ? "  · " + solvedN + " solved" : "");
+  var d = +p.difficulty || 0, bars = "";
+  for(var k=1;k<=3;k++) bars += '<i class="' + (k <= d ? "on" : "") + '"></i>';
+  document.getElementById("puzDiff").innerHTML = bars;
+  document.getElementById("puzDiff").title = "difficulty " + (d || "?") + " of 3";
+  document.getElementById("puzNext").disabled = (puz.state === "open");
+  document.getElementById("puzReveal").disabled = (puz.state !== "open");
+}
+
+/* Called from doMove BEFORE the move is applied. Returns true to let it through. */
+function puzJudge(m){
+  var p = puzCurrent();
+  if(!p) return true;
+  if(puz.state !== "open") return false;          // already settled; ignore further input
+  if(puzMatches(p, m)){
+    puz.state = "solved";
+    puzMarkSolved(p.id);
+    puz.solved[p.id] = 1;
+    return true;                                   // let it land so the board shows it
+  }
+  puz.tries++;
+  var alt = p.solutions.length > 1
+    ? " There are " + p.solutions.length + " correct answers here."
+    : "";
+  puzSay("<b>Not it.</b> That move is legal, but it is not the idea." + alt + " Try again.", "bad");
+  sel = -1; targets = [];
+  return false;                                    // never applied, never auto-advanced
+}
+
+function puzAfterSolve(){
+  var p = puzCurrent();
+  var n = p.solutions.length;
+  var extra = n > 1
+    ? " All " + n + " answers are correct here — every one of them is an execution, and that is the point."
+    : "";
+  puzSay("<b>That is it.</b> " + (p.rationale || "") + extra, "good");
+}
+
+function puzReveal(){
+  var p = puzCurrent();
+  if(!p || puz.state !== "open") return;
+  puz.state = "revealed";
+  var names = [];
+  for(var i=0;i<p.solutions.length;i++){
+    var s = p.solutions[i];
+    names.push(sqName(s.from) + "→" + sqName(s.to) + (s.promo ? "=" + s.promo.toUpperCase() : ""));
+  }
+  var san = Array.isArray(p.solutionsSan) && p.solutionsSan.length ? p.solutionsSan.join(", ") : names.join(", ");
+  puzSay("<b>Answer:</b> " + san + " <span style=\"opacity:.7\">(" + names.join(", ") + ")</span><br>" +
+         (p.rationale || ""), "");
+  render();
+}
+
+function puzNext(){
+  if(!puz) return;
+  if(puz.i + 1 < puz.list.length){ puzLoad(puz.i + 1); }
+  else {
+    var solvedN = 0;
+    for(var i=0;i<puz.list.length;i++) if(puz.solved[puz.list[i].id]) solvedN++;
+    puz.state = "done";
+    puzSay("<b>End of the set.</b> " + solvedN + " of " + puz.list.length +
+           " solved. Leave puzzles to go back to a normal game.", "good");
+    document.getElementById("puzNext").disabled = true;
+    document.getElementById("puzReveal").disabled = true;
+  }
+}
+
+/* Panel wiring. Degrades to a disabled Start button with a stated reason when
+   the global has not been injected yet. */
+(function puzInit(){
+  var r = puzRead();
+  var btn = document.getElementById("puzStart");
+  var note = document.getElementById("puzNote");
+  if(!r.ok){
+    btn.disabled = true;
+    note.className = "puz-note warn";
+    note.textContent = r.why === "no-global"
+      ? "No puzzle set is built into this page yet (window.TYRANNY_PUZZLES is absent), so puzzle mode is unavailable. The rest of the game is unaffected."
+      : r.why === "no-puzzles-array"
+        ? "A puzzle set was found but it has no puzzles array, so nothing can be loaded."
+        : "A puzzle set was found but none of its entries carry a fen and a non-empty solutions array.";
+  } else {
+    note.textContent = r.list.length + " position" + (r.list.length === 1 ? "" : "s") +
+      " where executing your own piece is the answer." +
+      (r.skipped ? " (" + r.skipped + " skipped as malformed.)" : "");
+  }
+  btn.onclick = puzEnter;
+  document.getElementById("puzQuit").onclick = puzLeave;
+  document.getElementById("puzNext").onclick = puzNext;
+  document.getElementById("puzReveal").onclick = puzReveal;
+})();
 
 /* ---------- self-test ---------- */
 function fen(str){                             // minimal FEN -> state, for test positions
