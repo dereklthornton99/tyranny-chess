@@ -1,0 +1,128 @@
+{
+  "schema": 1,
+  "generatedAt": "2026-09-14T17:43:45Z",
+  "generator": {
+    "strategy": "hand-verified fixture (orchestrator pre-run)",
+    "checkBias": null,
+    "games": 0,
+    "positionsVisited": 0,
+    "seed": null
+  },
+  "counts": {
+    "escape": 1,
+    "tactical": 3
+  },
+  "puzzles": [
+    {
+      "id": "esc-0001",
+      "family": "escape",
+      "fen": "2k5/2p3p1/2R5/r1K5/4rp1p/1PP5/5P1P/1R6 w - - 2 27",
+      "sideToMove": "w",
+      "legalMoveCount": 1,
+      "soleLegalMove": true,
+      "solution": {
+        "from": 26,
+        "to": 18,
+        "promo": null
+      },
+      "solutionUci": "c5c6",
+      "solutionSan": "K⊗c6",
+      "decoys": [],
+      "rationale": "In check with exactly one legal move, and it is an execution of your own piece.",
+      "difficulty": 1
+    },
+    {
+      "id": "tac-0001",
+      "family": "tactical",
+      "fen": "6q1/1r1p2b1/n4k1n/2Q3Np/1PB2B2/5R2/8/4K2R w K - 4 21",
+      "sideToMove": "w",
+      "legalMoveCount": 71,
+      "soleLegalMove": false,
+      "solution": {
+        "from": 26,
+        "to": 30,
+        "promo": null
+      },
+      "solutionUci": "c5g5",
+      "solutionSan": "Q⊗g5#",
+      "decoys": [
+        {
+          "uci": "c5b6",
+          "san": "Qb6+"
+        },
+        {
+          "uci": "c5a7",
+          "san": "Qa7"
+        },
+        {
+          "uci": "c5d6",
+          "san": "Qd6+"
+        }
+      ],
+      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "difficulty": 3
+    },
+    {
+      "id": "tac-0002",
+      "family": "tactical",
+      "fen": "3k4/8/r5p1/6P1/3n1P2/4q3/4B3/b2K4 b - - 2 40",
+      "sideToMove": "b",
+      "legalMoveCount": 48,
+      "soleLegalMove": false,
+      "solution": {
+        "from": 16,
+        "to": 56,
+        "promo": null
+      },
+      "solutionUci": "a6a1",
+      "solutionSan": "R⊗a1#",
+      "decoys": [
+        {
+          "uci": "d8c7",
+          "san": "Kc7"
+        },
+        {
+          "uci": "d8e7",
+          "san": "Ke7"
+        },
+        {
+          "uci": "d8d7",
+          "san": "Kd7"
+        }
+      ],
+      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "difficulty": 3
+    },
+    {
+      "id": "tac-0003",
+      "family": "tactical",
+      "fen": "8/1q3rp1/8/2r2RBp/2Q5/k7/P3P3/R2K1B2 w - - 0 29",
+      "sideToMove": "w",
+      "legalMoveCount": 52,
+      "soleLegalMove": false,
+      "solution": {
+        "from": 56,
+        "to": 48,
+        "promo": null
+      },
+      "solutionUci": "a1a2",
+      "solutionSan": "R⊗a2#",
+      "decoys": [
+        {
+          "uci": "f5f6",
+          "san": "Rf6"
+        },
+        {
+          "uci": "f5f7",
+          "san": "Rxf7"
+        },
+        {
+          "uci": "f5f4",
+          "san": "Rf4"
+        }
+      ],
+      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "difficulty": 3
+    }
+  ]
+}
