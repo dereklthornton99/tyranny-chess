@@ -1,127 +1,289 @@
 {
-  "schema": 1,
-  "generatedAt": "2026-09-14T17:43:45Z",
+  "schema": 2,
+  "generatedAt": "2026-09-14T18:37:04Z",
   "generator": {
-    "strategy": "hand-verified fixture (orchestrator pre-run)",
-    "checkBias": null,
-    "games": 0,
-    "positionsVisited": 0,
-    "seed": null
+    "strategy": "check-biased-playout, orchestrator pre-run fixture",
+    "checkBias": 0.5,
+    "games": 900,
+    "positionsVisited": 4321,
+    "seed": 20260914
   },
   "counts": {
-    "escape": 1,
-    "tactical": 3
+    "escape": 4,
+    "tactical": 4
   },
   "puzzles": [
     {
       "id": "esc-0001",
       "family": "escape",
-      "fen": "2k5/2p3p1/2R5/r1K5/4rp1p/1PP5/5P1P/1R6 w - - 2 27",
+      "fen": "R6k/6pp/8/8/8/8/8/6K1 b - - 0 1",
+      "sideToMove": "b",
+      "legalMoveCount": 2,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 0,
+      "solutions": [
+        {
+          "from": 7,
+          "to": 14,
+          "promo": null
+        },
+        {
+          "from": 7,
+          "to": 15,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h8g7",
+        "h8h7"
+      ],
+      "solutionsSan": [
+        "K⊗g7",
+        "K⊗h7"
+      ],
+      "decoys": [],
+      "rationale": "Checkmate under standard rules. Only an execution of your own piece survives.",
+      "difficulty": 1
+    },
+    {
+      "id": "esc-0002",
+      "family": "escape",
+      "fen": "2k1Qb1r/prpp2Rp/5p2/8/1P6/2N2N2/P1PP1P2/R3KB2 b Q - 2 10",
+      "sideToMove": "b",
+      "legalMoveCount": 2,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 0,
+      "solutions": [
+        {
+          "from": 2,
+          "to": 9,
+          "promo": null
+        },
+        {
+          "from": 2,
+          "to": 10,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c8b7",
+        "c8c7"
+      ],
+      "solutionsSan": [
+        "K⊗b7",
+        "K⊗c7"
+      ],
+      "decoys": [],
+      "rationale": "Checkmate under standard rules. Only an execution of your own piece survives.",
+      "difficulty": 1
+    },
+    {
+      "id": "esc-0003",
+      "family": "escape",
+      "fen": "1n6/2p1k1p1/B4N2/R6r/p2KP1P1/N1P5/1P2bb2/R7 w - - 8 29",
       "sideToMove": "w",
+      "legalMoveCount": 2,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 0,
+      "solutions": [
+        {
+          "from": 35,
+          "to": 42,
+          "promo": null
+        },
+        {
+          "from": 35,
+          "to": 36,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "d4c3",
+        "d4e4"
+      ],
+      "solutionsSan": [
+        "K⊗c3",
+        "K⊗e4"
+      ],
+      "decoys": [],
+      "rationale": "Checkmate under standard rules. Only an execution of your own piece survives.",
+      "difficulty": 1
+    },
+    {
+      "id": "esc-0004",
+      "family": "escape",
+      "fen": "rnb1Q1kr/pppp1ppp/8/8/8/2B5/PPP2PPP/RN2KBNR b KQ - 1 5",
+      "sideToMove": "b",
       "legalMoveCount": 1,
       "soleLegalMove": true,
-      "solution": {
-        "from": 26,
-        "to": 18,
-        "promo": null
-      },
-      "solutionUci": "c5c6",
-      "solutionSan": "K⊗c6",
+      "standardLegalMoveCount": 0,
+      "solutions": [
+        {
+          "from": 6,
+          "to": 15,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "g8h7"
+      ],
+      "solutionsSan": [
+        "K⊗h7"
+      ],
       "decoys": [],
-      "rationale": "In check with exactly one legal move, and it is an execution of your own piece.",
+      "rationale": "Checkmate under standard rules. Only an execution of your own piece survives.",
       "difficulty": 1
     },
     {
       "id": "tac-0001",
       "family": "tactical",
-      "fen": "6q1/1r1p2b1/n4k1n/2Q3Np/1PB2B2/5R2/8/4K2R w K - 4 21",
-      "sideToMove": "w",
-      "legalMoveCount": 71,
+      "fen": "6nr/1pp1k3/8/3Bb2p/1N3P2/6P1/1nPP1q2/R1QR3K b - - 3 20",
+      "sideToMove": "b",
+      "legalMoveCount": 45,
       "soleLegalMove": false,
-      "solution": {
-        "from": 26,
-        "to": 30,
-        "promo": null
-      },
-      "solutionUci": "c5g5",
-      "solutionSan": "Q⊗g5#",
-      "decoys": [
+      "standardLegalMoveCount": 40,
+      "solutions": [
         {
-          "uci": "c5b6",
-          "san": "Qb6+"
-        },
-        {
-          "uci": "c5a7",
-          "san": "Qa7"
-        },
-        {
-          "uci": "c5d6",
-          "san": "Qd6+"
+          "from": 7,
+          "to": 31,
+          "promo": null
         }
       ],
-      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "solutionsUci": [
+        "h8h5"
+      ],
+      "solutionsSan": [
+        "R⊗h5#"
+      ],
+      "decoys": [
+        {
+          "uci": "g8f6",
+          "san": "Nf6"
+        },
+        {
+          "uci": "g8h6",
+          "san": "Nh6"
+        },
+        {
+          "uci": "h8h7",
+          "san": "Rh7"
+        }
+      ],
+      "rationale": "Executing your own piece mates at once, and no ordinary move forces mate within two.",
       "difficulty": 3
     },
     {
       "id": "tac-0002",
       "family": "tactical",
-      "fen": "3k4/8/r5p1/6P1/3n1P2/4q3/4B3/b2K4 b - - 2 40",
+      "fen": "3k2nr/1pp5/8/3Nb2p/n4P2/3P2P1/2P2q2/R1QR3K b - - 0 22",
       "sideToMove": "b",
-      "legalMoveCount": 48,
+      "legalMoveCount": 45,
       "soleLegalMove": false,
-      "solution": {
-        "from": 16,
-        "to": 56,
-        "promo": null
-      },
-      "solutionUci": "a6a1",
-      "solutionSan": "R⊗a1#",
+      "standardLegalMoveCount": 41,
+      "solutions": [
+        {
+          "from": 7,
+          "to": 31,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h8h5"
+      ],
+      "solutionsSan": [
+        "R⊗h5#"
+      ],
       "decoys": [
-        {
-          "uci": "d8c7",
-          "san": "Kc7"
-        },
-        {
-          "uci": "d8e7",
-          "san": "Ke7"
-        },
         {
           "uci": "d8d7",
           "san": "Kd7"
+        },
+        {
+          "uci": "d8c8",
+          "san": "Kc8"
+        },
+        {
+          "uci": "d8e8",
+          "san": "Ke8"
         }
       ],
-      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "rationale": "Executing your own piece mates at once, and no ordinary move forces mate within two.",
       "difficulty": 3
     },
     {
       "id": "tac-0003",
       "family": "tactical",
-      "fen": "8/1q3rp1/8/2r2RBp/2Q5/k7/P3P3/R2K1B2 w - - 0 29",
-      "sideToMove": "w",
-      "legalMoveCount": 52,
+      "fen": "6rr/p1pn3p/bp3k2/B4p2/1b6/N3P2K/PPP2P1P/R5NR b - - 1 20",
+      "sideToMove": "b",
+      "legalMoveCount": 54,
       "soleLegalMove": false,
-      "solution": {
-        "from": 56,
-        "to": 48,
-        "promo": null
-      },
-      "solutionUci": "a1a2",
-      "solutionSan": "R⊗a2#",
-      "decoys": [
+      "standardLegalMoveCount": 47,
+      "solutions": [
         {
-          "uci": "f5f6",
-          "san": "Rf6"
-        },
-        {
-          "uci": "f5f7",
-          "san": "Rxf7"
-        },
-        {
-          "uci": "f5f4",
-          "san": "Rf4"
+          "from": 7,
+          "to": 15,
+          "promo": null
         }
       ],
-      "rationale": "Executing your own piece delivers mate; no other move does.",
+      "solutionsUci": [
+        "h8h7"
+      ],
+      "solutionsSan": [
+        "R⊗h7#"
+      ],
+      "decoys": [
+        {
+          "uci": "g8g7",
+          "san": "Rg7"
+        },
+        {
+          "uci": "g8g6",
+          "san": "Rg6"
+        },
+        {
+          "uci": "g8g5",
+          "san": "Rg5"
+        }
+      ],
+      "rationale": "Executing your own piece mates at once, and no ordinary move forces mate within two.",
+      "difficulty": 3
+    },
+    {
+      "id": "tac-0004",
+      "family": "tactical",
+      "fen": "rn2k1nR/pp3pp1/2p1b3/6P1/1r6/8/2P2P2/K1b3N1 b q - 6 16",
+      "sideToMove": "b",
+      "legalMoveCount": 49,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 41,
+      "solutions": [
+        {
+          "from": 0,
+          "to": 8,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "a8a7"
+      ],
+      "solutionsSan": [
+        "R⊗a7#"
+      ],
+      "decoys": [
+        {
+          "uci": "a8a7",
+          "san": "R⊗a7#"
+        },
+        {
+          "uci": "a8b8",
+          "san": "R⊗b8"
+        },
+        {
+          "uci": "b8d7",
+          "san": "Nd7"
+        }
+      ],
+      "rationale": "Executing your own piece mates at once, and no ordinary move forces mate within two.",
       "difficulty": 3
     }
   ]
