@@ -1,0 +1,4455 @@
+{
+  "generatedAt": "2026-09-17T20:21:10Z",
+  "source": "Lichess puzzle database, CC0",
+  "predicate": "survival: standard checkmate, >=3 legal self-capture escapes, exactly one survives the reply",
+  "stats": {
+    "seconds": 516.5,
+    "rows": 1902104,
+    "mateThemed": 1902104,
+    "replayed": 1902104,
+    "replayFailed": 0,
+    "standardMate": 1902104,
+    "tooFewEscapes": 1709357,
+    "notUnique": 192594,
+    "kept": 153
+  },
+  "puzzles": [
+    {
+      "fen": "r2q3r/p1pp1Bbk/1p2pN1p/3bn3/5RPn/3Q4/PP5P/R1B3K1 b - - 7 21",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "h7g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "h7h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qh7#"
+        },
+        {
+          "uci": "h7h6",
+          "san": "K⊗h6",
+          "refutedBy": "R⊗g4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0Gk2z",
+        "rating": 875,
+        "popularity": 95,
+        "plays": 1137,
+        "themes": "discoveredCheck doubleCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/ilfXUKGD/black#40"
+      }
+    },
+    {
+      "fen": "r4k1r/pp4pp/8/2p3q1/BB6/2P2p1b/PP3P1P/R2Q2KR w - - 4 21",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "1Pzos",
+        "rating": 1111,
+        "popularity": 94,
+        "plays": 142,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/q9FM0kY8#37"
+      }
+    },
+    {
+      "fen": "rb4kr/pb1q1p1p/1pn5/3ppN2/2P3Q1/BP2P3/P2N1PPP/R4RK1 b - - 0 16",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "21OwK",
+        "rating": 1011,
+        "popularity": 100,
+        "plays": 113,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/6b9lMx0C/black#30"
+      }
+    },
+    {
+      "fen": "5rk1/p1p2ppp/6q1/3BP3/8/2b2b2/P4P1P/1R1Q1RK1 w - - 1 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "22T3e",
+        "rating": 897,
+        "popularity": 96,
+        "plays": 224,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/nqVx4vdC#33"
+      }
+    },
+    {
+      "fen": "4Q3/5ppp/5k2/1p6/6q1/7b/PP3P1P/4R1KR w - - 3 26",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "29EBR",
+        "rating": 1057,
+        "popularity": 93,
+        "plays": 2257,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/uNtHxYtB#49"
+      }
+    },
+    {
+      "fen": "1Q6/6k1/p5p1/3p2P1/3P1pPK/7P/8/4q3 w - - 1 48",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h4g5",
+      "solutionSan": "K⊗g5",
+      "losingMoves": [
+        {
+          "uci": "h4h3",
+          "san": "K⊗h3",
+          "refutedBy": "Qg3#"
+        },
+        {
+          "uci": "h4g4",
+          "san": "K⊗g4",
+          "refutedBy": "Qg3#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "2W7ol",
+        "rating": 1233,
+        "popularity": 67,
+        "plays": 26,
+        "themes": "advancedPawn endgame long mate mateIn3 pawnEndgame promotion",
+        "url": "https://lichess.org/jKva0LN0#89"
+      }
+    },
+    {
+      "fen": "N1Q2nkr/pp4pp/8/1q1p4/3P4/b3B3/P1P2P1P/RK4R1 w - - 9 22",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b1c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b1a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "b1a1",
+          "san": "K⊗a1",
+          "refutedBy": "Qb2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "3W2GM",
+        "rating": 1399,
+        "popularity": 66,
+        "plays": 1003,
+        "themes": "mate mateIn2 middlegame queensideAttack short",
+        "url": "https://lichess.org/NC34qr6w#39"
+      }
+    },
+    {
+      "fen": "rn2k2r/pp4p1/2p1N3/3P1p2/4pP2/2P1P1p1/P1P1K1q1/R1BQR3 w kq - 0 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "e2d1",
+      "solutionSan": "K⊗d1",
+      "losingMoves": [
+        {
+          "uci": "e2e3",
+          "san": "K⊗e3",
+          "refutedBy": "Qf2#"
+        },
+        {
+          "uci": "e2e1",
+          "san": "K⊗e1",
+          "refutedBy": "Rh1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "3dw8P",
+        "rating": 866,
+        "popularity": 95,
+        "plays": 192,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/AIAtvgnc#33"
+      }
+    },
+    {
+      "fen": "4QQ2/1bp3pk/1p4p1/1P3p2/2P3n1/6PP/4q2K/6R1 w - - 1 36",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h2g3",
+      "solutionSan": "K⊗g3",
+      "losingMoves": [
+        {
+          "uci": "h2g1",
+          "san": "K⊗g1",
+          "refutedBy": "Qf2#"
+        },
+        {
+          "uci": "h2h3",
+          "san": "K⊗h3",
+          "refutedBy": "Qh2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "3hQmd",
+        "rating": 1013,
+        "popularity": 88,
+        "plays": 549,
+        "themes": "discoveredCheck doubleCheck endgame master mate mateIn1 oneMove",
+        "url": "https://lichess.org/dNtwQwHz#69"
+      }
+    },
+    {
+      "fen": "3r2k1/Q7/6bp/P2R2p1/4p1N1/5pPK/5P1P/5q2 w - - 2 33",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g4",
+      "solutionSan": "K⊗g4",
+      "losingMoves": [
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "4GOgd",
+        "rating": 1557,
+        "popularity": 97,
+        "plays": 3120,
+        "themes": "hangingPiece long mate mateIn3 middlegame",
+        "url": "https://lichess.org/GNinszrm#59"
+      }
+    },
+    {
+      "fen": "rk5r/p1p2ppp/B1p5/3p4/1Q6/B5Pb/P1q2P1P/6KR b - - 7 20",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8c7",
+      "solutionSan": "K⊗c7",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "Qb7#"
+        },
+        {
+          "uci": "b8a8",
+          "san": "K⊗a8",
+          "refutedBy": "Qb7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "4K8Tx",
+        "rating": 1453,
+        "popularity": 99,
+        "plays": 2551,
+        "themes": "long mate mateIn3 middlegame",
+        "url": "https://lichess.org/z9lM5ic7/black#34"
+      }
+    },
+    {
+      "fen": "6rr/pp2Q1k1/2p1pRBp/8/2PP4/8/PP6/2K5 b - - 0 36",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h6",
+      "solutionSan": "K⊗h6",
+      "losingMoves": [
+        {
+          "uci": "g7h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qh7#"
+        },
+        {
+          "uci": "g7g8",
+          "san": "K⊗g8",
+          "refutedBy": "Qf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "4OyAJ",
+        "rating": 1629,
+        "popularity": 97,
+        "plays": 25742,
+        "themes": "deflection epauletteMate exposedKing long mate mateIn3 middlegame pin",
+        "url": "https://lichess.org/YxWTFs5Q/black#66"
+      }
+    },
+    {
+      "fen": "5rk1/r5pp/2pb1p2/p1ppp3/P3PPq1/1P1P1N1b/1BPNQP1P/R5KR w - - 3 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "4W7Np",
+        "rating": 675,
+        "popularity": 100,
+        "plays": 140,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/QF5zqbcV#33"
+      }
+    },
+    {
+      "fen": "rk5r/p1p3pp/B1p2q2/8/4p3/1Q6/P4PPP/1N4K1 b - - 3 22",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8c7",
+      "solutionSan": "K⊗c7",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "Qb7#"
+        },
+        {
+          "uci": "b8a8",
+          "san": "K⊗a8",
+          "refutedBy": "Qb7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "4zu0C",
+        "rating": 1424,
+        "popularity": 96,
+        "plays": 29156,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/7dIBqc6s/black#40"
+      }
+    },
+    {
+      "fen": "1r1n1rkb/pb5p/1p4R1/3B2BN/3p2p1/2P5/PP3PPP/R5K1 b - - 0 22",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Rh6#"
+        },
+        {
+          "uci": "g8f8",
+          "san": "K⊗f8",
+          "refutedBy": "Rg8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "52kjX",
+        "rating": 1673,
+        "popularity": 94,
+        "plays": 5965,
+        "themes": "discoveredCheck doubleCheck epauletteMate kingsideAttack mate mateIn1 middlegame oneMove pillsburysMate",
+        "url": "https://lichess.org/dmMwRXkB/black#42"
+      }
+    },
+    {
+      "fen": "r5k1/ppp3pp/3p4/1B1Pp1q1/8/3P1P1b/PP3P1P/R2Q2KR w - - 0 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "5iqV0",
+        "rating": 808,
+        "popularity": 90,
+        "plays": 329,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/Is6jHtVW#35"
+      }
+    },
+    {
+      "fen": "6k1/p4p2/4p1qp/8/1QP5/7b/PP3P1P/R5KR w - - 3 24",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "6EAlK",
+        "rating": 1192,
+        "popularity": 89,
+        "plays": 579,
+        "themes": "endgame master mate mateIn1 oneMove",
+        "url": "https://lichess.org/0QmDbuPB#45"
+      }
+    },
+    {
+      "fen": "8/1b2Q3/p2P2pp/5k2/1p4q1/8/P2b1P1P/5RK1 w - - 0 33",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f1",
+      "solutionSan": "K⊗f1",
+      "losingMoves": [
+        {
+          "uci": "g1f2",
+          "san": "K⊗f2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "6bfN8",
+        "rating": 1105,
+        "popularity": 97,
+        "plays": 734,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/AUhyW1pN#63"
+      }
+    },
+    {
+      "fen": "r5kr/ppp2p1p/3p3B/7N/6Q1/2P1K1P1/PP5q/RN6 b - - 0 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "6eFuR",
+        "rating": 637,
+        "popularity": 87,
+        "plays": 95,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/7HZ8HaDS/black#32"
+      }
+    },
+    {
+      "fen": "r2br3/4k1Q1/3pBp2/2qP4/pp3P2/6B1/PP1NK1PP/8 b - - 0 31",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7e8",
+      "solutionSan": "K⊗e8",
+      "losingMoves": [
+        {
+          "uci": "e7d8",
+          "san": "K⊗d8",
+          "refutedBy": "Qd7#"
+        },
+        {
+          "uci": "e7d6",
+          "san": "K⊗d6",
+          "refutedBy": "Ne4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "6fR8Z",
+        "rating": 1131,
+        "popularity": 58,
+        "plays": 41,
+        "themes": "deflection epauletteMate long mate mateIn3 middlegame",
+        "url": "https://lichess.org/dCbEGC9i/black#56"
+      }
+    },
+    {
+      "fen": "r4rk1/pp3p1p/6p1/6q1/8/1PNB1P1b/P1P2P1P/1R1Q2KR w - - 3 17",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "7A23F",
+        "rating": 1165,
+        "popularity": 89,
+        "plays": 304,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/xk5zhKpo#29"
+      }
+    },
+    {
+      "fen": "4N1k1/1p3pp1/7p/3p4/P2n4/4PnQ1/2q2K2/R4R2 w - - 1 31",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "f2g3",
+      "solutionSan": "K⊗g3",
+      "losingMoves": [
+        {
+          "uci": "f2e3",
+          "san": "K⊗e3",
+          "refutedBy": "Qd2#"
+        },
+        {
+          "uci": "f2f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qe2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "7LMIH",
+        "rating": 1114,
+        "popularity": 56,
+        "plays": 507,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/nHGfNNgo#59"
+      }
+    },
+    {
+      "fen": "rn2kb1r/ppp1pppp/8/8/3P2q1/2NQBN1b/PPP1BP1P/R5KR w kq - 1 12",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "7Z35W",
+        "rating": 1091,
+        "popularity": 87,
+        "plays": 211,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/Ox0Yn1KM#21"
+      }
+    },
+    {
+      "fen": "8/Q3R2p/1B2ppk1/p2p2p1/1p1Pn1P1/4PNK1/NP3P1P/2r2q2 w - - 5 30",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g3f3",
+      "solutionSan": "K⊗f3",
+      "losingMoves": [
+        {
+          "uci": "g3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qh1#"
+        },
+        {
+          "uci": "g3g4",
+          "san": "K⊗g4",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "7hU2e",
+        "rating": 1136,
+        "popularity": 65,
+        "plays": 118,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/xcFBY1JW#55"
+      }
+    },
+    {
+      "fen": "6k1/pp3pbp/6p1/2p5/3pP1q1/PP5b/1BQ2P1P/2R3KR w - - 0 24",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "9J9sz",
+        "rating": 1301,
+        "popularity": 55,
+        "plays": 65,
+        "themes": "kingsideAttack mate mateIn2 middlegame short",
+        "url": "https://lichess.org/gOeQwF3v#43"
+      }
+    },
+    {
+      "fen": "2Q3k1/p4ppb/1p4Np/3n1P2/1PPP4/P6P/8/6K1 b - - 0 37",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "g8f7",
+          "san": "K⊗f7",
+          "refutedBy": "Qf8#"
+        },
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qh8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "A6UiN",
+        "rating": 1838,
+        "popularity": 87,
+        "plays": 1153,
+        "themes": "backRankMate endgame mate mateIn2 short",
+        "url": "https://lichess.org/SoXWTAEY/black#70"
+      }
+    },
+    {
+      "fen": "2r3k1/1p3ppp/4r3/pP4q1/3P4/3P3P/1P1KB3/2RQR3 w - - 3 27",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "d2e1",
+      "solutionSan": "K⊗e1",
+      "losingMoves": [
+        {
+          "uci": "d2d3",
+          "san": "K⊗d3",
+          "refutedBy": "Qe3#"
+        },
+        {
+          "uci": "d2d1",
+          "san": "K⊗d1",
+          "refutedBy": "Rxc1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "AK7sZ",
+        "rating": 1117,
+        "popularity": 96,
+        "plays": 815,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/NwhpfDgd#49"
+      }
+    },
+    {
+      "fen": "5Q2/pppk1p2/1q1p1B2/3Pp3/4P3/b7/P1P2PPP/RK5R w - - 5 20",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b1c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b1a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "b1a1",
+          "san": "K⊗a1",
+          "refutedBy": "Qb2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "AcyL2",
+        "rating": 811,
+        "popularity": 98,
+        "plays": 250,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/mfdJsCuX#37"
+      }
+    },
+    {
+      "fen": "r1b3k1/p1p3pp/2p2r2/3p4/2P1p1p1/1PN1P1P1/PB1PK1q1/R2QR3 w - - 0 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "e2d1",
+      "solutionSan": "K⊗d1",
+      "losingMoves": [
+        {
+          "uci": "e2e3",
+          "san": "K⊗e3",
+          "refutedBy": "Qf2#"
+        },
+        {
+          "uci": "e2e1",
+          "san": "K⊗e1",
+          "refutedBy": "Rf1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "AkLN7",
+        "rating": 884,
+        "popularity": 100,
+        "plays": 281,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/jmCoATkj#35"
+      }
+    },
+    {
+      "fen": "r2q1b1r/pp2Rk1p/1np2np1/5N2/2QP4/8/PPP2PPP/R1B3K1 b - - 4 16",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f7g6",
+      "solutionSan": "K⊗g6",
+      "losingMoves": [
+        {
+          "uci": "f7f8",
+          "san": "K⊗f8",
+          "refutedBy": "Qf7#"
+        },
+        {
+          "uci": "f7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qe6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "BqDFe",
+        "rating": 1666,
+        "popularity": 100,
+        "plays": 1233,
+        "themes": "doubleCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/v5z1h1tZ/black#30"
+      }
+    },
+    {
+      "fen": "r1bq1bkr/pp1p2p1/5N1p/n3N3/4P3/1Q6/PP3PPP/R1B2RK1 b - - 0 12",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "g8f8",
+          "san": "K⊗f8",
+          "refutedBy": "Qf7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "BqrxG",
+        "rating": 1163,
+        "popularity": 94,
+        "plays": 422,
+        "themes": "discoveredCheck doubleCheck kingsideAttack mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/nSipram1/black#22"
+      }
+    },
+    {
+      "fen": "r5n1/5R1k/1p1p2pp/pPpP4/2P1P1q1/1PQ3N1/6P1/6K1 b - - 0 31",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "h7h6",
+      "solutionSan": "K⊗h6",
+      "losingMoves": [
+        {
+          "uci": "h7g8",
+          "san": "K⊗g8",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "h7g6",
+          "san": "K⊗g6",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "BtoK0",
+        "rating": 733,
+        "popularity": 97,
+        "plays": 898,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/vM1aHJXL/black#60"
+      }
+    },
+    {
+      "fen": "r3k2r/ppp2ppp/8/2bP4/4P2q/2PB1PNb/P5KP/R2Q3R w kq - 5 16",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g2h1",
+      "solutionSan": "K⊗h1",
+      "losingMoves": [
+        {
+          "uci": "g2f3",
+          "san": "K⊗f3",
+          "refutedBy": "Qg4#"
+        },
+        {
+          "uci": "g2h2",
+          "san": "K⊗h2",
+          "refutedBy": "Bf1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "DHHm4",
+        "rating": 1605,
+        "popularity": 85,
+        "plays": 48,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/kicqprvD#29"
+      }
+    },
+    {
+      "fen": "r3kbnr/ppp1pppp/8/3P4/2P3q1/N3BN1b/PP2BP1P/R2Q2KR w kq - 3 13",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "DYIyW",
+        "rating": 1499,
+        "popularity": 94,
+        "plays": 1866,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/qk963xsw#21"
+      }
+    },
+    {
+      "fen": "8/6pk/3Np3/p2p4/P1pPq1P1/1r4rP/5PKQ/3R1R2 w - - 11 39",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g2f1",
+      "solutionSan": "K⊗f1",
+      "losingMoves": [
+        {
+          "uci": "g2f2",
+          "san": "K⊗f2",
+          "refutedBy": "Rbf3#"
+        },
+        {
+          "uci": "g2h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "EJs8Q",
+        "rating": 1799,
+        "popularity": 95,
+        "plays": 6453,
+        "themes": "discoveredCheck doubleCheck epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/p5p6jlWz#75"
+      }
+    },
+    {
+      "fen": "r5kr/pp1qbp1p/3pNn1n/6Q1/4P3/2N5/PP3PPP/R4RK1 b - - 1 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "EqviG",
+        "rating": 1510,
+        "popularity": 73,
+        "plays": 108,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/CvaYV0dB/black#32"
+      }
+    },
+    {
+      "fen": "2k2bnr/ppp2ppp/2n5/6q1/8/2NB1P1b/PPP2P1P/R2Q2KR w - - 0 15",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "FLR9e",
+        "rating": 683,
+        "popularity": 100,
+        "plays": 195,
+        "themes": "mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/vUWyvwLs#27"
+      }
+    },
+    {
+      "fen": "5BQ1/pp1k4/2b1p3/6p1/3p2B1/2P3PK/7P/5q2 w - - 4 35",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g4",
+      "solutionSan": "K⊗g4",
+      "losingMoves": [
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "FsyDU",
+        "rating": 1593,
+        "popularity": 90,
+        "plays": 1078,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/OMlTfUY3#65"
+      }
+    },
+    {
+      "fen": "r3q1kr/ppp2p1p/2n4B/5pQ1/2pp4/5N1P/PPP2PP1/6K1 b - - 1 19",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "GQ5dD",
+        "rating": 764,
+        "popularity": 88,
+        "plays": 127,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/LuGVgYda/black#36"
+      }
+    },
+    {
+      "fen": "rk5r/p1pbq2p/B1n2n2/1Q1p4/3Pp3/2P5/PP1K1PPP/3R3R b - - 3 20",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8c7",
+      "solutionSan": "K⊗c7",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "Qb7#"
+        },
+        {
+          "uci": "b8a8",
+          "san": "K⊗a8",
+          "refutedBy": "Qb7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HN9Wf",
+        "rating": 906,
+        "popularity": 96,
+        "plays": 1900,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/X3VJkNNc/black#36"
+      }
+    },
+    {
+      "fen": "r7/pp3pkp/3p2p1/6qn/8/1BP2P1b/PP1N1P1P/R3Q1KR w - - 1 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HNjbi",
+        "rating": 867,
+        "popularity": 98,
+        "plays": 1385,
+        "themes": "master mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/X3CbuANK#33"
+      }
+    },
+    {
+      "fen": "5rk1/1Rp4p/8/p2P2pB/P5N1/5pPK/1R3P1P/5q2 w - - 2 38",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g4",
+      "solutionSan": "K⊗g4",
+      "losingMoves": [
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HSyKs",
+        "rating": 1221,
+        "popularity": 93,
+        "plays": 3320,
+        "themes": "endgame long mate mateIn3",
+        "url": "https://lichess.org/U4Zdone3#69"
+      }
+    },
+    {
+      "fen": "5Q2/7R/3p1kr1/p2Pp1p1/1pq1P3/3b1P2/PP3P2/4K3 b - - 3 38",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f6e5",
+      "solutionSan": "K⊗e5",
+      "losingMoves": [
+        {
+          "uci": "f6g5",
+          "san": "K⊗g5",
+          "refutedBy": "Qf5#"
+        },
+        {
+          "uci": "f6g6",
+          "san": "K⊗g6",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HbJBr",
+        "rating": 1192,
+        "popularity": 70,
+        "plays": 133,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/tO4NRgEw/black#72"
+      }
+    },
+    {
+      "fen": "r4rk1/1p4p1/7B/pq1pP3/8/b7/P1P3Q1/RK5R w - - 0 34",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b1c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b1a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "b1a1",
+          "san": "K⊗a1",
+          "refutedBy": "Qb2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HuhNp",
+        "rating": 1422,
+        "popularity": 94,
+        "plays": 283,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/ERKiFXGa#63"
+      }
+    },
+    {
+      "fen": "Nn3b1r/1p3kp1/1B1p1p1p/2n5/6q1/5N1b/P3QP1P/3BR1KR w - - 5 27",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "HvaXc",
+        "rating": 1162,
+        "popularity": 43,
+        "plays": 30,
+        "themes": "mate mateIn2 opening short",
+        "url": "https://lichess.org/1qLwKL0i#49"
+      }
+    },
+    {
+      "fen": "3R4/p3b1p1/5kp1/3Q2P1/8/7P/PP3PK1/2r1q3 b - - 0 33",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f6g6",
+      "solutionSan": "K⊗g6",
+      "losingMoves": [
+        {
+          "uci": "f6e7",
+          "san": "K⊗e7",
+          "refutedBy": "Qd7#"
+        },
+        {
+          "uci": "f6g7",
+          "san": "K⊗g7",
+          "refutedBy": "Qg8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "ISFVA",
+        "rating": 1673,
+        "popularity": 88,
+        "plays": 1338,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/qu0qVgqt/black#62"
+      }
+    },
+    {
+      "fen": "r6r/p4k1p/2p2p2/3p2p1/6q1/Q2B3b/PPPB1P1P/4R1KR w - - 5 24",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "IoJFf",
+        "rating": 1272,
+        "popularity": 33,
+        "plays": 25,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/0KaLiFb4#43"
+      }
+    },
+    {
+      "fen": "2kr3r/pppb4/5pn1/2qN3p/1PN1P2P/5Pp1/P3n1P1/R2Q1BKR w - - 1 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1g2",
+      "solutionSan": "K⊗g2",
+      "losingMoves": [
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qf2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "J06ad",
+        "rating": 872,
+        "popularity": 88,
+        "plays": 1013,
+        "themes": "discoveredCheck doubleCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/g4hWzLrr#35"
+      }
+    },
+    {
+      "fen": "r5kr/pp3p1p/4N3/5pQ1/5N1K/P5P1/7P/5q2 b - - 1 34",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "J0fzZ",
+        "rating": 1190,
+        "popularity": 99,
+        "plays": 1239,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/XUb1zclN/black#66"
+      }
+    },
+    {
+      "fen": "1r1q4/p6R/p2p1kp1/1bpPp1p1/4P3/P4Q2/1PP5/2K4R b - - 0 26",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f6e5",
+      "solutionSan": "K⊗e5",
+      "losingMoves": [
+        {
+          "uci": "f6g5",
+          "san": "K⊗g5",
+          "refutedBy": "Rg1#"
+        },
+        {
+          "uci": "f6g6",
+          "san": "K⊗g6",
+          "refutedBy": "Qf5#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "JIpPX",
+        "rating": 779,
+        "popularity": 96,
+        "plays": 304,
+        "themes": "hangingPiece mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/slRbILEb/black#50"
+      }
+    },
+    {
+      "fen": "4R3/3r1pk1/2p2p1p/1pP5/pPn5/P5Q1/1qB2PPP/6K1 b - - 2 28",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7f6",
+      "solutionSan": "K⊗f6",
+      "losingMoves": [
+        {
+          "uci": "g7h6",
+          "san": "K⊗h6",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "g7f7",
+          "san": "K⊗f7",
+          "refutedBy": "Qg6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "JZsSN",
+        "rating": 1307,
+        "popularity": 94,
+        "plays": 1532,
+        "themes": "discoveredAttack kingsideAttack long mate mateIn3 middlegame",
+        "url": "https://lichess.org/3Ear9RVd/black#50"
+      }
+    },
+    {
+      "fen": "5r2/7k/p7/3P2p1/2P3N1/5pPK/P2Q1P1P/5q2 w - - 2 44",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g4",
+      "solutionSan": "K⊗g4",
+      "losingMoves": [
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "K5bIY",
+        "rating": 1243,
+        "popularity": 86,
+        "plays": 482,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/nh2vvetK#83"
+      }
+    },
+    {
+      "fen": "N6Q/pp1nk1pp/8/5pq1/3P4/P2Bn3/1P3P1P/2R3KR w - - 0 21",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "KfeiU",
+        "rating": 970,
+        "popularity": 85,
+        "plays": 103,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/q8VVnoe1#37"
+      }
+    },
+    {
+      "fen": "rn1r2k1/pp3p1p/6p1/6q1/3P4/B2B3b/PPQN1P1P/4R1KR w - - 1 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "KtlCF",
+        "rating": 904,
+        "popularity": 80,
+        "plays": 15,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/DZ1fsh6x#35"
+      }
+    },
+    {
+      "fen": "8/p1p1N1pk/3p4/1r2p3/3qP3/PK6/BPP1R3/8 w - - 0 31",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b3c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b3a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qxb2#"
+        },
+        {
+          "uci": "b3a3",
+          "san": "K⊗a3",
+          "refutedBy": "Q⊗a7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "LIpVm",
+        "rating": 1759,
+        "popularity": 93,
+        "plays": 1147,
+        "themes": "endgame exposedKing long mate mateIn3",
+        "url": "https://lichess.org/7Pnu7asT#55"
+      }
+    },
+    {
+      "fen": "4R3/1bq2pk1/3r1p1p/pp3B2/6Q1/P1p5/1P4PP/7K b - - 3 33",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7f6",
+      "solutionSan": "K⊗f6",
+      "losingMoves": [
+        {
+          "uci": "g7h6",
+          "san": "K⊗h6",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "g7f7",
+          "san": "K⊗f7",
+          "refutedBy": "Qg6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "MF5HF",
+        "rating": 1416,
+        "popularity": 95,
+        "plays": 7149,
+        "themes": "kingsideAttack long mate mateIn3 middlegame",
+        "url": "https://lichess.org/nHDMCh58/black#60"
+      }
+    },
+    {
+      "fen": "r3kb1r/ppp2ppp/2n1p3/8/2BP2q1/PQ3N1b/1PPN1P1P/R1B3KR w kq - 5 15",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "MFr2X",
+        "rating": 1101,
+        "popularity": 91,
+        "plays": 296,
+        "themes": "mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/bA95B92Z#27"
+      }
+    },
+    {
+      "fen": "1rb5/2N2k2/p2p4/1PpP1p2/1P4q1/3Qp2p/P6P/5RKR w - - 0 40",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f1",
+      "solutionSan": "K⊗f1",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "MRUBu",
+        "rating": 1434,
+        "popularity": 84,
+        "plays": 191,
+        "themes": "epauletteMate kingsideAttack mate mateIn2 middlegame short",
+        "url": "https://lichess.org/sig8iPL3#75"
+      }
+    },
+    {
+      "fen": "rn2k2r/ppp1ppbp/6p1/8/2NP2q1/2P2N1b/PP2BP1P/R1BQ2KR w kq - 3 13",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "NGxlk",
+        "rating": 1066,
+        "popularity": 94,
+        "plays": 9077,
+        "themes": "mate mateIn2 opening short",
+        "url": "https://lichess.org/izsNy8mk#21"
+      }
+    },
+    {
+      "fen": "r2q2kr/pbpn1p1p/1p1p1n1B/4ppQ1/2PPP3/2P2P2/P1B3PP/R4RK1 b - - 3 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OH7nn",
+        "rating": 689,
+        "popularity": 95,
+        "plays": 320,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/ByPYlyib/black#32"
+      }
+    },
+    {
+      "fen": "r1bq3r/ppp3kp/2np1pnB/2b1p2Q/2B1P3/2PP3P/PP3PP1/RN2K2R b KQ - 1 11",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qg5#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OV1GW",
+        "rating": 835,
+        "popularity": 91,
+        "plays": 526,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/RpSZtINp/black#20"
+      }
+    },
+    {
+      "fen": "r5kr/1bq1bp1p/5n1B/p5QN/4P3/2p2B2/PP4PP/5RK1 b - - 1 22",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OYRGH",
+        "rating": 951,
+        "popularity": 80,
+        "plays": 172,
+        "themes": "discoveredAttack discoveredCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/ZMICg1ue/black#42"
+      }
+    },
+    {
+      "fen": "r2qr3/pp2k1Q1/2n1p2p/3pP3/3Pn3/2P4N/PP4PP/5RK1 b - - 3 22",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rf8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OeEAv",
+        "rating": 1364,
+        "popularity": 73,
+        "plays": 43,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/6blJ2Uxr/black#42"
+      }
+    },
+    {
+      "fen": "r3q1kr/pp3p1p/5p1B/3p4/8/P5Q1/1PP2P1P/2K2B2 b - - 1 24",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OeTA2",
+        "rating": 1455,
+        "popularity": 69,
+        "plays": 565,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/Q3OX3GAk/black#46"
+      }
+    },
+    {
+      "fen": "rk5r/p1pbqpp1/B1n1pn2/1Q1p4/1P1P4/2P1PN2/5P1P/RN3K2 b - - 4 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8c7",
+      "solutionSan": "K⊗c7",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "Qb7#"
+        },
+        {
+          "uci": "b8a8",
+          "san": "K⊗a8",
+          "refutedBy": "Qb7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "OfWUB",
+        "rating": 1646,
+        "popularity": 100,
+        "plays": 625,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/uvFBze63/black#30"
+      }
+    },
+    {
+      "fen": "1b2k2r/5ppp/4p3/1PPpn3/3NnP2/BP2P2P/4K1q1/R2QR3 w k - 0 23",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "e2e1",
+      "solutionSan": "K⊗e1",
+      "losingMoves": [
+        {
+          "uci": "e2d1",
+          "san": "K⊗d1",
+          "refutedBy": "Qd2#"
+        },
+        {
+          "uci": "e2e3",
+          "san": "K⊗e3",
+          "refutedBy": "Qf2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "PKiOT",
+        "rating": 1739,
+        "popularity": 93,
+        "plays": 2253,
+        "themes": "deflection epauletteMate long mate mateIn3 middlegame",
+        "url": "https://lichess.org/3KTDoLFd#39"
+      }
+    },
+    {
+      "fen": "r5kr/1p3p1p/p1n1Nn1B/q2p2Q1/1b4b1/2N3P1/PP3P1P/R3KB1R b KQ - 8 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "PSdbG",
+        "rating": 778,
+        "popularity": 88,
+        "plays": 405,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/j5qZ9fI5/black#32"
+      }
+    },
+    {
+      "fen": "2r3kr/p4p1p/5p1B/2b5/2p3Q1/2Pn4/q4PPP/1N1R2K1 b - - 12 26",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "Qc91m",
+        "rating": 1250,
+        "popularity": 92,
+        "plays": 2889,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/MHeqd9zl/black#48"
+      }
+    },
+    {
+      "fen": "r1bq3r/ppp1n1kp/3p1pnB/2b4Q/4P3/1BP5/PP3PPP/RN3R1K b - - 1 13",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qg5#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "R5b2O",
+        "rating": 1083,
+        "popularity": 62,
+        "plays": 50,
+        "themes": "mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/sbTPwhVJ/black#24"
+      }
+    },
+    {
+      "fen": "3qr3/pp2k1Q1/2p1p3/2P5/3P4/7P/PP4P1/5RK1 b - - 0 35",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rf8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "RGN9W",
+        "rating": 943,
+        "popularity": 89,
+        "plays": 304,
+        "themes": "endgame epauletteMate mate mateIn1 oneMove",
+        "url": "https://lichess.org/x0gXkeYC/black#68"
+      }
+    },
+    {
+      "fen": "r4k1r/pp2nppp/3N4/6q1/1BB5/1Q3P1b/PP3P1P/2R3KR w - - 5 20",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "RWf6e",
+        "rating": 1211,
+        "popularity": 100,
+        "plays": 557,
+        "themes": "master mate mateIn2 middlegame short",
+        "url": "https://lichess.org/3D9zzajN#35"
+      }
+    },
+    {
+      "fen": "r1b3kr/pp3p1p/2n1N3/3p2Q1/8/2P5/P4PPP/R3KB1R b KQ - 0 15",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "RhBxg",
+        "rating": 649,
+        "popularity": 100,
+        "plays": 78,
+        "themes": "hangingPiece kingsideAttack mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/6kmtDN2x/black#28"
+      }
+    },
+    {
+      "fen": "7k/8/p6p/1p2P1p1/6Q1/1B2P1PK/PP5P/4nq2 w - - 2 32",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g4",
+      "solutionSan": "K⊗g4",
+      "losingMoves": [
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "Roshx",
+        "rating": 978,
+        "popularity": 100,
+        "plays": 154,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/XiG5q6Ws#61"
+      }
+    },
+    {
+      "fen": "7k/p4Qpp/4PR2/2p5/2pp2P1/q7/P1PRB2P/1r1K4 w - - 3 29",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "d1d2",
+      "solutionSan": "K⊗d2",
+      "losingMoves": [
+        {
+          "uci": "d1c2",
+          "san": "K⊗c2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "d1e2",
+          "san": "K⊗e2",
+          "refutedBy": "Qe3#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "SkyBo",
+        "rating": 1709,
+        "popularity": 93,
+        "plays": 962,
+        "themes": "backRankMate endgame mate mateIn2 short",
+        "url": "https://lichess.org/tbmrjfEm#53"
+      }
+    },
+    {
+      "fen": "r3kb1r/ppp1pppp/2n5/8/6q1/2NP1N1b/PPP1BP1P/R1BQ2KR w kq - 3 11",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "SpOGo",
+        "rating": 934,
+        "popularity": 95,
+        "plays": 3609,
+        "themes": "mate mateIn2 opening short",
+        "url": "https://lichess.org/Llby3kCQ#17"
+      }
+    },
+    {
+      "fen": "5bkr/p5pp/1p2Q3/3p4/q2B1P2/P5R1/1P1p2PP/2rN2K1 b - - 0 29",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Rh3#"
+        },
+        {
+          "uci": "g8f8",
+          "san": "K⊗f8",
+          "refutedBy": "Bxg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "T0nfE",
+        "rating": 997,
+        "popularity": 90,
+        "plays": 251,
+        "themes": "kingsideAttack mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/Rd36UCvU/black#56"
+      }
+    },
+    {
+      "fen": "r4rkn/p4ppp/1p3N1B/2pq1P2/8/6Q1/PPP3PP/R4RK1 b - - 0 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f8",
+      "solutionSan": "K⊗f8",
+      "losingMoves": [
+        {
+          "uci": "g8f7",
+          "san": "K⊗f7",
+          "refutedBy": "Qxg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Bxg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "TnHdu",
+        "rating": 1065,
+        "popularity": 98,
+        "plays": 1364,
+        "themes": "kingsideAttack mate mateIn1 middlegame oneMove pin smotheredMate",
+        "url": "https://lichess.org/JuVZVTrz/black#34"
+      }
+    },
+    {
+      "fen": "N4knr/pp3p1p/6p1/3p2q1/8/5P1b/P1P1BP1P/1R1Q2KR w - - 6 20",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "USYKi",
+        "rating": 1131,
+        "popularity": 84,
+        "plays": 122,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/z4kXGKsx#37"
+      }
+    },
+    {
+      "fen": "3Q2R1/5pkp/p2Rp1rp/1pq1n3/8/8/P4P2/5K2 b - - 1 36",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h7",
+      "solutionSan": "K⊗h7",
+      "losingMoves": [
+        {
+          "uci": "g7h6",
+          "san": "K⊗h6",
+          "refutedBy": "Qh4#"
+        },
+        {
+          "uci": "g7f7",
+          "san": "K⊗f7",
+          "refutedBy": "Qf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "UruW9",
+        "rating": 861,
+        "popularity": 100,
+        "plays": 379,
+        "themes": "endgame epauletteMate mate mateIn1 oneMove",
+        "url": "https://lichess.org/6ii2MRas/black#70"
+      }
+    },
+    {
+      "fen": "r4bkr/1b4p1/pp1q1N1p/4Nn2/8/1Q6/PP3PPP/R4RK1 b - - 1 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "g8f8",
+          "san": "K⊗f8",
+          "refutedBy": "Qf7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "VAVN3",
+        "rating": 1391,
+        "popularity": 96,
+        "plays": 6348,
+        "themes": "discoveredCheck doubleCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/VDW3JhYh/black#34"
+      }
+    },
+    {
+      "fen": "r2k3r/pp3Bpp/8/1Q2p3/1b2P1q1/5b2/PP3P1P/R1B2RK1 w - - 1 17",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "VUseC",
+        "rating": 1357,
+        "popularity": 99,
+        "plays": 2351,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/9ljLKDcx#31"
+      }
+    },
+    {
+      "fen": "3rr3/pp2k1R1/1qp1p3/8/1P1P1Q2/P7/5PP1/3n2K1 b - - 4 28",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7e8",
+      "solutionSan": "K⊗e8",
+      "losingMoves": [
+        {
+          "uci": "e7d8",
+          "san": "K⊗d8",
+          "refutedBy": "Qb8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qe5#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "W0AQi",
+        "rating": 1540,
+        "popularity": 98,
+        "plays": 1636,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/wTHvYTgk/black#54"
+      }
+    },
+    {
+      "fen": "r5kr/pp2pp1p/3p1P1B/6Q1/8/3n4/P1PK1PP1/q7 b - - 5 21",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "W5Gcw",
+        "rating": 1618,
+        "popularity": 94,
+        "plays": 3543,
+        "themes": "endgame master mate mateIn2 short",
+        "url": "https://lichess.org/lmmofp7u/black#38"
+      }
+    },
+    {
+      "fen": "r2q2kr/pp2bp1p/5n1B/6Q1/3P2p1/5b2/PPP1N2P/2K1R1R1 b - - 7 20",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "WhfxE",
+        "rating": 960,
+        "popularity": 97,
+        "plays": 659,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/5AOEsvgR/black#36"
+      }
+    },
+    {
+      "fen": "rn4k1/ppp3pp/8/3p2q1/8/2PB1P1b/P1P2P1P/R2Q2KR w - - 4 16",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "Wvgrb",
+        "rating": 1021,
+        "popularity": 96,
+        "plays": 347,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/tm2jYFBD#27"
+      }
+    },
+    {
+      "fen": "r1b1q2r/ppp3kp/3p1pnB/4n2Q/4P3/1BP5/P1P2PPP/3R1RK1 b - - 1 15",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qg5#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "XQ4h8",
+        "rating": 662,
+        "popularity": 89,
+        "plays": 375,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/nDJ3g2Ao/black#28"
+      }
+    },
+    {
+      "fen": "2rqr3/1b2k1Q1/2p1p1P1/p1R1Pp2/1p1P4/1P6/P4PP1/6KR b - - 0 34",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "Y2Y8A",
+        "rating": 1476,
+        "popularity": 94,
+        "plays": 1257,
+        "themes": "deflection epauletteMate mate mateIn2 middlegame short",
+        "url": "https://lichess.org/lLTPGeDF/black#64"
+      }
+    },
+    {
+      "fen": "rnr2q2/3b1Pk1/p5pp/3pQ1N1/P1p5/2P5/4B1PP/5RK1 b - - 0 25",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h6",
+      "solutionSan": "K⊗h6",
+      "losingMoves": [
+        {
+          "uci": "g7f8",
+          "san": "K⊗f8",
+          "refutedBy": "Nh7#"
+        },
+        {
+          "uci": "g7g6",
+          "san": "K⊗g6",
+          "refutedBy": "Qf6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "Y8IBR",
+        "rating": 1747,
+        "popularity": 88,
+        "plays": 441,
+        "themes": "master mate mateIn2 middlegame short",
+        "url": "https://lichess.org/A7HmNCSV/black#46"
+      }
+    },
+    {
+      "fen": "8/p1R1Q1pp/5pk1/1p6/5B1P/6PK/1P3nB1/3q2b1 w - - 7 33",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g2",
+      "solutionSan": "K⊗g2",
+      "losingMoves": [
+        {
+          "uci": "h3h4",
+          "san": "K⊗h4",
+          "refutedBy": "Qg4#"
+        },
+        {
+          "uci": "h3g3",
+          "san": "K⊗g3",
+          "refutedBy": "Qg4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "YD1gZ",
+        "rating": 978,
+        "popularity": 87,
+        "plays": 170,
+        "themes": "master mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/RjJQu3Ow#63"
+      }
+    },
+    {
+      "fen": "r1bqrn2/pp2k1Q1/2n1p3/3pP3/3P4/2P1P3/P2B2PP/R4RK1 b - - 0 19",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rxf8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "YZCXc",
+        "rating": 971,
+        "popularity": 99,
+        "plays": 1251,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/WhAwlvYs/black#36"
+      }
+    },
+    {
+      "fen": "r2qr3/pb2k1Q1/1p2p1P1/2npP3/2p2P2/2P1P3/PP4P1/R3K2R b KQ - 0 23",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "YoARh",
+        "rating": 1154,
+        "popularity": 93,
+        "plays": 1123,
+        "themes": "deflection epauletteMate long mate mateIn3 middlegame",
+        "url": "https://lichess.org/90Pw3tYn/black#40"
+      }
+    },
+    {
+      "fen": "r1bq1bkr/ppp1N1pp/8/n3P1N1/6n1/1Q6/PP3PPP/R1B1K2R b KQ - 2 12",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "g8f8",
+          "san": "K⊗f8",
+          "refutedBy": "Qf7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "ZZCmE",
+        "rating": 976,
+        "popularity": 86,
+        "plays": 175,
+        "themes": "discoveredCheck doubleCheck mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/NbYKqQ25/black#22"
+      }
+    },
+    {
+      "fen": "r5kr/pb2bp1p/5p1B/1B6/3P4/6Q1/2P2KPP/7q b - - 5 24",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "a3zR6",
+        "rating": 947,
+        "popularity": 99,
+        "plays": 3006,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/TikKqZ21/black#44"
+      }
+    },
+    {
+      "fen": "r3kb1r/pp2pppp/2P5/1B4q1/8/2N2P1b/PPP2P1P/R2Q2KR w kq - 5 14",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "anyck",
+        "rating": 1224,
+        "popularity": 94,
+        "plays": 4955,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/ri0fRXin#23"
+      }
+    },
+    {
+      "fen": "r2qr3/4k1Q1/4p1P1/1pPpPp2/1n3P2/2N5/1BP5/2K4R b - - 0 26",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "byQBx",
+        "rating": 848,
+        "popularity": 96,
+        "plays": 365,
+        "themes": "epauletteMate master mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/ztyseCi4/black#50"
+      }
+    },
+    {
+      "fen": "r3k1nr/ppp2ppp/8/2b5/2Pq2n1/8/PP1N2P1/R1BQ1BKR w kq - 0 12",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1g2",
+      "solutionSan": "K⊗g2",
+      "losingMoves": [
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qf2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "cB9LJ",
+        "rating": 1103,
+        "popularity": 99,
+        "plays": 589,
+        "themes": "mate mateIn2 opening short",
+        "url": "https://lichess.org/GzgsylnB#19"
+      }
+    },
+    {
+      "fen": "rkb4r/pp2R1pp/3Q4/8/3P2nq/3B4/PPP2nP1/RN4K1 b - - 3 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8a8",
+      "solutionSan": "K⊗a8",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "R⊗a2#"
+        },
+        {
+          "uci": "b8c8",
+          "san": "K⊗c8",
+          "refutedBy": "Qc7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "cZkJj",
+        "rating": 997,
+        "popularity": 38,
+        "plays": 17,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/Qrq4LMxJ/black#34"
+      }
+    },
+    {
+      "fen": "r5kr/p1q2p1p/5p1B/1Bb1p3/4P1Q1/8/P1P3PP/7K b - - 0 21",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "ceXMN",
+        "rating": 1192,
+        "popularity": 82,
+        "plays": 196,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/7vxcyyb6/black#38"
+      }
+    },
+    {
+      "fen": "6r1/5p2/1Q3k2/p1p1pNp1/P4pP1/2PP3P/1P4K1/8 b - - 0 37",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f6f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "f6e5",
+          "san": "K⊗e5",
+          "refutedBy": "Qd6#"
+        },
+        {
+          "uci": "f6g5",
+          "san": "K⊗g5",
+          "refutedBy": "Qh6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "czO5M",
+        "rating": 1170,
+        "popularity": 95,
+        "plays": 15431,
+        "themes": "endgame epauletteMate mate mateIn2 short",
+        "url": "https://lichess.org/BTU16d58/black#70"
+      }
+    },
+    {
+      "fen": "6nr/p2Q2p1/1k6/1B3Nq1/1b1p4/5PKp/PP3P1P/7R w - - 2 27",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g3f3",
+      "solutionSan": "K⊗f3",
+      "losingMoves": [
+        {
+          "uci": "g3f2",
+          "san": "K⊗f2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "dH7dP",
+        "rating": 1753,
+        "popularity": 85,
+        "plays": 100,
+        "themes": "epauletteMate mate mateIn2 middlegame short",
+        "url": "https://lichess.org/RM3X4Uyz#49"
+      }
+    },
+    {
+      "fen": "rkb4r/pp2R2p/3Q4/6p1/8/2P3p1/PP3PPb/R4K2 b - - 0 32",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "b8a8",
+      "solutionSan": "K⊗a8",
+      "losingMoves": [
+        {
+          "uci": "b8a7",
+          "san": "K⊗a7",
+          "refutedBy": "R⊗a2#"
+        },
+        {
+          "uci": "b8c8",
+          "san": "K⊗c8",
+          "refutedBy": "Qc7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "dhMmE",
+        "rating": 1226,
+        "popularity": 100,
+        "plays": 1009,
+        "themes": "fork mate mateIn2 middlegame short",
+        "url": "https://lichess.org/KqVWfKRj/black#60"
+      }
+    },
+    {
+      "fen": "r1b1N2k/ppp2R1p/6p1/3pp3/1q2P3/b7/P1P5/RK3Q2 w - - 0 24",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b1c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b1a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "b1a1",
+          "san": "K⊗a1",
+          "refutedBy": "Qb2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "dxBps",
+        "rating": 619,
+        "popularity": 65,
+        "plays": 147,
+        "themes": "hangingPiece mate mateIn1 middlegame oneMove queensideAttack",
+        "url": "https://lichess.org/njp1SJi8#45"
+      }
+    },
+    {
+      "fen": "r5k1/pPp2ppp/8/1Bb5/7q/5PNb/PP4KP/R2Q3R w - - 5 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g2h1",
+      "solutionSan": "K⊗h1",
+      "losingMoves": [
+        {
+          "uci": "g2f3",
+          "san": "K⊗f3",
+          "refutedBy": "Qg4#"
+        },
+        {
+          "uci": "g2h2",
+          "san": "K⊗h2",
+          "refutedBy": "Bf1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "e5m6v",
+        "rating": 768,
+        "popularity": 96,
+        "plays": 256,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/9Xb6Bxlj#35"
+      }
+    },
+    {
+      "fen": "4r1kr/p1q2p1p/1p5B/2pn2Q1/3pp2P/3P2b1/PPP1K1B1/R6R b - - 1 22",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "eOJYn",
+        "rating": 711,
+        "popularity": 84,
+        "plays": 249,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/4MOYTcHT/black#42"
+      }
+    },
+    {
+      "fen": "r2qr3/1bp1k1Q1/p1n1p1P1/1p1pPp2/8/2P1P1B1/PP3PP1/R3K2R b KQ - 0 19",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "etR4n",
+        "rating": 965,
+        "popularity": 97,
+        "plays": 529,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/PLvjEa8v/black#36"
+      }
+    },
+    {
+      "fen": "rn6/p4kp1/2p4p/1P2p3/1Q2P1q1/7b/1BP2P1P/4R1KR w - - 4 22",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "fBiIM",
+        "rating": 1997,
+        "popularity": 79,
+        "plays": 95,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/lFgyG810#39"
+      }
+    },
+    {
+      "fen": "r3q1kr/1bp2p1p/p6B/2p2pQ1/6n1/2N5/PPP2PPP/R5K1 b - - 1 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "fDDEp",
+        "rating": 1170,
+        "popularity": 77,
+        "plays": 284,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/icE40xxo/black#34"
+      }
+    },
+    {
+      "fen": "r2q2kr/pp3p1p/2n1pn1B/3p2Q1/1b1P4/2N2P2/PPP2P1P/2KR1B2 b - - 3 13",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "fb39l",
+        "rating": 484,
+        "popularity": 98,
+        "plays": 549,
+        "themes": "master mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/LPIDQjWj/black#24"
+      }
+    },
+    {
+      "fen": "r2q2kr/pp2bp1p/5p1B/1B6/8/5KQP/PP3PP1/n6R b - - 3 20",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "hHe5Z",
+        "rating": 1208,
+        "popularity": 95,
+        "plays": 17972,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/RfoCwpjL/black#36"
+      }
+    },
+    {
+      "fen": "rnbk1b1r/1p1ppBpp/1Qp2n2/8/p2P1B2/4PN2/P1P2PPP/qN2K2R b K - 2 9",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "d8e7",
+      "solutionSan": "K⊗e7",
+      "losingMoves": [
+        {
+          "uci": "d8d7",
+          "san": "K⊗d7",
+          "refutedBy": "Qc7#"
+        },
+        {
+          "uci": "d8c8",
+          "san": "K⊗c8",
+          "refutedBy": "Qc7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "hcapJ",
+        "rating": 1136,
+        "popularity": 71,
+        "plays": 82,
+        "themes": "attackingF2F7 mate mateIn2 middlegame short",
+        "url": "https://lichess.org/8zoTxjKk/black#14"
+      }
+    },
+    {
+      "fen": "r4k1r/ppN2pp1/6qp/3BP3/1b6/5b2/PP3P1P/2RQ1RK1 w - - 1 17",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "R⊗h6#"
+        },
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "hynfG",
+        "rating": 846,
+        "popularity": 99,
+        "plays": 739,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/7qmZnnAp#31"
+      }
+    },
+    {
+      "fen": "r2q1b1r/pp1np1kb/2p2p1B/7Q/2BP3P/8/PPP2PP1/R3K2R b KQ - 5 14",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qf7#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bxf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "iPYD9",
+        "rating": 841,
+        "popularity": 100,
+        "plays": 235,
+        "themes": "mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/CcztHNEi/black#26"
+      }
+    },
+    {
+      "fen": "r5kr/ppp2p1p/2n1b2B/3q1pQ1/2pp3N/8/PPP2PPP/R3R1K1 b - - 0 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "jYjVy",
+        "rating": 1029,
+        "popularity": 94,
+        "plays": 173,
+        "themes": "kingsideAttack mate mateIn2 middlegame short",
+        "url": "https://lichess.org/DrErdj0k/black#32"
+      }
+    },
+    {
+      "fen": "r5kr/p3bp1p/5p1B/3qp3/6Q1/3pP1P1/PP3P1P/R4RK1 b - - 1 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "jhI8b",
+        "rating": 976,
+        "popularity": 64,
+        "plays": 45,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/lRYUKFCI/black#34"
+      }
+    },
+    {
+      "fen": "2Q5/1p3p1k/6p1/3Pq1p1/1P4P1/5BKP/5P2/5b2 w - - 5 43",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g3f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g3g4",
+          "san": "K⊗g4",
+          "refutedBy": "Qf4#"
+        },
+        {
+          "uci": "g3f3",
+          "san": "K⊗f3",
+          "refutedBy": "Qf4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "js1qO",
+        "rating": 962,
+        "popularity": 88,
+        "plays": 113,
+        "themes": "endgame master mate mateIn1 oneMove",
+        "url": "https://lichess.org/akiwBtjg#83"
+      }
+    },
+    {
+      "fen": "8/ppp2kpp/3P2r1/5b2/2NP1P2/4qP2/PP4KP/R2Q1B1R w - - 1 21",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g2h2",
+      "solutionSan": "K⊗h2",
+      "losingMoves": [
+        {
+          "uci": "g2f1",
+          "san": "K⊗f1",
+          "refutedBy": "Bh3#"
+        },
+        {
+          "uci": "g2h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "kfEAH",
+        "rating": 1339,
+        "popularity": 90,
+        "plays": 1136,
+        "themes": "mate mateIn2 middlegame pillsburysMate short",
+        "url": "https://lichess.org/CVfaGy05#37"
+      }
+    },
+    {
+      "fen": "r5kr/pb1nqp1p/1ppp1n1B/3PppQ1/2P1P3/3B4/PP3PPP/R3R1K1 b - - 3 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "l26FO",
+        "rating": 579,
+        "popularity": 100,
+        "plays": 165,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/uqaUiItR/black#32"
+      }
+    },
+    {
+      "fen": "r3q1kr/ppp2p1p/2n4B/5pQ1/2pp2b1/5N2/PPP2PPP/R5K1 b - - 0 16",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "lpHtp",
+        "rating": 1976,
+        "popularity": 91,
+        "plays": 4264,
+        "themes": "deflection kingsideAttack mate mateIn2 middlegame sacrifice short",
+        "url": "https://lichess.org/yKDxKwlf/black#28"
+      }
+    },
+    {
+      "fen": "3rr3/4k1Q1/2p1p1p1/4P3/1pqP4/2P2R2/6PP/6K1 b - - 0 34",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rf8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "lr6wS",
+        "rating": 1730,
+        "popularity": 98,
+        "plays": 1850,
+        "themes": "attraction deflection epauletteMate long mate mateIn3 middlegame sacrifice",
+        "url": "https://lichess.org/ypiyRtgN/black#62"
+      }
+    },
+    {
+      "fen": "r3k1n1/ppp4p/3p1B2/3N4/1bB1P1q1/5b2/PQ3P1P/R4RK1 w q - 1 16",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1f1",
+          "san": "K⊗f1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "mtju7",
+        "rating": 978,
+        "popularity": 96,
+        "plays": 1080,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/JnVw7BzX#29"
+      }
+    },
+    {
+      "fen": "8/p4p2/2Q2k2/4pNp1/4PbP1/5P2/6K1/4q3 b - - 1 48",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f6f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "f6e5",
+          "san": "K⊗e5",
+          "refutedBy": "Qd6#"
+        },
+        {
+          "uci": "f6g5",
+          "san": "K⊗g5",
+          "refutedBy": "Qh6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "mw7Mg",
+        "rating": 706,
+        "popularity": 81,
+        "plays": 281,
+        "themes": "endgame epauletteMate master mate mateIn1 oneMove",
+        "url": "https://lichess.org/iBTi0uU2/black#94"
+      }
+    },
+    {
+      "fen": "r6r/ppk2BQp/2n5/6P1/6q1/3P1N1b/PP2PP1P/2R3KR w - - 7 23",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "n3DZi",
+        "rating": 1067,
+        "popularity": 90,
+        "plays": 312,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/HNaTqhgl#41"
+      }
+    },
+    {
+      "fen": "r3q1kr/2p2p1p/p1n4B/1pbp1NQ1/6n1/3B4/PPP2PPP/R5K1 b - - 1 20",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "n835I",
+        "rating": 935,
+        "popularity": 97,
+        "plays": 2136,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/UWnwKgnD/black#38"
+      }
+    },
+    {
+      "fen": "r3kb1r/p3pppp/2pp4/8/4B1q1/2N2N1b/PP3P1P/R2Q2KR w kq - 3 16",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "nLjLM",
+        "rating": 892,
+        "popularity": 95,
+        "plays": 2363,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/LWL0sdrY#27"
+      }
+    },
+    {
+      "fen": "r4r2/pp1R1k2/1q2pNp1/6B1/4PP1P/1P6/PK3P2/8 b - - 0 28",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "f7e6",
+      "solutionSan": "K⊗e6",
+      "losingMoves": [
+        {
+          "uci": "f7g6",
+          "san": "K⊗g6",
+          "refutedBy": "h5#"
+        },
+        {
+          "uci": "f7f8",
+          "san": "K⊗f8",
+          "refutedBy": "Bh6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "nuJ0L",
+        "rating": 1399,
+        "popularity": 94,
+        "plays": 1574,
+        "themes": "epauletteMate mate mateIn2 middlegame sacrifice short",
+        "url": "https://lichess.org/AKWKha1R/black#52"
+      }
+    },
+    {
+      "fen": "2r1kbnr/pQp3pp/5p2/4p3/2BP2q1/2P2N1b/PP1N1P1P/R5KR w k - 3 15",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "oUm86",
+        "rating": 721,
+        "popularity": 77,
+        "plays": 126,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/flcWGNjA#27"
+      }
+    },
+    {
+      "fen": "r3kb1r/pQ3ppp/2p5/4P3/B1P1p1q1/7b/PP3P1P/RNB3KR w kq - 3 15",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "p3asS",
+        "rating": 2042,
+        "popularity": 60,
+        "plays": 158,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/lH7McIHx#25"
+      }
+    },
+    {
+      "fen": "6kr/pppq1p1p/3p3B/4rp2/8/6QP/PPP3P1/R5K1 b - - 1 23",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "pXYTn",
+        "rating": 984,
+        "popularity": 97,
+        "plays": 652,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/Pk9GFamZ/black#44"
+      }
+    },
+    {
+      "fen": "1r6/1bp2Q2/p1kp4/1p2p3/4P3/2QP1P2/2P1KBr1/6q1 b - - 8 33",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "c6b7",
+      "solutionSan": "K⊗b7",
+      "losingMoves": [
+        {
+          "uci": "c6b5",
+          "san": "K⊗b5",
+          "refutedBy": "Qfc4#"
+        },
+        {
+          "uci": "c6d6",
+          "san": "K⊗d6",
+          "refutedBy": "Qc5#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "qKtLP",
+        "rating": 1711,
+        "popularity": 90,
+        "plays": 7540,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/XWZmjauS/black#64"
+      }
+    },
+    {
+      "fen": "2k1r3/pppq1p2/5P2/7p/3pNB2/3BKP1b/PPP3rP/R2Q2R1 w - - 0 24",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "e3d3",
+      "solutionSan": "K⊗d3",
+      "losingMoves": [
+        {
+          "uci": "e3f4",
+          "san": "K⊗f4",
+          "refutedBy": "Qf5#"
+        },
+        {
+          "uci": "e3f3",
+          "san": "K⊗f3",
+          "refutedBy": "Qg4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "qMfnp",
+        "rating": 1478,
+        "popularity": 92,
+        "plays": 408,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/zkY48Zj6#45"
+      }
+    },
+    {
+      "fen": "rn4kr/pp2bp1p/4qn1B/6Q1/4P3/8/PP3PPP/RN2K2R b KQ - 1 15",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "qpQuy",
+        "rating": 984,
+        "popularity": 98,
+        "plays": 730,
+        "themes": "mate mateIn1 oneMove opening",
+        "url": "https://lichess.org/XOqrJxIT/black#28"
+      }
+    },
+    {
+      "fen": "r2q2n1/5R1k/p2p2pp/1p1P4/3QP1n1/P5N1/BP4PP/6K1 b - - 0 23",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "h7h6",
+      "solutionSan": "K⊗h6",
+      "losingMoves": [
+        {
+          "uci": "h7g8",
+          "san": "K⊗g8",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "h7g6",
+          "san": "K⊗g6",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "qxLyi",
+        "rating": 825,
+        "popularity": 89,
+        "plays": 327,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/Y1HRp1HD/black#42"
+      }
+    },
+    {
+      "fen": "r5k1/ppp2p1p/6p1/2Bp2q1/8/2QB1P1b/PPP2P1P/R5KR w - - 3 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "rAPwL",
+        "rating": 1209,
+        "popularity": 83,
+        "plays": 12,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/KE2iT1gt#31"
+      }
+    },
+    {
+      "fen": "r1bqr3/pp2k1Q1/4p1P1/3pPp2/2p2P2/2P5/PP3PP1/R4K1R b - - 0 21",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "sQTQ8",
+        "rating": 1364,
+        "popularity": 77,
+        "plays": 265,
+        "themes": "deflection epauletteMate mate mateIn2 middlegame short",
+        "url": "https://lichess.org/ox9B9Pcp/black#38"
+      }
+    },
+    {
+      "fen": "6k1/1p3ppp/8/2p5/8/2P2PPb/PP1qrK1P/2R3R1 w - - 0 31",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "f2g3",
+      "solutionSan": "K⊗g3",
+      "losingMoves": [
+        {
+          "uci": "f2g1",
+          "san": "K⊗g1",
+          "refutedBy": "Qxc1#"
+        },
+        {
+          "uci": "f2f3",
+          "san": "K⊗f3",
+          "refutedBy": "Qe3#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "sfhq6",
+        "rating": 1204,
+        "popularity": 90,
+        "plays": 908,
+        "themes": "endgame long mate mateIn3 pillsburysMate",
+        "url": "https://lichess.org/xDlYiF2R#55"
+      }
+    },
+    {
+      "fen": "1rbq1N1r/p3b1pk/1p1p1p1p/2pBpQ2/2P5/3PP1P1/PP3P1P/R4RK1 b - - 1 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "h7g7",
+      "solutionSan": "K⊗g7",
+      "losingMoves": [
+        {
+          "uci": "h7h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qh7#"
+        },
+        {
+          "uci": "h7h6",
+          "san": "K⊗h6",
+          "refutedBy": "Qg6#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "t86tc",
+        "rating": 1816,
+        "popularity": 93,
+        "plays": 13249,
+        "themes": "discoveredCheck doubleCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/WRlDXhBR/black#34"
+      }
+    },
+    {
+      "fen": "5rk1/Qn3pp1/4pB1p/8/6q1/3P3b/PP2PP1P/R5KR w - - 5 22",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "tp4gp",
+        "rating": 1193,
+        "popularity": 47,
+        "plays": 22,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/CS0Beh0H#39"
+      }
+    },
+    {
+      "fen": "rn2k2r/p1pp1p2/1p2pq2/8/3Pb1Pp/N1P3KN/PP2B2P/R2Q1R2 w kq - 0 16",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g3h2",
+      "solutionSan": "K⊗h2",
+      "losingMoves": [
+        {
+          "uci": "g3g4",
+          "san": "K⊗g4",
+          "refutedBy": "Q⊗h4#"
+        },
+        {
+          "uci": "g3h3",
+          "san": "K⊗h3",
+          "refutedBy": "Q⊗h4#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "tqdKB",
+        "rating": 1200,
+        "popularity": 90,
+        "plays": 726,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/2Hs3evwD#29"
+      }
+    },
+    {
+      "fen": "1k4b1/1p6/pq6/2p3R1/4Bp2/P1P2P2/1KP2QP1/3r4 w - - 3 32",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b2c3",
+      "solutionSan": "K⊗c3",
+      "losingMoves": [
+        {
+          "uci": "b2a3",
+          "san": "K⊗a3",
+          "refutedBy": "Ra1#"
+        },
+        {
+          "uci": "b2c2",
+          "san": "K⊗c2",
+          "refutedBy": "Qb3#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "uXPAs",
+        "rating": 824,
+        "popularity": 90,
+        "plays": 337,
+        "themes": "endgame mate mateIn1 oneMove",
+        "url": "https://lichess.org/q2pzLAPc#61"
+      }
+    },
+    {
+      "fen": "rnb3kr/1pq2p1p/p3p2B/4p3/8/6Q1/P1P2PPP/b2K1B1R b - - 1 16",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "v5kyV",
+        "rating": 934,
+        "popularity": 95,
+        "plays": 405,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/wxWCPq14/black#30"
+      }
+    },
+    {
+      "fen": "7k/3n2p1/2r4p/1p2pp1P/p2p3N/P2P3Q/1q1K1PP1/3RR3 w - - 0 32",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "d2e1",
+      "solutionSan": "K⊗e1",
+      "losingMoves": [
+        {
+          "uci": "d2d3",
+          "san": "K⊗d3",
+          "refutedBy": "Nc5#"
+        },
+        {
+          "uci": "d2d1",
+          "san": "K⊗d1",
+          "refutedBy": "Rc1#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "vE3Nr",
+        "rating": 1460,
+        "popularity": 97,
+        "plays": 2372,
+        "themes": "deflection epauletteMate mate mateIn2 middlegame short",
+        "url": "https://lichess.org/P4yu31PN#59"
+      }
+    },
+    {
+      "fen": "3rr3/p3k1Q1/1pp1p3/4P3/2bP4/5R2/2q3PP/4R1K1 b - - 0 33",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rf8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "vENSw",
+        "rating": 924,
+        "popularity": 100,
+        "plays": 305,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/PZbfFGsw/black#64"
+      }
+    },
+    {
+      "fen": "r6r/pb1q2kp/1pnp1pnB/7Q/2B1P3/2P5/P1P2PPP/R4RK1 b - - 1 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qg5#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "vRLUR",
+        "rating": 774,
+        "popularity": 100,
+        "plays": 398,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/L9tlCbjs/black#32"
+      }
+    },
+    {
+      "fen": "r3kb1r/p4ppp/8/3pP3/6q1/2P2N1b/PP1NQP1P/R5KR w kq - 3 18",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "vgctd",
+        "rating": 557,
+        "popularity": 100,
+        "plays": 64,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/Lfea9UVx#33"
+      }
+    },
+    {
+      "fen": "r1b3kr/pp3p1p/2n2n1B/4pNQ1/8/2P1pP1K/P1P3PP/4q3 b - - 1 19",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "vwZ1X",
+        "rating": 1095,
+        "popularity": 89,
+        "plays": 110,
+        "themes": "discoveredAttack discoveredCheck mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/wDn1bwoJ/black#36"
+      }
+    },
+    {
+      "fen": "r3kb1r/ppp2ppp/8/6q1/8/1PNPnP1b/PBPQBP1P/R5KR w kq - 7 15",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "wKG3z",
+        "rating": 948,
+        "popularity": 90,
+        "plays": 71,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/AH6qWDsr#27"
+      }
+    },
+    {
+      "fen": "r1bqr3/pp2k1Q1/4p1P1/2ppPp2/4nP2/2P1P3/PP4P1/R1B1K2R b KQ - 0 19",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "e7d8",
+      "solutionSan": "K⊗d8",
+      "losingMoves": [
+        {
+          "uci": "e7e8",
+          "san": "K⊗e8",
+          "refutedBy": "Rh8#"
+        },
+        {
+          "uci": "e7e6",
+          "san": "K⊗e6",
+          "refutedBy": "Qf7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "wtLQ6",
+        "rating": 953,
+        "popularity": 87,
+        "plays": 80,
+        "themes": "epauletteMate mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/igfFqOkl/black#36"
+      }
+    },
+    {
+      "fen": "r1bq3r/1p1n2kp/p4pnB/2p4Q/8/1B6/PP3PPP/RN4K1 b - - 1 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g7h8",
+      "solutionSan": "K⊗h8",
+      "losingMoves": [
+        {
+          "uci": "g7f6",
+          "san": "K⊗f6",
+          "refutedBy": "Qg5#"
+        },
+        {
+          "uci": "g7h7",
+          "san": "K⊗h7",
+          "refutedBy": "Bf8#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "x7rLV",
+        "rating": 771,
+        "popularity": 58,
+        "plays": 99,
+        "themes": "mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/25viCQwv/black#34"
+      }
+    },
+    {
+      "fen": "7R/5pp1/4p1k1/7p/3P3Q/4nPPK/7P/5q2 w - - 11 46",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "h3g3",
+      "solutionSan": "K⊗g3",
+      "losingMoves": [
+        {
+          "uci": "h3h4",
+          "san": "K⊗h4",
+          "refutedBy": "Nf5#"
+        },
+        {
+          "uci": "h3h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "xXTuB",
+        "rating": 1433,
+        "popularity": 38,
+        "plays": 14,
+        "themes": "endgame master mate mateIn1 oneMove",
+        "url": "https://lichess.org/gaGYb77q#89"
+      }
+    },
+    {
+      "fen": "r2k3r/pp3ppp/3p4/1B4q1/8/2P2P1b/PP3P1P/R5KR w - - 0 19",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "g1f2",
+      "solutionSan": "K⊗f2",
+      "losingMoves": [
+        {
+          "uci": "g1h2",
+          "san": "K⊗h2",
+          "refutedBy": "Qg2#"
+        },
+        {
+          "uci": "g1h1",
+          "san": "K⊗h1",
+          "refutedBy": "Qg2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "xYQ1D",
+        "rating": 776,
+        "popularity": 92,
+        "plays": 395,
+        "themes": "hangingPiece mate mateIn1 middlegame oneMove",
+        "url": "https://lichess.org/FUURs4WM#35"
+      }
+    },
+    {
+      "fen": "r1b3k1/pp1p1p1p/2n1p1p1/4P3/1q3P2/b1N3Q1/P1P1N1PP/RK3B1R w - - 3 17",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "solutionUci": "b1c2",
+      "solutionSan": "K⊗c2",
+      "losingMoves": [
+        {
+          "uci": "b1a2",
+          "san": "K⊗a2",
+          "refutedBy": "Qb2#"
+        },
+        {
+          "uci": "b1a1",
+          "san": "K⊗a1",
+          "refutedBy": "Qb2#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "ylCEn",
+        "rating": 1483,
+        "popularity": 95,
+        "plays": 16398,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/dOJbHUVz#29"
+      }
+    },
+    {
+      "fen": "r1b3kr/1p3p1p/p1n1N2B/4p1Q1/4P3/2q3P1/P1P3BP/R5K1 b - - 0 18",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "zGTz4",
+        "rating": 1177,
+        "popularity": 98,
+        "plays": 492,
+        "themes": "kingsideAttack mate mateIn2 middlegame short",
+        "url": "https://lichess.org/Tzf7crGD/black#32"
+      }
+    },
+    {
+      "fen": "r5kr/pp1q1p1p/3b3B/2p2P2/3n2Q1/6P1/PPP2K1P/RN5R b - - 0 17",
+      "sideToMove": "b",
+      "legalMoveCount": 3,
+      "solutionUci": "g8f7",
+      "solutionSan": "K⊗f7",
+      "losingMoves": [
+        {
+          "uci": "g8h7",
+          "san": "K⊗h7",
+          "refutedBy": "Qg7#"
+        },
+        {
+          "uci": "g8h8",
+          "san": "K⊗h8",
+          "refutedBy": "Qg7#"
+        }
+      ],
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "zKAGp",
+        "rating": 1106,
+        "popularity": 100,
+        "plays": 525,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/jlymo5XP/black#30"
+      }
+    }
+  ]
+}

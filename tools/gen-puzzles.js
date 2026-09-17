@@ -53,6 +53,10 @@ if (require.main === module && process.argv.includes('--inline')) {
 const E = require('./../tests/engine.js');
 const { startState, legal, apply, inCheck, fen, san, sqName } = E;
 const { toFen } = require('./fen-write.js');
+/* trySurvival lives with the seeder because that is where it is applied at
+   scale. It is imported rather than copied so the two tools cannot drift, and
+   requiring the file runs nothing: its CLI is behind require.main === module. */
+const { trySurvival } = require('./lichess-seed.js');
 
 /* ------------------------------ predicates ------------------------------ */
 
@@ -226,7 +230,14 @@ function restraintDifficulty(ms, selfs) {
 }
 
 const RATIONALE = {
+  /* RETIRED 2026-09-17. The escape family could not be hard: it listed EVERY
+     legal move as a correct answer, so it had zero wrong answers by
+     construction - "you are mated under normal rules, now play anything". Its
+     replacement is survival, which keeps the setup and adds a way to be wrong.
+     Kept here as a string only, because a schema-3 file still in someone's
+     browser cache can still name it. */
   escape: 'Checkmate under standard rules. Only an execution of your own piece survives.',
+  survival: 'Checkmate under standard rules, and the variant offers several ways out. Only one of them is still alive after the reply; the rest are legal, look no different, and lose.',
   tactical: 'Executing your own piece mates at once, and no ordinary move forces mate within two.',
   multistep: 'One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.',
   restraint: 'The execution is the trap. An ordinary move mates at once and no self-capture matches it, so taking your own piece here is simply the wrong idea.'
@@ -318,7 +329,11 @@ function buildEntry(id, family, S, solutionMoves, ms, std) {
    measures the overlap as a NUMBER on every run rather than leaving a branch
    that cannot fire looking like assurance. */
 const FAMILIES = [
-  { name: 'escape',    prefix: 'esc', run: tryEscape,    sols: function (r) { return r; } },
+  /* escape was here and is retired - see RATIONALE above. tryEscape() itself
+     stays exported and is still used by tests/puzzles.js, because SURVIVAL is a
+     strict subset of it: every survival position is a standard-rules checkmate
+     that the variant reopens. Dropping the predicate would remove the check
+     that a survival puzzle really is one. */
   { name: 'tactical',  prefix: 'tac', run: tryTactical,  sols: function (r) { return [r.sole]; } },
   { name: 'restraint', prefix: 'res', run: tryRestraint, sols: function (r) { return r.wins; } },
   { name: 'multistep', prefix: 'mul', run: tryMultistep, sols: function (r) { return [r.sole]; } }
@@ -450,6 +465,15 @@ if (require.main === module) {
     cap: parseInt(arg('--cap', '40'), 10)
   };
   const out = arg('--out', OUT_DEFAULT);
+  /*
+   * The survival family is NOT swept for. It is derived from the Lichess CC0
+   * puzzle database by tools/lichess-seed.js and committed as a file, because
+   * the positions have to come from real games: 1.9 million mate lines were
+   * replayed to find 153 of them, which no playout from the opening is going to
+   * stumble into. This stays the single writer of puzzles.json - it reads that
+   * file rather than a second writer appending to the output.
+   */
+  const survivalPath = arg('--survival', path.join(ROOT, 'puzzles', 'survival-seed.json'));
   /* --now exists so "the same --seed reproduces a byte-identical puzzles.json"
      (M3-T1-AC6) is literally true and testable. Everything else in the output is
      a pure function of the seed; the wall-clock stamp was the one thing that was
@@ -461,6 +485,55 @@ if (require.main === module) {
 
   const puzzles = [];
   const counts = {}, yield_ = {};
+
+  /* Read first, so a malformed seed fails before a 200-second sweep is thrown
+     away rather than after it. */
+  let survival = [];
+  if (fs.existsSync(survivalPath)) {
+    const seed = JSON.parse(fs.readFileSync(survivalPath, 'utf8'));
+    survival = (seed.puzzles || []).map(function (p, i) {
+      const S = fen(p.fen);
+      const ms = legal(S, true);
+      /* RE-DERIVED, not copied. The seed file supplies a position and where it
+         came from; everything a reader could check is recomputed here from the
+         FEN, and the seed's own answer is used only to CONTRADICT this one if
+         the two tools ever disagree. A stored depth would have been one more
+         claim nobody verifies. */
+      const r = trySurvival(S, 3, true);
+      if (!r) throw new Error('survival seed ' + p.source.id +
+        ': the position no longer satisfies the predicate — ' + p.fen);
+      if (sqName(r.sole.from) + sqName(r.sole.to) + (r.sole.promo || '') !== p.solutionUci) {
+        throw new Error('survival seed ' + p.source.id + ': seeder says ' + p.solutionUci +
+          ', predicate says ' + sqName(r.sole.from) + sqName(r.sole.to));
+      }
+      const e = buildEntry('sur-' + String(i + 1).padStart(4, '0'), 'survival',
+        S, [r.sole], ms, legal(S, false).length);
+      /* CC0 asks for no attribution. The link is here because a position a
+         reader can trace back to a real game is worth more than one that
+         appeared from nowhere, and the Lichess rating is a difficulty prior no
+         predicate in this repo can compute. */
+      e.source = p.source;
+      e.depth = r.depth;
+      e.difficulty = r.depth === 3 ? 3 : (ms.length > 3 ? 3 : 2);
+      /* The losing moves and what refutes each one, recomputed the same way. */
+      /* Compared by square, NOT by object identity: trySurvival ran its own
+         legal() call, so its move objects are different instances from the ones
+         in `ms` and `m !== r.sole` is true even for the solution — which put the
+         answer in its own decoy list until the validator caught it. */
+      const soleKey = r.sole.from + ':' + r.sole.to + ':' + (r.sole.promo || '-');
+      e.decoys = ms.filter(function (m) {
+        return m.from + ':' + m.to + ':' + (m.promo || '-') !== soleKey;
+      }).map(function (m) {
+        const T = apply(S, m);
+        const kill = legal(T, true).filter(function (x) {
+          return legal(apply(T, x), true).length === 0 && inCheck(apply(T, x), apply(T, x).turn);
+        })[0];
+        return { uci: sqName(m.from) + sqName(m.to) + (m.promo || ''), san: san(S, m, true),
+                 refutedBy: kill ? san(T, kill, true) : null };
+      });
+      return e;
+    });
+  }
   FAMILIES.forEach(function (F) {
     const all = r.found[F.name];
     const got = all.slice(0, opts.cap);
@@ -483,12 +556,22 @@ if (require.main === module) {
     got.forEach(function (p) { puzzles.push(p); });
   });
 
+  if (survival.length) {
+    counts.survival = survival.length;
+    yield_.survival = { found: survival.length, kept: survival.length, cap: survival.length,
+      target: 0, short: 0, perThousandUnique: 0 };
+    survival.forEach(function (p) { puzzles.push(p); });
+  }
+
   const doc = {
-    schema: 3,
+    /* Schema 4: the escape family value is gone, survival and its source/depth
+       fields are new. Bumped WITH the page reader in the same change. */
+    schema: 4,
     generatedAt: now,
     generator: {
       strategy: 'check-biased playout from startState, depth-free predicates',
-      familyPrecedence: FAMILIES.map(function (F) { return F.name; }),
+      familyPrecedence: FAMILIES.map(function (F) { return F.name; }).concat(survival.length ? ['survival'] : []),
+      survivalSource: survival.length ? { file: path.basename(survivalPath), db: 'lichess-cc0' } : null,
       checkBias: opts.bias,
       games: r.games,
       positionsVisited: r.positions,

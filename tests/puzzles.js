@@ -120,16 +120,77 @@ function forcingLine(S, m) {
   return { ok: gaps.length === 0, replies: lines, gaps: gaps, count: rep.length };
 }
 
+/* does the side to move at T lose by force within three plies? */
+function lostIn3(T) {
+  const ms = legal(T, true);
+  for (const m of ms) if (isMate(apply(T, m))) return true;
+  for (const m of ms) {
+    const U = apply(T, m);
+    const rep = legal(U, true);
+    if (!rep.length) continue;
+    let all = true;
+    for (const r of rep) {
+      const V = apply(U, r);
+      if (!legal(V, true).some(function (x) { return isMate(apply(V, x)); })) { all = false; break; }
+    }
+    if (all) return true;
+  }
+  return false;
+}
+
+/*
+ * SURVIVAL, the family that replaced escape. Re-derived here rather than
+ * imported, for the same reason as the others: a validator that imports the
+ * thing it validates proves only that the generator agrees with itself.
+ *
+ * Checkmate under standard rules, at least three ways out under the variant,
+ * and exactly ONE of them still alive afterwards. Two depths, and the depth is
+ * the difficulty: a SHALLOW puzzle is settled by checking the opponent's
+ * immediate reply to each candidate; a DEEP one is not - more than one
+ * candidate survives the reply, and only one survives three plies.
+ *
+ * Every candidate is a self-capture and that needs no clause: standard-legal
+ * moves number zero here, so anything the variant adds can only be an
+ * execution. The king is always the mover, for the same reason - capturing the
+ * checker or blocking the line would both be ordinary moves, so the only thing
+ * the rule newly permits is the king eating its own neighbour.
+ */
+function survivalSolution(S) {
+  if (!inCheck(S, S.turn)) return null;
+  if (legal(S, false).length !== 0) return null;
+  const ms = legal(S, true);
+  if (ms.length < 3) return null;
+  const live = ms.filter(function (m) {
+    const T = apply(S, m);
+    return !legal(T, true).some(function (r) { return isMate(apply(T, r)); });
+  });
+  if (live.length === 1) return { move: live[0], depth: 1, live: live.length };
+  if (live.length < 2) return null;
+  const deep = live.filter(function (m) { return !lostIn3(apply(S, m)); });
+  if (deep.length !== 1) return null;
+  return { move: deep[0], depth: 3, live: live.length };
+}
+
 /* Family PRECEDENCE, mirroring tools/gen-puzzles.js. Escape and multistep are
    NOT disjoint -- a position in check with no ordinary moves satisfies
    multistep's clauses vacuously -- so a multistep that is also an escape is
    mislabelled, and this is the check that says so. */
-const ORDER = ['escape', 'tactical', 'restraint', 'multistep'];
+/* escape is RETIRED as a shipped family and survival replaces it. isEscape()
+   stays, because survival is a strict SUBSET of escape and the subset relation
+   is what makes "this really is a survival position" checkable: every survival
+   puzzle must also satisfy isEscape, and that is asserted below.
+
+   survival sits LAST on purpose. A position with no ordinary moves can in
+   principle also satisfy tactical or multistep - if one of its escapes happens
+   to mate, or to force mate in two - and if that ever happens the label is
+   genuinely ambiguous and a human should look. Measured over the shipped set:
+   zero do. */
+const ORDER = ['tactical', 'restraint', 'multistep', 'survival'];
 const MATCHES = {
-  escape:    function (S) { return isEscape(S); },
   tactical:  function (S) { return !!tacticalSolution(S); },
   restraint: function (S) { return !!restraintSolutions(S); },
-  multistep: function (S) { return !!multistepSolution(S); }
+  multistep: function (S) { return !!multistepSolution(S); },
+  survival:  function (S) { return !!survivalSolution(S); }
 };
 
 /* ---------- helpers ---------- */
@@ -153,6 +214,15 @@ function validate(p) {
   if (bad.length) return bad;
 
   if (ORDER.indexOf(p.family) < 0) bad.push('family not one of ' + ORDER.join('|') + ': ' + p.family);
+  /* survival carries two fields nothing else does: where the position came from,
+     and the depth that decides its difficulty. Both are required for that family
+     and must be absent nowhere else in a way that matters - a missing source is
+     a puzzle nobody can trace back to a game. */
+  if (p.family === 'survival') {
+    if (!p.source || typeof p.source.id !== 'string') bad.push('survival puzzle has no source.id');
+    else if (p.source.db !== 'lichess-cc0') bad.push('survival source.db is ' + p.source.db + ', expected lichess-cc0');
+    if (p.depth !== 1 && p.depth !== 3) bad.push('survival depth is ' + p.depth + ', expected 1 or 3');
+  }
   if (!Array.isArray(p.solutions)) { bad.push('solutions is not an ARRAY'); return bad; }
   if (p.solutions.length === 0) bad.push('solutions is empty');
   if (!Array.isArray(p.decoys)) bad.push('decoys is not an array');
@@ -210,16 +280,44 @@ function validate(p) {
   if (resolved.length !== p.solutions.length) return bad;
 
   /* the family predicate itself must hold — this is the check a lying file fails */
-  if (p.family === 'escape') {
+  if (p.family === 'survival') {
+    /* the setup half: this must still be a position standard chess calls mate */
     if (!isEscape(S)) {
-      bad.push('ESCAPE predicate FAILS: inCheck=' + inCheck(S, S.turn) +
-               ' standardLegal=' + std.length + ' tyrannyLegal=' + ms.length);
+      bad.push('SURVIVAL setup FAILS: it is not a standard-rules checkmate. inCheck=' +
+               inCheck(S, S.turn) + ' standardLegal=' + std.length + ' tyrannyLegal=' + ms.length);
     }
-    /* solutions must be EVERY legal move, not a subset */
-    const solSet = new Set(p.solutions.map(key));
-    const allSet = new Set(ms.map(key));
-    if (solSet.size !== allSet.size) bad.push('escape solutions list ' + solSet.size + ' moves but ' + allSet.size + ' are legal');
-    for (const k of allSet) if (!solSet.has(k)) bad.push('escape is missing legal move ' + k + ' from solutions');
+    if (ms.length < 3) bad.push('SURVIVAL needs at least three ways out, has ' + ms.length);
+    const want = survivalSolution(S);
+    if (!want) {
+      const live = ms.filter(function (m) {
+        const T = apply(S, m);
+        return !legal(T, true).some(function (r) { return isMate(apply(T, r)); });
+      });
+      bad.push('SURVIVAL predicate FAILS: ' + ms.length + ' ways out, ' + live.length +
+               ' survive the reply, so the answer is not unique');
+    } else {
+      if (p.solutions.length !== 1) bad.push('survival must carry exactly 1 solution, has ' + p.solutions.length);
+      else if (key(p.solutions[0]) !== key(want.move)) {
+        bad.push('survival solution ' + uci(p.solutions[0]) + ' is not the one that survives, ' + uci(want.move));
+      }
+      if (p.depth !== want.depth) bad.push('survival depth ' + p.depth + ' but the position is decided at ' + want.depth);
+      /* THE clause that makes this a puzzle at all, and the one the retired
+         escape family never had: there have to be wrong answers. */
+      if (p.solutions.length >= ms.length) {
+        bad.push('SURVIVAL has no wrong answers: ' + p.solutions.length + ' solutions for ' + ms.length + ' legal moves');
+      }
+    }
+    /* every decoy must be a real losing move, refuted by the move named */
+    p.decoys.forEach(function (d, i) {
+      const hit = ms.filter(function (m) { return uci(m) === d.uci; })[0];
+      if (!hit) { bad.push('survival decoy ' + i + ' ' + d.uci + ' is not legal'); return; }
+      const T = apply(S, hit);
+      const kill = legal(T, true).filter(function (r) { return isMate(apply(T, r)); })[0];
+      if (!kill && p.depth === 1) bad.push('survival decoy ' + i + ' ' + d.uci + ' is not actually refuted');
+      else if (kill && d.refutedBy && san(T, kill, true) !== d.refutedBy) {
+        bad.push('survival decoy ' + i + ' says it is refuted by ' + d.refutedBy + ' but the move is ' + san(T, kill, true));
+      }
+    });
   } else if (p.family === 'tactical') {
     const want = tacticalSolution(S);
     if (!want) {
@@ -313,7 +411,7 @@ hd('File-level schema');
 /* Schema 3, bumped WITH the reader in the same change (M3-T2-AC4): two new
    family values plus the selfCaptureCount field. The page refuses a schema it
    does not know rather than reading a newer file as if it were a schema-2 one. */
-chk('schema is 3', doc.schema, 3);
+chk('schema is 4', doc.schema, 4);
 chk('puzzles is an array', Array.isArray(doc.puzzles), true);
 chk('at least one puzzle', (doc.puzzles || []).length > 0, true);
 chk('has a generator block', !!doc.generator, true);
@@ -409,12 +507,13 @@ console.log('      ' + sound + ' of ' + list.length + ' puzzles verified sound')
  */
 hd('Mutation: corrupted puzzles must be REJECTED');
 const clone = function (o) { return JSON.parse(JSON.stringify(o)); };
-/* Pick an escape with MORE THAN ONE solution for the drop-a-solution mutation.
-   Dropping the only solution of a 1-move escape leaves an empty array, which is
-   caught by a different rule — so the check that "an escape must list every legal
-   move" would never actually be exercised. */
-const esc = list.filter(function (p) { return p.family === 'escape' && p.solutions.length > 1; })[0]
-         || list.filter(function (p) { return p.family === 'escape'; })[0];
+/* The generic corruptions need any real puzzle to work from; survival is used
+   because it is the family this round added and the one with the most fields to
+   get wrong. The escape family it replaced is gone, and with it the mutation
+   that asserted "an escape lists every legal move" — that property was the
+   defect, not a feature, and its replacement is below: a survival puzzle that
+   lists every legal move has no wrong answers and must be REJECTED. */
+const sur = list.filter(function (p) { return p.family === 'survival'; })[0];
 const tac = list.filter(function (p) { return p.family === 'tactical'; })[0];
 const res = list.filter(function (p) { return p.family === 'restraint'; })[0];
 const mul = list.filter(function (p) { return p.family === 'multistep'; })[0];
@@ -426,19 +525,16 @@ function mustReject(label, obj) {
   console.log((ok ? 'PASS  ' : 'FAIL  ') + 'rejects ' + label + (ok ? '   [' + bad[0].slice(0, 62) + ']' : '   *** ACCEPTED A BAD PUZZLE'));
 }
 
-if (!esc || !tac) {
-  console.log('FAIL  need one escape and one tactical puzzle to run the mutation suite');
+if (!sur || !tac) {
+  console.log('FAIL  need one survival and one tactical puzzle to run the mutation suite');
   fail++;
 } else {
   let m;
-  m = clone(esc); m.fen = 'not a fen at all';                       mustReject('an unparseable FEN', m);
-  m = clone(esc); m.sideToMove = (esc.sideToMove === 'w' ? 'b' : 'w'); mustReject('sideToMove contradicting the FEN', m);
-  m = clone(esc); m.legalMoveCount = esc.legalMoveCount + 7;          mustReject('an inflated legalMoveCount', m);
-  m = clone(esc); m.solutions = m.solutions.slice(0, -1) ;
-                  m.solutionsUci = m.solutionsUci.slice(0, -1);
-                  m.solutionsSan = m.solutionsSan.slice(0, -1);      mustReject('an escape missing one of its legal moves', m);
-  m = clone(esc); m.solutions = { from: 0, to: 1, promo: null };     mustReject('solutions as an OBJECT instead of an array', m);
-  m = clone(esc); m.solutions[0] = { from: 0, to: 63, promo: null };
+  m = clone(sur); m.fen = 'not a fen at all';                       mustReject('an unparseable FEN', m);
+  m = clone(sur); m.sideToMove = (sur.sideToMove === 'w' ? 'b' : 'w'); mustReject('sideToMove contradicting the FEN', m);
+  m = clone(sur); m.legalMoveCount = sur.legalMoveCount + 7;          mustReject('an inflated legalMoveCount', m);
+  m = clone(sur); m.solutions = { from: 0, to: 1, promo: null };     mustReject('solutions as an OBJECT instead of an array', m);
+  m = clone(sur); m.solutions[0] = { from: 0, to: 63, promo: null };
                   m.solutionsUci[0] = 'a8h1';                        mustReject('a solution that is not a legal move', m);
   m = clone(tac); m.family = 'escape';                               mustReject('a tactical relabelled as an escape', m);
   m = clone(tac); delete m.difficulty;                               mustReject('a missing required field', m);
@@ -455,6 +551,55 @@ if (!esc || !tac) {
   }
   m = clone(tac); m.selfCaptureCount = tac.selfCaptureCount + 3;  mustReject('an inflated selfCaptureCount', m);
   m = clone(tac); m.family = 'nonsense';                          mustReject('an unknown family value', m);
+}
+
+/* ====================== survival must have WRONG ANSWERS ====================== */
+/*
+ * This is the section that exists because of what it replaced. The escape family
+ * listed EVERY legal move as a solution, so it was impossible to answer one
+ * incorrectly. Each corruption below turns a survival puzzle back into something
+ * with that defect, and each must be caught.
+ */
+hd('Mutation: a survival puzzle with no wrong answer is not a puzzle');
+if (!sur) { console.log('FAIL  no survival puzzle to mutate'); fail++; }
+else {
+  let m;
+  const Ss = fen(sur.fen);
+  const all = legal(Ss, true);
+
+  /* THE one. Every legal move listed as correct is precisely the retired
+     family's shape, and it has to fail now. */
+  m = clone(sur);
+  m.solutions = all.map(function (x) { return { from: x.from, to: x.to, promo: x.promo || null }; });
+  m.solutionsUci = all.map(uci);
+  m.solutionsSan = all.map(function (x) { return san(Ss, x, true); });
+  mustReject('a survival puzzle that lists EVERY legal move, the old escape shape', m);
+
+  /* pointing at a move that actually loses */
+  const loser = all.filter(function (x) { return uci(x) !== sur.solutionsUci[0]; })[0];
+  if (loser) {
+    m = clone(sur);
+    m.solutions = [{ from: loser.from, to: loser.to, promo: loser.promo || null }];
+    m.solutionsUci = [uci(loser)];
+    m.solutionsSan = [san(Ss, loser, true)];
+    mustReject('a survival puzzle whose answer is one of the losing moves', m);
+  }
+
+  m = clone(sur); m.depth = (sur.depth === 1 ? 3 : 1);
+  mustReject('a survival puzzle claiming the wrong depth', m);
+  m = clone(sur); delete m.source;
+  mustReject('a survival puzzle with no source to trace it back to', m);
+  m = clone(sur); m.source = JSON.parse(JSON.stringify(sur.source)); m.source.db = 'somewhere-else';
+  mustReject('a survival puzzle claiming a source database it did not come from', m);
+  m = clone(sur); m.selfCaptureCount = 0;
+  mustReject('a survival puzzle claiming no self-captures are available', m);
+  if (sur.decoys && sur.decoys.length) {
+    m = clone(sur); m.decoys = JSON.parse(JSON.stringify(sur.decoys));
+    m.decoys[0].refutedBy = 'Qz9#';
+    mustReject('a survival decoy naming a refutation that is not the real one', m);
+  }
+  m = clone(sur); m.family = 'multistep';
+  mustReject('a survival puzzle relabelled as a multistep', m);
 }
 
 /* ============ the two new families, and the claims they must not fake ============ */

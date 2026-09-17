@@ -7,8 +7,10 @@
  * Node 24 ships a global WebSocket, which is the whole CDP client.
  *
  * SEPARATE RUNNER, ALSO DELIBERATELY. This is not in tests/run-all.js's suite
- * loop. M1-T1-AC5 pins that runner at 27/8/24/13/85 and the tree's must_not
- * forbids the count moving, so browser checks are counted on their own line.
+ * loop, so the Node count stays a number about Node. It IS run by CI as its own
+ * step: no suite under tests/ other than this one touches the page's UI, so
+ * without it the marker toggle, puzzle mode and the Try again reset could all
+ * be deleted with the build staying green.
  *
  *   node tests/browser.js            run everything
  *   node tests/browser.js --head     watch it in a real window
@@ -472,7 +474,7 @@ async function main(){
     chk('     the shipped set carries all four families',
       await ev('var f = {};' +
                'window.TYRANNY_PUZZLES.puzzles.forEach(function(p){ f[p.family] = 1; });' +
-               'return ["escape","tactical","restraint","multistep"].every(function(k){ return !!f[k]; });'), true);
+               'return ["tactical","restraint","multistep","survival"].every(function(k){ return !!f[k]; }) && !f.escape;'), true);
     await ev('document.getElementById("puzToggle").click();');
     const restraint = await ev(
       'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
@@ -512,13 +514,56 @@ async function main(){
 
     head('M3-T2-AC4 the reader knows its own schema and refuses one it does not');
     await load();
-    chk('     the shipped file is schema 3', await ev('return window.TYRANNY_PUZZLES.schema'), 3);
+    chk('     the shipped file is schema 4', await ev('return window.TYRANNY_PUZZLES.schema'), 4);
     await ev('window.TYRANNY_PUZZLES = {schema:99, puzzles:[{id:"x", fen:"7k/8/8/8/8/8/8/7K w - - 0 1",' +
              ' solutions:[{from:63,to:62,promo:null}]}]}; return 1;');
     const refused = await ev('return JSON.stringify(puzRead());');
     chk('AC4  a schema this page has never seen is refused, not read as an old one',
       JSON.parse(refused).why, 'unknown-schema');
     chk('AC4  and it refuses without throwing', JSON.parse(refused).ok, false);
+
+    /* ---------------- survival: a wrong answer that teaches ---------------- */
+    /*
+     * The family this replaced could not be answered incorrectly — it listed
+     * every legal move as a solution. These checks are the opposite claim:
+     * there are wrong answers, and picking one tells you what refuted it.
+     */
+    head('Survival has wrong answers, and says what beat you');
+    await load();
+    await ev('document.getElementById("puzToggle").click();');
+    const sv = await ev(
+      'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
+      '  if(p.family === "survival" && p.decoys.length && p.decoys[0].refutedBy){' +
+      '    return {i:i, id:p.id, sol:p.solutionsUci[0], decoy:p.decoys[0].uci,' +
+      '            beats:p.decoys[0].refutedBy, legal:p.legalMoveCount,' +
+      '            sols:p.solutions.length, url:p.source.url}; } }' +
+      'return null;');
+    chk('     found a survival puzzle', !!sv, true);
+    chk('AC   it has real wrong answers: fewer solutions than legal moves',
+      sv.sols + ' of ' + sv.legal, '1 of 3');
+    chk('     and it is traceable to a real game', /^https:\/\/lichess\.org\//.test(sv.url), true);
+    await ev('puzLoad(' + sv.i + '); return 1;');
+    const dm = await ev(
+      'var S = window.hist[window.hist.length-1];' +
+      'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+      'var m = legal(S, true).filter(function(x){ return nm(x.from)+nm(x.to) === "' + sv.decoy + '"; })[0];' +
+      'return m ? {from:m.from, to:m.to, kind:m.kind} : null;');
+    chk('     the decoy is a legal self-capture', dm && dm.kind, 'self');
+    await ev(pick(dm.from)); await ev(pick(dm.to));
+    chk('AC   a losing escape is judged WRONG', await ev('return window.puz.state'), 'wrong');
+    const told = await ev('return document.getElementById("puzSay").textContent;');
+    console.log('       told: ' + told);
+    chk('AC   and the page names what refuted it', told.indexOf(sv.beats) >= 0, true);
+    /* Naming what refuted YOUR move is not naming the puzzle's answer. The
+       square the winning move goes to must not appear in the message. */
+    chk('AC   without naming the square the answer moves to',
+      told.indexOf(sv.sol.slice(2, 4)) < 0, true);
+    await ev('document.getElementById("puzRetry").click();');
+    const winning = await ev('var p = window.puz.list[' + sv.i + '];' +
+      'return {from:p.solutions[0].from, to:p.solutions[0].to};');
+    await ev(pick(winning.from)); await ev(pick(winning.to));
+    chk('AC   the one surviving move solves it', await ev('return window.puz.state'), 'solved');
+    await ev('document.getElementById("puzToggle").click();');
 
     /* ---------------- the set is dealt in a new order every time ---------------- */
     head('Puzzles are shuffled on entry, not served in generation order');
@@ -527,7 +572,7 @@ async function main(){
     const dealA = await ev('document.getElementById("puzToggle").click();' + ids);
     await ev('document.getElementById("puzToggle").click();');            // leave
     const dealB = await ev('document.getElementById("puzToggle").click();' + ids);
-    chk('     both deals contain the whole set', dealA.length + '/' + dealB.length, '121/121');
+    chk('     both deals contain the whole set', dealA.length + '/' + dealB.length, '240/240');
     chk('two entries deal a DIFFERENT order',
       JSON.stringify(dealA) === JSON.stringify(dealB), false);
     /* The half that matters more than the shuffle itself: a bad shuffle that
@@ -539,7 +584,7 @@ async function main(){
        reorder the data the page shipped with. */
     chk('the shipped data itself is untouched, still in generation order',
       await ev('var p = window.TYRANNY_PUZZLES.puzzles;' +
-               'return p[0].id + "," + p[p.length-1].id;'), 'esc-0001,mul-0027');
+               'return p[0].id + "," + p[p.length-1].id;'), 'tac-0001,sur-0153');
     chk('     the families are genuinely interleaved now, not still grouped',
       await ev('var seen = {}, runs = 0, last = null;' +
                'window.puz.list.forEach(function(p){ if(p.family !== last){ runs++; last = p.family; } });' +
