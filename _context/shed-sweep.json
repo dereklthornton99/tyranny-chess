@@ -1,0 +1,29 @@
+{
+  "ranAt": "2026-09-17T16:26:14Z",
+  "budget": {
+    "samples": 400000,
+    "games": 400,
+    "seed": 20260917,
+    "msBudget": 480000
+  },
+  "searched": {
+    "constructed": 68977,
+    "positionsExamined": 69193,
+    "positionsWithASelfCapture": 56186,
+    "positionsWhereEveryOrdinaryMoveLoses": 0,
+    "seconds": 495.6
+  },
+  "shedVerdicts": {
+    "DRAWN": 5071,
+    "OPP_WINS": 5825,
+    "UNDETERMINED": 80659,
+    "SHEDDER_WINS": 8
+  },
+  "drawMechanisms": {
+    "INSUFFICIENT": 5071
+  },
+  "soundSheds": 0,
+  "soundKingSheds": 0,
+  "examples": [],
+  "kingShedExamples": []
+}

@@ -108,6 +108,81 @@ function tryTactical(S) {
   return { sole: sole, ms: ms };
 }
 
+/* MULTISTEP (goal-tree M3-T1): exactly one self-capture FORCES mate within
+   three plies -- after it, EVERY opponent reply leaves the mover a mate-in-1 --
+   and it is deliberately NOT a one-mover.
+
+   Three clauses, and the last two are what make the family mean anything:
+
+     1. At least one self-capture is legal at all.
+     2. REJECTION (AC2). No self-capture is itself mate-in-1. Without this the
+        family collapses into 'tactical' wearing a different label, and the
+        puzzle is solvable without seeing past the first move. An ordinary
+        mate-in-1 is rejected for the same reason from the other side: it would
+        solve the position with no execution at all.
+     3. NECESSITY (AC3). No ORDINARY move forces mate in the same three plies.
+        Without this the execution is merely sufficient, not necessary, and
+        'you had to execute your own piece' is a claim the position does not
+        support.
+
+   Depth-free, like every other predicate here: legal(), apply() and inCheck()
+   only, exhaustively enumerated. No search, no scoring, no think(). That is
+   what makes a --seed reproduce a set exactly.
+
+   Note on the order of the loops: the two mate-in-1 scans are one legal() per
+   candidate and throw out the overwhelming majority of positions. matesIn2 is a
+   nested sweep, so it runs only on what survives. Cheap test first. */
+function tryMultistep(S) {
+  const ms = legal(S, true);
+  const selfs = [], ords = [];
+  for (const m of ms) (m.kind === 'self' ? selfs : ords).push(m);
+  if (!selfs.length) return null;
+
+  for (const m of selfs) if (isMate(apply(S, m))) return null;   // clause 2
+  for (const m of ords) if (isMate(apply(S, m))) return null;    // clause 2, other side
+
+  /* Past this point nothing is mate-in-1, so matesIn2's own first clause can
+     never fire and it means exactly 'every reply has a mating answer'. */
+  let sole = null, n = 0;
+  for (const m of selfs) {
+    if (matesIn2(S, m)) { n++; if (n > 1) return null; sole = m; }
+  }
+  if (n !== 1) return null;
+
+  for (const m of ords) if (matesIn2(S, m)) return null;         // clause 3, expensive, last
+
+  return { sole: sole, ms: ms, selfs: selfs, ords: ords };
+}
+
+/* RESTRAINT (goal-tree M3-T2): the position where executing your own piece is
+   the WRONG answer. An ordinary move wins outright, a self-capture is sitting
+   right there, and no self-capture matches the ordinary move.
+
+   'No self-capture achieves the same' is read STRICTLY, and that is a
+   deliberate strengthening of the proposal in the goal tree, which said only
+   that no self-capture should be mate-in-1. A self-capture that forces mate one
+   move later is not wrong, merely slower -- and a puzzle whose lesson is 'the
+   execution also wins, just less quickly' does not teach restraint. So both are
+   excluded: no self-capture mates in 1, and none forces mate within three
+   plies either. Executing here is simply not a winning idea.
+
+   The solution is every ordinary move that mates at once. The self-captures are
+   the decoys, because they ARE the trap. */
+function tryRestraint(S) {
+  const ms = legal(S, true);
+  const selfs = [], ords = [];
+  for (const m of ms) (m.kind === 'self' ? selfs : ords).push(m);
+  if (!selfs.length) return null;                 // no temptation, no lesson (AC1)
+
+  const wins = ords.filter(function (m) { return isMate(apply(S, m)); });
+  if (!wins.length) return null;
+
+  for (const m of selfs) if (isMate(apply(S, m))) return null;   // an execution mates too
+  for (const m of selfs) if (matesIn2(S, m)) return null;        // ...or forces it a move later
+
+  return { wins: wins, ms: ms, selfs: selfs, ords: ords };
+}
+
 /* ------------------------------ plumbing ------------------------------ */
 
 function mulberry32(a) {
@@ -135,6 +210,27 @@ const plain = function (m) { return { from: m.from, to: m.to, promo: m.promo || 
    one. */
 function escapeDifficulty(ms) { return ms.length === 1 ? 1 : 2; }
 function tacticalDifficulty(ms) { return ms.length <= 35 ? 2 : 3; }
+/* multistep — the same "size of the set you must reject" rule, floored at 2:
+   no multistep can be a 1, because the family REJECTS every one-mover by
+   construction, so you always have to see three plies ahead.
+   restraint — same rule again, but the set that matters is the one you must
+   refuse, so the count of legal self-captures is the second axis. A position
+   waving five executions at you is a harder refusal than one waving a single
+   one. Thresholds below come from the measured distribution of the real run
+   and are printed by --stats. */
+function multistepDifficulty(ms) { return ms.length <= 35 ? 2 : 3; }
+function restraintDifficulty(ms, selfs) {
+  if (ms.length <= 30 && selfs <= 2) return 1;
+  if (ms.length <= 45 || selfs <= 3) return 2;
+  return 3;
+}
+
+const RATIONALE = {
+  escape: 'Checkmate under standard rules. Only an execution of your own piece survives.',
+  tactical: 'Executing your own piece mates at once, and no ordinary move forces mate within two.',
+  multistep: 'One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.',
+  restraint: 'The execution is the trap. An ordinary move mates at once and no self-capture matches it, so taking your own piece here is simply the wrong idea.'
+};
 
 /* Up to three legal moves that are NOT the solution. Checks and captures first,
    because a plausible distractor is the point. The solution is excluded by key,
@@ -155,35 +251,90 @@ function pickDecoys(S, ms, solutions) {
   return scored.slice(0, 3).map(function (x) { return { uci: uci(x.m), san: san(S, x.m, true) }; });
 }
 
+/* For a RESTRAINT the decoys are not garnish, they ARE the trap: every legal
+   self-capture, most attractive first. Everywhere else they are ordinary
+   distractors. Escape gets none because every legal move is a solution, so
+   there is nothing left to be a decoy. */
+function pickTemptations(S, ms, solutions) {
+  const selfs = ms.filter(function (m) { return m.kind === 'self'; });
+  const scored = selfs.map(function (m) {
+    const T = apply(S, m);
+    let sc = 0;
+    if (inCheck(T, T.turn)) sc += 4;                       // a check looks forcing
+    if (m.cap) sc += ({ q: 3, r: 2, b: 1, n: 1, p: 0 })[m.cap[1]] || 0;
+    return { m: m, s: sc };
+  });
+  scored.sort(function (a, b) { return b.s - a.s || uci(a.m).localeCompare(uci(b.m)); });
+  return scored.slice(0, 3).map(function (x) { return { uci: uci(x.m), san: san(S, x.m, true) }; });
+}
+
 function buildEntry(id, family, S, solutionMoves, ms, std) {
   const sols = solutionMoves.map(plain);
+  const selfCount = ms.filter(function (m) { return m.kind === 'self'; }).length;
+  const decoys = family === 'escape' ? []
+    : family === 'restraint' ? pickTemptations(S, ms, solutionMoves)
+    : pickDecoys(S, ms, solutionMoves);
+  const diff = family === 'escape' ? escapeDifficulty(ms)
+    : family === 'tactical' ? tacticalDifficulty(ms)
+    : family === 'multistep' ? multistepDifficulty(ms)
+    : restraintDifficulty(ms, selfCount);
   return {
     id: id,
     family: family,
     fen: toFen(S),
     sideToMove: S.turn,
     legalMoveCount: ms.length,
+    /* Schema 3. Re-derived from the FEN by tests/puzzles.js like every other
+       number here, so it is a checked claim rather than a stored assertion.
+       It is what makes "the temptation is real" a fact about the position. */
+    selfCaptureCount: selfCount,
     soleLegalMove: ms.length === 1,
     standardLegalMoveCount: std,
     solutions: sols,
     solutionsUci: solutionMoves.map(uci),
     solutionsSan: solutionMoves.map(function (m) { return san(S, m, true); }),
-    decoys: family === 'tactical' ? pickDecoys(S, ms, solutionMoves) : [],
-    rationale: family === 'escape'
-      ? 'Checkmate under standard rules. Only an execution of your own piece survives.'
-      : 'Executing your own piece mates at once, and no ordinary move forces mate within two.',
-    difficulty: family === 'escape' ? escapeDifficulty(ms) : tacticalDifficulty(ms)
+    decoys: decoys,
+    rationale: RATIONALE[family],
+    difficulty: diff
   };
 }
 
 /* ------------------------------ the sweep ------------------------------ */
 
+/* The four families in PRECEDENCE order, cheapest predicate first.
+
+   Five of the six pairs are disjoint by construction and need no ordering:
+   tactical demands exactly one self-capture mate-in-1, multistep demands none,
+   and restraint demands an ordinary mate-in-1 that both of the others reject.
+
+   ESCAPE AND MULTISTEP ARE NOT DISJOINT IN THEORY — a position in check with no
+   ordinary moves at all satisfies multistep's necessity clause vacuously — which
+   is why escape runs first. But that overlap has never been OBSERVED: zero of
+   the 34 shipped escapes satisfy the multistep predicate, and a sweep of 409,622
+   constructed endgames containing 1,532 escapes produced none either. An earlier
+   version of this comment called the ordering "load-bearing, not merely
+   cheaper", which overstated it — today it bears nothing, and it is kept as a
+   forward guard against a loosened predicate or a fifth family. tests/puzzles.js
+   measures the overlap as a NUMBER on every run rather than leaving a branch
+   that cannot fire looking like assurance. */
+const FAMILIES = [
+  { name: 'escape',    prefix: 'esc', run: tryEscape,    sols: function (r) { return r; } },
+  { name: 'tactical',  prefix: 'tac', run: tryTactical,  sols: function (r) { return [r.sole]; } },
+  { name: 'restraint', prefix: 'res', run: tryRestraint, sols: function (r) { return r.wins; } },
+  { name: 'multistep', prefix: 'mul', run: tryMultistep, sols: function (r) { return [r.sole]; } }
+];
+
 function sweep(opts) {
   const rnd = mulberry32(opts.seed);
   const seen = new Set();
-  const escapes = [], tacticals = [];
+  const found = {};
+  const predMs = {};
+  FAMILIES.forEach(function (F) { found[F.name] = []; predMs[F.name] = 0; });
   let positions = 0, games = 0;
   const t0 = Date.now();
+  const enough = function () {
+    return FAMILIES.every(function (F) { return found[F.name].length >= opts.target; });
+  };
 
   for (let g = 0; g < opts.games; g++) {
     games++;
@@ -196,15 +347,16 @@ function sweep(opts) {
       const f = toFen(S);
       if (!seen.has(f)) {
         seen.add(f);
-        const esc = tryEscape(S);
-        if (esc) {
-          escapes.push(buildEntry('esc-' + String(escapes.length + 1).padStart(4, '0'),
-            'escape', S, esc, ms, legal(S, false).length));
-        } else {
-          const tac = tryTactical(S);
-          if (tac) {
-            tacticals.push(buildEntry('tac-' + String(tacticals.length + 1).padStart(4, '0'),
-              'tactical', S, [tac.sole], ms, legal(S, false).length));
+        for (let i = 0; i < FAMILIES.length; i++) {
+          const F = FAMILIES[i];
+          const a = Date.now();
+          const r = F.run(S);
+          predMs[F.name] += Date.now() - a;
+          if (r) {
+            found[F.name].push(buildEntry(
+              F.prefix + '-' + String(found[F.name].length + 1).padStart(4, '0'),
+              F.name, S, F.sols(r), ms, legal(S, false).length));
+            break;                       // precedence: first match wins
           }
         }
       }
@@ -213,12 +365,13 @@ function sweep(opts) {
       const pool = (checks.length && rnd() < opts.bias) ? checks : ms;
       S = apply(S, pool[(rnd() * pool.length) | 0]);
 
-      if (escapes.length >= opts.target && tacticals.length >= opts.target) break;
+      if (enough()) break;
     }
-    if (escapes.length >= opts.target && tacticals.length >= opts.target) break;
+    if (enough()) break;
     if (Date.now() - t0 > opts.msBudget) break;
   }
-  return { escapes, tacticals, positions, games, ms: Date.now() - t0, unique: seen.size };
+  return { found: found, predMs: predMs, positions: positions, games: games,
+           ms: Date.now() - t0, unique: seen.size };
 }
 
 /* ------------------------------ --inline ------------------------------ */
@@ -286,36 +439,81 @@ if (require.main === module) {
     seed: parseInt(arg('--seed', '20260914'), 10),
     bias: parseFloat(arg('--bias', '0.5')),
     target: parseInt(arg('--target', '20'), 10),
-    msBudget: parseInt(arg('--ms', '600000'), 10)
+    msBudget: parseInt(arg('--ms', '600000'), 10),
+    /* The sweep runs until the RAREST family reaches --target, so the common
+       ones overshoot hard: one 500-game run found 171 restraints while still
+       waiting on 27 multisteps. Shipping all of them would make two thirds of
+       the set a single family. --cap keeps the first N of each in discovery
+       order, which is deterministic under a seed, and the yield block below
+       records BOTH the true number found and the number kept -- capping the
+       set never hides the measurement. */
+    cap: parseInt(arg('--cap', '40'), 10)
   };
   const out = arg('--out', OUT_DEFAULT);
+  /* --now exists so "the same --seed reproduces a byte-identical puzzles.json"
+     (M3-T1-AC6) is literally true and testable. Everything else in the output is
+     a pure function of the seed; the wall-clock stamp was the one thing that was
+     not, and without a way to pin it the criterion could never be checked. */
+  const now = arg('--now', new Date().toISOString().replace(/\.\d+Z$/, 'Z'));
 
   console.error('sweeping: games<=' + opts.games + ' seed=' + opts.seed + ' bias=' + opts.bias + ' target=' + opts.target + '/family');
   const r = sweep(opts);
 
-  const puzzles = r.escapes.concat(r.tacticals);
+  const puzzles = [];
+  const counts = {}, yield_ = {};
+  FAMILIES.forEach(function (F) {
+    const all = r.found[F.name];
+    const got = all.slice(0, opts.cap);
+    counts[F.name] = got.length;
+    /* Measured yield, recorded either way (M3-T1-AC5). A family that comes up
+       short says so here in a number; the predicate is never loosened to make
+       the count look better. */
+    yield_[F.name] = {
+      found: all.length,
+      kept: got.length,
+      cap: opts.cap,
+      target: opts.target,
+      short: Math.max(0, opts.target - all.length),
+      perThousandUnique: r.unique ? +(all.length / r.unique * 1000).toFixed(3) : 0
+    };
+    /* predicateSeconds deliberately does NOT go in the file. It is wall-clock,
+       so writing it would break "the same --seed reproduces a byte-identical
+       puzzles.json" (M3-T1-AC6) by two bytes and nothing else -- which is
+       exactly how this was found. It is printed below instead. */
+    got.forEach(function (p) { puzzles.push(p); });
+  });
+
   const doc = {
-    schema: 2,
-    generatedAt: new Date().toISOString().replace(/\.\d+Z$/, 'Z'),
+    schema: 3,
+    generatedAt: now,
     generator: {
       strategy: 'check-biased playout from startState, depth-free predicates',
+      familyPrecedence: FAMILIES.map(function (F) { return F.name; }),
       checkBias: opts.bias,
       games: r.games,
       positionsVisited: r.positions,
       uniquePositions: r.unique,
       seed: opts.seed,
+      target: opts.target,
+      yield: yield_,
       tool: 'tools/gen-puzzles.js'
     },
-    counts: { escape: r.escapes.length, tactical: r.tacticals.length },
+    counts: counts,
     puzzles: puzzles
   };
   fs.mkdirSync(path.dirname(out), { recursive: true });
   fs.writeFileSync(out, JSON.stringify(doc, null, 2) + '\n', 'utf8');
 
   console.error('games=' + r.games + ' positions=' + r.positions + ' unique=' + r.unique +
-                ' escape=' + r.escapes.length + ' tactical=' + r.tacticals.length +
                 ' in ' + (r.ms / 1000).toFixed(1) + 's');
+  FAMILIES.forEach(function (F) {
+    const y = yield_[F.name];
+    console.error('  ' + F.name.padEnd(10) + y.kept + ' kept of ' + y.found + ' found, target ' + y.target +
+      (y.short ? '  SHORT BY ' + y.short : '          ') +
+      '  ' + y.perThousandUnique + '/1000 unique   ' +
+      (r.predMs[F.name] / 1000).toFixed(1) + 's in the predicate');
+  });
   console.error('wrote ' + out);
 }
 
-module.exports = { isMate, matesIn2, tryEscape, tryTactical, sweep, mulberry32 };
+module.exports = { isMate, matesIn2, tryEscape, tryTactical, tryMultistep, tryRestraint, sweep, mulberry32 };

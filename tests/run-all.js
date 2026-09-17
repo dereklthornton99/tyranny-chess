@@ -8,7 +8,7 @@ execFileSync(node, [path.join(root, 'build.js')], { stdio: 'inherit' });
 execFileSync(node, [path.join(__dirname, 'extract.js')], { stdio: 'inherit' });
 
 let failed = 0;
-for (const f of ['test.js', 'floor.js', 'castle.js', 'ai-test.js', 'puzzles.js']) {
+for (const f of ['test.js', 'floor.js', 'castle.js', 'ai-test.js', 'puzzles.js', 'shed.js']) {
   console.log('\n########## ' + f + ' ##########');
   try { execFileSync(node, [path.join(__dirname, f)], { stdio: 'inherit' }); }
   catch (e) { failed++; }
