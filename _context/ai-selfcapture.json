@@ -1,0 +1,938 @@
+{
+  "ranAt": "2026-09-17T16:41:39Z",
+  "budget": {
+    "games": 25,
+    "positions": 450,
+    "depth": 4,
+    "seed": 20260917,
+    "maxPly": 120,
+    "msBudget": 430000
+  },
+  "budgetBound": false,
+  "sample": {
+    "gamesPlayed": 25,
+    "positionsProbed": 439,
+    "engineDecisions": 2587,
+    "depth": 4,
+    "seed": 20260917,
+    "seconds": 312.7
+  },
+  "selfCapturesChosen": 33,
+  "buckets": {
+    "forced": 4,
+    "escape-from-check": 10,
+    "mate-delivering": 0,
+    "other": 19
+  },
+  "otherKinds": {
+    "forces-mate-in-2": 0,
+    "quiet": 19
+  },
+  "otherPreference": {
+    "strictly-better-than-every-ordinary-move": 17,
+    "every-move-loses-by-force": 1,
+    "tied-with-the-best-ordinary-move": 1
+  },
+  "events": [
+    {
+      "fen": "r3k3/p1p2p1p/2nqp3/1Q6/1p2BP2/4BP2/PPP3rP/R3K2R b KQq - 1 14",
+      "uci": "d6b4",
+      "san": "Q⊗b4+",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 48,
+        "selfCaptureOptions": 8,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -505,
+        "bestOrdinaryScore": -645,
+        "bestOrdinary": "O-O-O",
+        "centipawnGap": 140,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r2r2k1/1bp2ppp/pp2pn2/n7/BP1q4/8/P1P1Q1PP/R5KR w - - 1 22",
+      "uci": "g1h2",
+      "san": "K⊗h2",
+      "side": "w",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 5,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "r5k1/2p2ppp/pp2pn2/n2b4/7q/8/P1Pr2PK/R4QR1 w - - 2 27",
+      "uci": "h2g1",
+      "san": "K⊗g1",
+      "side": "w",
+      "bucket": "forced",
+      "otherKind": null,
+      "flags": {
+        "forced": true,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": false,
+        "legalMoves": 1,
+        "selfCaptureOptions": 1,
+        "capturedPiece": "r",
+        "centipawnsGivenUp": 500
+      }
+    },
+    {
+      "fen": "r5kr/2pq1ppp/np1pbb2/p2P4/2PBPNn1/PPQ5/3NBPPP/R4RK1 b - - 2 18",
+      "uci": "e6f7",
+      "san": "B⊗f7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 59,
+        "selfCaptureOptions": 21,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -305,
+        "bestOrdinaryScore": -310,
+        "bestOrdinary": "Bxd4",
+        "centipawnGap": 5,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "2q4r/6pp/7k/5RQ1/4P3/8/3N1PPP/6K1 b - - 5 42",
+      "uci": "h6h7",
+      "san": "K⊗h7",
+      "side": "b",
+      "bucket": "forced",
+      "otherKind": null,
+      "flags": {
+        "forced": true,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": false,
+        "legalMoves": 1,
+        "selfCaptureOptions": 1,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "1Q1nk1r1/2p1bppp/6n1/1pq5/2N5/P3PN2/1B3PPP/2K2B1R w - b6 0 20",
+      "uci": "b2a3",
+      "san": "B⊗a3",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 43,
+        "selfCaptureOptions": 9,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 245,
+        "bestOrdinaryScore": 160,
+        "bestOrdinary": "Qxb5+",
+        "centipawnGap": 85,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1k1r3/1pp5/p4pp1/5n2/3b4/4q3/P1P3PP/R4K2 w - - 0 26",
+      "uci": "f1g2",
+      "san": "K⊗g2",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 14,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -99996,
+        "bestOrdinaryScore": -99998,
+        "bestOrdinary": "a3",
+        "centipawnGap": 2,
+        "verdict": "every-move-loses-by-force"
+      }
+    },
+    {
+      "fen": "r1bk2r1/1p1n1p1p/5n2/8/p3p3/P7/1PP3p1/R1BK2b1 w - - 0 31",
+      "uci": "c1b2",
+      "san": "B⊗b2",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 20,
+        "selfCaptureOptions": 6,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -1980,
+        "bestOrdinaryScore": -2045,
+        "bestOrdinary": "Bf4",
+        "centipawnGap": 65,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "rnb1kb1r/p2ppppp/8/1p6/6Q1/1P3N2/P4PPP/RN1q1K1R w kq - 2 9",
+      "uci": "f1g2",
+      "san": "K⊗g2",
+      "side": "w",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 3,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "2r1kb1r/1Q2pppp/1B3n2/1B3b2/4p3/2N2N2/PPn2PPP/2KR3R b k - 1 13",
+      "uci": "e8f7",
+      "san": "K⊗f7",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 5,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "2r2bkr/1Q2p1pp/1BN2n2/5b2/2B5/2N1p3/PPn2PPP/2KR3R b - - 1 16",
+      "uci": "g8g7",
+      "san": "K⊗g7",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 7,
+        "selfCaptureOptions": 4,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "8/7p/1B3Q1k/2r5/1R4PP/8/PP1K1P2/4R3 b - - 0 28",
+      "uci": "h6h7",
+      "san": "K⊗h7",
+      "side": "b",
+      "bucket": "forced",
+      "otherKind": null,
+      "flags": {
+        "forced": true,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": false,
+        "legalMoves": 1,
+        "selfCaptureOptions": 1,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "rn1qkb1r/p1pnppp1/1p1p3p/3PP3/2PQ1P2/2N2P2/PP5P/R1B1KB1R b KQkq - 2 10",
+      "uci": "d8e7",
+      "san": "Q⊗e7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 44,
+        "selfCaptureOptions": 24,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -80,
+        "bestOrdinaryScore": -90,
+        "bestOrdinary": "Na6",
+        "centipawnGap": 10,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1k2b1r/p1p3p1/1pnp3p/8/2PnBP2/2N1BP2/PP5P/R4RK1 b - - 7 19",
+      "uci": "f8g7",
+      "san": "B⊗g7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 41,
+        "selfCaptureOptions": 13,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -130,
+        "bestOrdinaryScore": -135,
+        "bestOrdinary": "Rb8",
+        "centipawnGap": 5,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "5r2/p1pk2R1/1pnpn2p/3N1B2/2P2P2/4B3/PP5P/7K b - - 2 30",
+      "uci": "d7d6",
+      "san": "K⊗d6",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 7,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "R7/p2k2r1/1pp5/2n2PB1/2PKN3/8/PP5P/8 b - - 10 43",
+      "uci": "d7c6",
+      "san": "K⊗c6",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 20,
+        "selfCaptureOptions": 3,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -710,
+        "bestOrdinaryScore": -755,
+        "bestOrdinary": "Na6",
+        "centipawnGap": 45,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "1k6/1pp2pp1/p7/5P1r/5B2/PP3P1p/5R1P/3q2KB w - - 1 27",
+      "uci": "g1h2",
+      "san": "K⊗h2",
+      "side": "w",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 3,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "8/kpp3p1/p7/5R2/6K1/P4PB1/1q6/6r1 b - - 0 35",
+      "uci": "b2g7",
+      "san": "Q⊗g7+",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 43,
+        "selfCaptureOptions": 5,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 1110,
+        "bestOrdinaryScore": 955,
+        "bestOrdinary": "Qb6",
+        "centipawnGap": 155,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "8/p7/4k3/2p5/P2b1K1q/1P3P2/8/8 w - - 8 47",
+      "uci": "f4f3",
+      "san": "K⊗f3",
+      "side": "w",
+      "bucket": "forced",
+      "otherKind": null,
+      "flags": {
+        "forced": true,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": false,
+        "legalMoves": 1,
+        "selfCaptureOptions": 1,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "r1bk1b1r/ppp1p1pp/5n2/4N3/P2n1P2/2N5/1P1PP1PP/R1B1KB1R w KQ - 4 9",
+      "uci": "a1a4",
+      "san": "R⊗a4",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 46,
+        "selfCaptureOptions": 15,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 120,
+        "bestOrdinaryScore": 95,
+        "bestOrdinary": "e4",
+        "centipawnGap": 25,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1bk1b2/ppp1p1pp/8/1N2N3/3RPn2/8/1P1P2PP/2n1KB1R b K - 1 16",
+      "uci": "d8e7",
+      "san": "K⊗e7",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 5,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "r1b3k1/1pp2p2/5pnr/p2Pp3/2B1P2p/2P2PR1/PP4P1/4R1K1 w - - 0 30",
+      "uci": "g3f3",
+      "san": "R⊗f3",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 37,
+        "selfCaptureOptions": 10,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -405,
+        "bestOrdinaryScore": -470,
+        "bestOrdinary": "Rg4",
+        "centipawnGap": 65,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "rnbq2nr/ppp1ppbp/4k3/2PP4/Q7/8/PP2NPPP/RNB1KB1R b KQ - 0 6",
+      "uci": "e6e7",
+      "san": "K⊗e7",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 7,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "6k1/p2p1p1p/3p1P2/p1rNp3/4P3/1nPB4/5rPP/1K5R b - - 8 28",
+      "uci": "c5a5",
+      "san": "R⊗a5",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 35,
+        "selfCaptureOptions": 7,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 505,
+        "bestOrdinaryScore": 445,
+        "bestOrdinary": "Nd2+",
+        "centipawnGap": 60,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "rnbqkbnr/ppp1p1pp/5p2/3p4/8/5N2/PPPPKPPP/1RBQ1B1R b kq - 1 3",
+      "uci": "d8e7",
+      "san": "Q⊗e7+",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 45,
+        "selfCaptureOptions": 18,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 385,
+        "bestOrdinaryScore": 370,
+        "bestOrdinary": "Bg4",
+        "centipawnGap": 15,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "rnb1kbnr/ppp1q1pp/5p2/3p4/8/5N2/PPPPKPPP/1RBQ1B1R w kq - 0 4",
+      "uci": "e2d2",
+      "san": "K⊗d2",
+      "side": "w",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 7,
+        "selfCaptureOptions": 5,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    },
+    {
+      "fen": "1r3bkr/ppp3pp/4b1n1/2qP1p2/3N2n1/P1N3P1/1PP3BP/R1BQ2KR b - - 2 14",
+      "uci": "f8g7",
+      "san": "B⊗g7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 58,
+        "selfCaptureOptions": 17,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -20,
+        "bestOrdinaryScore": -25,
+        "bestOrdinary": "Bf7",
+        "centipawnGap": 5,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "1r4kr/ppp4p/6n1/2bP1p2/N7/P3n1P1/1PP1K1BP/R6R b - - 1 20",
+      "uci": "c5a7",
+      "san": "B⊗a7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 44,
+        "selfCaptureOptions": 9,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 245,
+        "bestOrdinaryScore": 245,
+        "bestOrdinary": "Bd4",
+        "centipawnGap": 0,
+        "verdict": "tied-with-the-best-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1b4r/1p1p2pp/2k5/p7/4n3/P3b2N/1PP5/1R2K3 b - - 1 26",
+      "uci": "h8h7",
+      "san": "R⊗h7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 49,
+        "selfCaptureOptions": 8,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 1530,
+        "bestOrdinaryScore": 1415,
+        "bestOrdinary": "d5",
+        "centipawnGap": 115,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "4k1nr/4p2p/R7/3B1p2/2PbPP2/8/6PP/1K4NR b - - 0 20",
+      "uci": "g8e7",
+      "san": "N⊗e7",
+      "side": "b",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 27,
+        "selfCaptureOptions": 5,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": -870,
+        "bestOrdinaryScore": -880,
+        "bestOrdinary": "Kf8",
+        "centipawnGap": 10,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1b3r1/p6p/nk6/8/6Q1/2R1P2K/1PP2P1P/1NBq1B1R w - - 0 15",
+      "uci": "c1e3",
+      "san": "B⊗e3+",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 40,
+        "selfCaptureOptions": 10,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 910,
+        "bestOrdinaryScore": 285,
+        "bestOrdinary": "Rc6+",
+        "centipawnGap": 625,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "rnb2br1/ppp1p1kp/8/8/1P3Q2/4K3/P1P1PPPP/RNB2BR1 w - - 0 8",
+      "uci": "g1g2",
+      "san": "R⊗g2+",
+      "side": "w",
+      "bucket": "other",
+      "otherKind": "quiet",
+      "flags": {
+        "forced": false,
+        "inCheck": false,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": true,
+        "legalMoves": 50,
+        "selfCaptureOptions": 12,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      },
+      "preference": {
+        "selfCaptureScore": 1375,
+        "bestOrdinaryScore": 1250,
+        "bestOrdinary": "Bb2+",
+        "centipawnGap": 125,
+        "verdict": "strictly-better-than-every-ordinary-move"
+      }
+    },
+    {
+      "fen": "r1k1Qbnr/pppp1ppp/n7/8/5P1P/8/PPP3P1/RNB1KBNR b KQ - 1 7",
+      "uci": "c8b7",
+      "san": "K⊗b7",
+      "side": "b",
+      "bucket": "escape-from-check",
+      "otherKind": null,
+      "flags": {
+        "forced": false,
+        "inCheck": true,
+        "deliversMate": false,
+        "forcesMateIn2": false,
+        "hadOrdinaryAlternatives": false,
+        "legalMoves": 2,
+        "selfCaptureOptions": 2,
+        "capturedPiece": "p",
+        "centipawnsGivenUp": 100
+      }
+    }
+  ],
+  "probes": [
+    {
+      "id": "clearance-min",
+      "fen": "4K3/3r2k1/3p2r1/8/8/8/8/8 b - - 8 38",
+      "note": "Constructed by minimisation. Black spends its own pawn to put the RIGHT rook on d6; the other rook taking the same pawn does not force mate. No check, no material won, payoff two plies away.",
+      "proof": {
+        "moverInCheck": false,
+        "legalMoves": 23,
+        "movesThatMateAtOnce": 0,
+        "movesThatForceMateInTwo": [
+          "d7d6"
+        ],
+        "theBestMoveIsASelfCapture": true,
+        "bestMove": "Rd⊗d6"
+      },
+      "engine": {
+        "easy": {
+          "asShipped": {
+            "move": "Rc7",
+            "foundIt": false,
+            "isSelfCapture": false,
+            "score": 1160,
+            "depthReached": 2,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rc7",
+            "foundIt": false,
+            "isSelfCapture": false,
+            "score": 1160,
+            "depthReached": 2
+          }
+        },
+        "medium": {
+          "asShipped": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3
+          }
+        },
+        "hard": {
+          "asShipped": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3
+          }
+        }
+      },
+      "probeValid": true
+    },
+    {
+      "id": "mul-0004",
+      "fen": "4K3/3r2k1/2Pp2r1/8/1P6/1p2P3/8/8 b - - 8 38",
+      "note": "The same idea as it actually arose in play, before minimisation, with four more pieces on the board to see past.",
+      "proof": {
+        "moverInCheck": false,
+        "legalMoves": 24,
+        "movesThatMateAtOnce": 0,
+        "movesThatForceMateInTwo": [
+          "d7d6"
+        ],
+        "theBestMoveIsASelfCapture": true,
+        "bestMove": "Rd⊗d6"
+      },
+      "engine": {
+        "easy": {
+          "asShipped": {
+            "move": "Rc7",
+            "foundIt": false,
+            "isSelfCapture": false,
+            "score": 949,
+            "depthReached": 2,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rc7",
+            "foundIt": false,
+            "isSelfCapture": false,
+            "score": 949,
+            "depthReached": 2
+          }
+        },
+        "medium": {
+          "asShipped": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3
+          }
+        },
+        "hard": {
+          "asShipped": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3,
+            "timeBoundedSoNotReproducible": true
+          },
+          "depthPinned": {
+            "move": "Rd⊗d6",
+            "foundIt": true,
+            "isSelfCapture": true,
+            "score": 99997,
+            "depthReached": 3
+          }
+        }
+      },
+      "probeValid": true
+    }
+  ]
+}

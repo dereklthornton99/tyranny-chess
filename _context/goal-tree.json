@@ -3,12 +3,12 @@
   "scale": "project",
   "source": "Derek's eight items, 2026-09-17. Item 6 (the shed demo) was verified as a real defect before authoring: after K(x)h7 White has exactly one mate-in-1 (Qh3#) and exactly one stalemating move (Qf8).",
   "created_at": "2026-09-17T10:30:00-04:00",
-  "updated_at": "2026-09-17T10:30:00-04:00",
+  "updated_at": "2026-09-17T17:08:32.756Z",
   "root": {
     "id": "TC-R2",
     "level": "project",
     "title": "Tyranny Chess round 2: marker control, harder puzzles, and two correctness debts",
-    "status": "pending",
+    "status": "done",
     "notes": "Baseline at authoring: main @ 4546582, 157 Node checks across five suites (27/8/24/13/85), 48 in-page, 64 puzzles (39 escape / 25 tactical, 91 solutions). Live at https://dereklthornton99.github.io/tyranny-chess/",
     "non_goals": [
       "Networked multiplayer. Still out of scope.",
@@ -28,7 +28,7 @@
         "id": "M1",
         "level": "milestone",
         "title": "Marker control",
-        "status": "pending",
+        "status": "done",
         "notes": "Derek's items 1 and 2. The dot / red ring / brass brackets are teaching aids; in a puzzle they give the answer away.",
         "non_goals": [
           "Removing the markers from normal play. They stay, and stay on by default."
@@ -38,25 +38,67 @@
             "id": "M1-T1",
             "level": "task",
             "title": "A control that turns the move markers off",
-            "status": "pending",
+            "status": "done",
             "criteria": [
-              { "id": "M1-T1-AC1", "text": "A visible control in the page toggles all three markers (quiet dot, enemy-capture ring, self-capture brackets) off and on together.", "met": null },
-              { "id": "M1-T1-AC2", "text": "Default state is ON, so an existing player sees no change until they choose otherwise.", "met": null },
-              { "id": "M1-T1-AC3", "text": "With markers OFF, a legal move is still playable by clicking from-square then to-square; only the visual hint is suppressed.", "met": null },
-              { "id": "M1-T1-AC4", "text": "The choice survives a page reload via localStorage, and a reload with no stored value renders ON without throwing.", "met": null },
-              { "id": "M1-T1-AC5", "text": "node tests/run-all.js still reports 27/8/24/13/85 and the in-page suite still reports 48 passed, 0 failed.", "met": null, "release_blocker": true }
+              {
+                "id": "M1-T1-AC1",
+                "text": "A visible control in the page toggles all three markers (quiet dot, enemy-capture ring, self-capture brackets) off and on together.",
+                "met": true,
+                "evidence": "tests/browser.js \"M1-T1-AC1 the toggle turns all three off together\" - quiet dot on d3, carmine ring on e5, brass brackets on d5 all present with the toggle ON; zero marker elements anywhere after one click of #markBtn."
+              },
+              {
+                "id": "M1-T1-AC2",
+                "text": "Default state is ON, so an existing player sees no change until they choose otherwise.",
+                "met": true,
+                "evidence": "tests/browser.js - fresh Chrome profile, no stored value: window.showMarks===true and #markBtn reads \"Move markers: ON\"."
+              },
+              {
+                "id": "M1-T1-AC3",
+                "text": "With markers OFF, a legal move is still playable by clicking from-square then to-square; only the visual hint is suppressed.",
+                "met": true,
+                "evidence": "tests/browser.js \"a move is still playable with markers OFF\" - with markers OFF, window.targets.length>0 and clicking d4 then e5 lands the capture (hist 1->2, wq on e5)."
+              },
+              {
+                "id": "M1-T1-AC4",
+                "text": "The choice survives a page reload via localStorage, and a reload with no stored value renders ON without throwing.",
+                "met": true,
+                "evidence": "tests/browser.js \"the choice survives a reload\" + \"no stored value renders ON and does not throw\" - localStorage tyranny.markers.v1===\"off\" survives Page.navigate; after removeItem the reload renders ON with render/marksVisible both still functions."
+              },
+              {
+                "id": "M1-T1-AC5",
+                "text": "node tests/run-all.js still reports 27/8/24/13/85 and the in-page suite still reports 48 passed, 0 failed.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "node tests/run-all.js on 2026-09-17 after every TC-R2 change: 27/8/24/13/164/26 = 262 Node checks, all suites passed, exit 0. The 157-check baseline never dropped; puzzles.js grew from 85 to 164 and a sixth suite, tests/shed.js, was added, which the tree must_not explicitly allows (\"a new family adds checks; it never replaces them\"). The in-page 48 was VERIFIED BY CLICKING Run tests in headless Chrome and reading the number off #testOut, not inferred from the source - tests/browser.js prints \"page reports: 48 passed, 0 failed\"."
+              }
             ]
           },
           {
             "id": "M1-T2",
             "level": "task",
             "title": "Markers are suppressed inside puzzle mode regardless of the toggle",
-            "status": "pending",
+            "status": "done",
             "notes": "Derek: 'Those shouldn't even exist on the puzzles.' Puzzle mode forces them off; it does not merely default them off.",
             "criteria": [
-              { "id": "M1-T2-AC1", "text": "Entering puzzle mode renders no dot, no ring and no brackets on any square, even when the M1-T1 toggle is ON.", "met": null, "release_blocker": true },
-              { "id": "M1-T2-AC2", "text": "Leaving puzzle mode restores the marker state the player had before entering, not a hardcoded default.", "met": null },
-              { "id": "M1-T2-AC3", "text": "The suppression is verified in a real browser by entering a puzzle and querying the DOM for the marker classes, not by reading the source.", "met": null }
+              {
+                "id": "M1-T2-AC1",
+                "text": "Entering puzzle mode renders no dot, no ring and no brackets on any square, even when the M1-T1 toggle is ON.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/browser.js - in puzzle mode with the toggle still ON, a sweep selecting EVERY piece of the side to move produced 0 marker elements, with two controls proving the sweep was real (pieces picked > 0, legal targets > 0) and a mutation control: replacing marksVisible with a version that ignores puz makes the identical sweep light squares up."
+              },
+              {
+                "id": "M1-T2-AC2",
+                "text": "Leaving puzzle mode restores the marker state the player had before entering, not a hardcoded default.",
+                "met": true,
+                "evidence": "tests/browser.js - ON in / ON out, then OFF in / OFF out. showMarks is never mutated by puzzle mode; the override lives in marksVisible(), so leaving restores the real prior value rather than a default."
+              },
+              {
+                "id": "M1-T2-AC3",
+                "text": "The suppression is verified in a real browser by entering a puzzle and querying the DOM for the marker classes, not by reading the source.",
+                "met": true,
+                "evidence": "tests/browser.js drives headless Chrome over CDP and queries document.querySelectorAll(\".hl-move,.hl-take,.hl-self\") on the live DOM. No source reading."
+              }
             ]
           }
         ]
@@ -65,33 +107,80 @@
         "id": "M2",
         "level": "milestone",
         "title": "Puzzle mode interaction",
-        "status": "pending",
+        "status": "done",
         "notes": "Derek's items 3 and 5b. 'Start puzzles' is wonky, and a wrong answer currently has no reset path.",
         "children": [
           {
             "id": "M2-T1",
             "level": "task",
             "title": "Rework the Start-puzzles entry point",
-            "status": "pending",
+            "status": "done",
             "notes": "Current state: a bare 'Start puzzles' button plus a 'Leave puzzles' button, with the subtitle '64 positions where executing your own piece is the answer' -- which will be wrong once M3-T2 lands, since restraint puzzles are positions where it is NOT the answer.",
             "criteria": [
-              { "id": "M2-T1-AC1", "text": "Entering and leaving puzzle mode reads as one coherent control rather than two competing buttons.", "met": null },
-              { "id": "M2-T1-AC2", "text": "While in puzzle mode the two-player / You-White / You-Black and Easy / Medium / Hard controls are visibly unavailable, since neither applies.", "met": null },
-              { "id": "M2-T1-AC3", "text": "The subtitle no longer claims every puzzle's answer is an execution. It must remain true after M3-T2 ships.", "met": null, "release_blocker": true },
-              { "id": "M2-T1-AC4", "text": "Progress, family and difficulty are legible without leaving the board area.", "met": null },
-              { "id": "M2-T1-AC5", "text": "Verified in a real browser: enter, solve one, advance, leave, and confirm normal play still works afterwards.", "met": null }
+              {
+                "id": "M2-T1-AC1",
+                "text": "Entering and leaving puzzle mode reads as one coherent control rather than two competing buttons.",
+                "met": true,
+                "evidence": "tests/browser.js \"one control, not two competing buttons\" - #puzStart and #puzQuit no longer exist; the single #puzToggle relabels Start puzzles -> Leave puzzles from the same left edge (35px) in both states."
+              },
+              {
+                "id": "M2-T1-AC2",
+                "text": "While in puzzle mode the two-player / You-White / You-Black and Easy / Medium / Hard controls are visibly unavailable, since neither applies.",
+                "met": true,
+                "evidence": "tests/browser.js - all 6 opponent/strength buttons report disabled===true in puzzle mode, computed opacity < 1, #modeSeg computed pointer-events \"none\", #ruleBtn disabled; all re-enabled after leaving (0 disabled)."
+              },
+              {
+                "id": "M2-T1-AC3",
+                "text": "The subtitle no longer claims every puzzle's answer is an execution. It must remain true after M3-T2 ships.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/browser.js - subtitle reads \"64 positions where the self-capture rule decides the answer. 39 escape, 25 tactical.\" It is COUNTED from window.TYRANNY_PUZZLES at load, not hardcoded, and the claim is family-neutral, so adding a restraint family cannot falsify it."
+              },
+              {
+                "id": "M2-T1-AC4",
+                "text": "Progress, family and difficulty are legible without leaving the board area.",
+                "met": true,
+                "evidence": "tests/browser.js at 1280x900 via Emulation.setDeviceMetricsOverride: family, progress and difficulty all fully inside the viewport, board top edge at y=243 visible at the same time, readouts at left 888 (beside the board, not stacked under it)."
+              },
+              {
+                "id": "M2-T1-AC5",
+                "text": "Verified in a real browser: enter, solve one, advance, leave, and confirm normal play still works afterwards.",
+                "met": true,
+                "evidence": "tests/browser.js \"enter, solve, advance, leave, and play on\" - solved esc-0001 from the shipped set, Next enabled, advanced to puzzle index 1 in state open, left, board back to the opening position, controls re-enabled, and e2-e4 played normally."
+              }
             ]
           },
           {
             "id": "M2-T2",
             "level": "task",
             "title": "A wrong answer offers Try again, which resets the position",
-            "status": "pending",
+            "status": "done",
             "criteria": [
-              { "id": "M2-T2-AC1", "text": "Playing a non-solution legal move shows a wrong-answer state and a Try again control.", "met": null },
-              { "id": "M2-T2-AC2", "text": "Try again restores the puzzle's original FEN exactly, including side to move, castling rights and the en-passant square -- verified by comparing against the puzzle's fen field, not by eye.", "met": null, "release_blocker": true },
-              { "id": "M2-T2-AC3", "text": "The puzzle never auto-advances past a failure, and the solution is not revealed by the wrong-answer state.", "met": null },
-              { "id": "M2-T2-AC4", "text": "Retry count within a puzzle does not corrupt the solved/progress tally.", "met": null }
+              {
+                "id": "M2-T2-AC1",
+                "text": "Playing a non-solution legal move shows a wrong-answer state and a Try again control.",
+                "met": true,
+                "evidence": "tests/browser.js - a legal non-solution (e2-e4) LANDS (hist 1->2), puz.state===\"wrong\", #puzRetry enabled."
+              },
+              {
+                "id": "M2-T2-AC2",
+                "text": "Try again restores the puzzle's original FEN exactly, including side to move, castling rights and the en-passant square -- verified by comparing against the puzzle's fen field, not by eye.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/browser.js against a synthetic puzzle carrying all four castling rights AND an en-passant square (rnbqkbnr/pp1ppppp/8/2pP4/8/8/PPP1PPPP/RNBQKBNR w KQkq c6 0 3). Control first: after the wrong move toFen(state) reads ...4P3/8/PPP2PPP... b KQkq e3 0 3, so it genuinely differed. After Try again, toFen(state) is byte-identical to the fen field; turn w, all four rights true, ep===18 (c6), clocks 0/3. Compared with tools/fen-write.js, the repo own round-trip-verified writer - not by eye."
+              },
+              {
+                "id": "M2-T2-AC3",
+                "text": "The puzzle never auto-advances past a failure, and the solution is not revealed by the wrong-answer state.",
+                "met": true,
+                "evidence": "tests/browser.js - #puzNext is disabled in the wrong state (allow-list: only solved or revealed enable it), and the wrong-answer text matches neither the solution squares (c6/d5/dxc6) nor any answer count. The old message leaked \"There are N correct answers here\", which in an escape family IS the answer; it was removed."
+              },
+              {
+                "id": "M2-T2-AC4",
+                "text": "Retry count within a puzzle does not corrupt the solved/progress tally.",
+                "met": true,
+                "evidence": "tests/browser.js - four failures then a solve: puz.tries===4, solved set empty until the solve, then exactly one entry, and #puzProg reads \"1 / 1  - 1 solved\"."
+              }
             ]
           }
         ]
@@ -100,7 +189,7 @@
         "id": "M3",
         "level": "milestone",
         "title": "Puzzle depth: two new families",
-        "status": "pending",
+        "status": "done",
         "notes": "Derek's items 4 and 5a. Measured basis for 'too easy': 18 of the 39 escapes have exactly one legal move, so they are solvable by elimination. Both new predicates below are DEPTH-FREE -- exhaustive ply enumeration, no search and no engine scoring -- so a seed reproduces a set exactly, which is why the existing families are reproducible and must stay so.",
         "non_goals": [
           "Redefining the existing escape or tactical families.",
@@ -111,29 +200,92 @@
             "id": "M3-T1",
             "level": "task",
             "title": "Multi-step family: a self-capture that forces mate in two",
-            "status": "pending",
+            "status": "done",
             "notes": "Proposed predicate, to be confirmed or replaced by whoever builds it: exactly one self-capture forces mate within 3 plies (after it, EVERY opponent reply leaves the mover a mate-in-1); NO self-capture is itself mate-in-1, so the puzzle cannot be solved as a one-mover; and no ordinary move forces mate within 3 plies, so ignoring self-capture does not win anyway.",
             "criteria": [
-              { "id": "M3-T1-AC1", "text": "The family predicate is stated in code as a pure function of legal() and inCheck() with no search and no scoring, and is documented in tools/gen-puzzles.js.", "met": null, "release_blocker": true },
-              { "id": "M3-T1-AC2", "text": "A puzzle in this family is NOT solvable by a mate-in-1 self-capture; that is an explicit rejection clause, verified by a test that feeds it a mate-in-1 position and sees it rejected.", "met": null, "release_blocker": true },
-              { "id": "M3-T1-AC3", "text": "No ordinary (non-self-capture) move reaches the same result within the same ply budget, so the execution is necessary rather than merely sufficient.", "met": null, "release_blocker": true },
-              { "id": "M3-T1-AC4", "text": "tests/puzzles.js re-derives the full forcing line for every puzzle of this family from its FEN, including that every opponent reply is answered.", "met": null, "release_blocker": true },
-              { "id": "M3-T1-AC5", "text": "The measured yield per N games is recorded in the generator block, and if the family proves too rare to reach a useful count the shortfall is reported rather than the predicate being quietly loosened.", "met": null },
-              { "id": "M3-T1-AC6", "text": "The same --seed reproduces a byte-identical puzzles.json.", "met": null }
+              {
+                "id": "M3-T1-AC1",
+                "text": "The family predicate is stated in code as a pure function of legal() and inCheck() with no search and no scoring, and is documented in tools/gen-puzzles.js.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tools/gen-puzzles.js tryMultistep() - legal(), apply() and inCheck() only, exhaustively enumerated; no search, no scoring, no think(). Documented in a block comment naming all three clauses and why the cheap mate-in-1 scans run before the nested matesIn2 sweep."
+              },
+              {
+                "id": "M3-T1-AC2",
+                "text": "A puzzle in this family is NOT solvable by a mate-in-1 self-capture; that is an explicit rejection clause, verified by a test that feeds it a mate-in-1 position and sees it rejected.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Rejection clause is the second loop in tryMultistep and is re-derived independently in tests/puzzles.js multistepSolution(). The test that feeds it a mate-in-1 position is a real one, not a synthetic: a shipped TACTICAL puzzle (whose solution IS a mate-in-1 self-capture) relabelled as multistep. Output: PASS rejects a MULTISTEP that is really a one-mover [MULTISTEP rejection clause FAILS: 1 self-capture(s) mate in 1]."
+              },
+              {
+                "id": "M3-T1-AC3",
+                "text": "No ordinary (non-self-capture) move reaches the same result within the same ply budget, so the execution is necessary rather than merely sufficient.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Necessity clause: tryMultistep rejects if ANY ordinary move satisfies matesIn2. Re-derived per puzzle in tests/puzzles.js, which reports the offending move by name if it ever fires. All 27 multistep puzzles pass."
+              },
+              {
+                "id": "M3-T1-AC4",
+                "text": "tests/puzzles.js re-derives the full forcing line for every puzzle of this family from its FEN, including that every opponent reply is answered.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/puzzles.js forcingLine(S,m) enumerates EVERY legal opponent reply and names a mating answer for each, returning the gaps rather than a boolean. Run over all 27 multistep puzzles as part of the 121-of-121 sound result on 2026-09-17."
+              },
+              {
+                "id": "M3-T1-AC5",
+                "text": "The measured yield per N games is recorded in the generator block, and if the family proves too rare to reach a useful count the shortfall is reported rather than the predicate being quietly loosened.",
+                "met": true,
+                "evidence": "puzzles.json generator.yield records found / kept / cap / target / short / perThousandUnique per family. Measured 2026-09-17 over 500 games and 92,699 unique positions: escape 0.367, tactical 0.216, restraint 1.845, multistep 0.291 per 1000 unique. Multistep is the rarest at roughly 1 in 3,440 positions and cost 163s of predicate time; it still reached 27, over the target of 20, so nothing was loosened. tests/puzzles.js prints a NOTE line for any family that comes up short."
+              },
+              {
+                "id": "M3-T1-AC6",
+                "text": "The same --seed reproduces a byte-identical puzzles.json.",
+                "met": true,
+                "evidence": "tests/puzzles.js Reproducibility section runs tools/gen-puzzles.js twice at --seed 424242 --now 2026-01-01T00:00:00Z and compares the two files byte for byte, with a control asserting the run was not empty. This found a real defect: generator.yield carried predicateSeconds, a wall-clock value, which made two identical runs differ by exactly 2 bytes. Removed from the file and printed to stderr instead."
+              }
             ]
           },
           {
             "id": "M3-T2",
             "level": "task",
             "title": "Restraint family: positions where executing your own piece is the WRONG answer",
-            "status": "pending",
+            "status": "done",
             "notes": "Derek: 'puzzles that don't include a self side capture to make the user reason if one is necessary at all.' The teaching value is the trap, so the position must genuinely offer one. Proposed predicate: at least one self-capture is legal; an ordinary move wins decisively (mate-in-1 as the first cut); and NO self-capture achieves the same. The solution is the ordinary move.",
             "criteria": [
-              { "id": "M3-T2-AC1", "text": "Every puzzle in this family has at least one legal self-capture available, so the temptation is real rather than absent.", "met": null, "release_blocker": true },
-              { "id": "M3-T2-AC2", "text": "The solution is an ordinary move, and no self-capture reaches the same result -- verified per puzzle from the FEN.", "met": null, "release_blocker": true },
-              { "id": "M3-T2-AC3", "text": "Playing the tempting self-capture produces the wrong-answer state from M2-T2, not silence.", "met": null },
-              { "id": "M3-T2-AC4", "text": "Schema stays at 2 with a new family value, or is bumped to 3 with the reader updated in the same change -- never a new family value silently read by a schema-2 reader.", "met": null, "release_blocker": true },
-              { "id": "M3-T2-AC5", "text": "tests/puzzles.js validates this family with its own assertions; a restraint puzzle whose solution is a self-capture must fail the suite.", "met": null, "release_blocker": true }
+              {
+                "id": "M3-T2-AC1",
+                "text": "Every puzzle in this family has at least one legal self-capture available, so the temptation is real rather than absent.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tryRestraint returns null when no self-capture is legal, and every entry stores selfCaptureCount, which tests/puzzles.js re-derives from the FEN rather than trusting. Across the 40 shipped restraint puzzles the count is never 0."
+              },
+              {
+                "id": "M3-T2-AC2",
+                "text": "The solution is an ordinary move, and no self-capture reaches the same result -- verified per puzzle from the FEN.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Solutions are every ordinary mate-in-1; the predicate rejects if any self-capture mates in 1 OR forces mate within three plies. That second clause is a deliberate STRENGTHENING of the goal tree proposal - a self-capture that mates one move later is not wrong, only slower, and a puzzle whose lesson is that the execution also wins does not teach restraint. tests/puzzles.js re-derives both from the FEN."
+              },
+              {
+                "id": "M3-T2-AC3",
+                "text": "Playing the tempting self-capture produces the wrong-answer state from M2-T2, not silence.",
+                "met": true,
+                "evidence": "tests/browser.js M3-T2-AC3 block: loads a real restraint puzzle, resolves its decoy back to a legal move, confirms kind===self, plays it, and asserts puz.state===wrong with #puzRetry enabled and non-empty text. Try again then restores the FEN exactly, and the ordinary move solves it. Also asserts the page does NOT print every one of them is an execution after a restraint solve."
+              },
+              {
+                "id": "M3-T2-AC4",
+                "text": "Schema stays at 2 with a new family value, or is bumped to 3 with the reader updated in the same change -- never a new family value silently read by a schema-2 reader.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Bumped to schema 3 WITH the reader in the same change. Reader half: PUZ_SCHEMAS = [2,3] in src/tyranny.html, puzRead returns why:unknown-schema for anything else, and puzInit prints a stated reason. Verified live in tests/browser.js by injecting schema 99 and asserting the reader refuses without throwing. New in schema 3: family values restraint and multistep, plus the selfCaptureCount field."
+              },
+              {
+                "id": "M3-T2-AC5",
+                "text": "tests/puzzles.js validates this family with its own assertions; a restraint puzzle whose solution is a self-capture must fail the suite.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/puzzles.js rejects a restraint whose solution is a self-capture in two independent places: the per-solution kind rule and the family block requiring solutions to equal the ordinary mating moves. Mutation test output: PASS rejects a RESTRAINT whose solution is the self-capture it warns against [solution 0 (d2c1) IS a self-capture, but a restraint puzzle is solved by REFUSING one]. Six further mutations cover every label swap among the four families."
+              }
             ]
           }
         ]
@@ -142,34 +294,86 @@
         "id": "M4",
         "level": "milestone",
         "title": "Two correctness debts",
-        "status": "pending",
+        "status": "done",
         "notes": "Derek's items 6 and 7. Both are claims the project currently makes that nobody has proven.",
         "children": [
           {
             "id": "M4-T1",
             "level": "task",
             "title": "The shed demo: find a sound position or retract the claim",
-            "status": "pending",
+            "status": "done",
             "notes": "VERIFIED DEFECT, 2026-09-17, before this tree was written. Position 7k/5K1n/8/8/8/Q7/8/8 b: after the shed K(x)h7, White has exactly one mate-in-1 (Qh3#) and exactly one stalemating move (Qf8). The shed only draws against an opponent who errs. Derek found this independently. The deeper question is whether ANY position makes the shed sound -- if not, 'stalemate becomes reachable on purpose' is an overclaim wherever it appears.",
             "criteria": [
-              { "id": "M4-T1-AC1", "text": "A sweep searches for a position where a king shed is sound against CORRECT play -- after the shed, the opponent has no win, not merely a stalemate available. The search budget and result are recorded either way.", "met": null, "release_blocker": true },
-              { "id": "M4-T1-AC2", "text": "If such a position exists, the demo button loads it and the caption describes it accurately.", "met": null },
-              { "id": "M4-T1-AC3", "text": "If no such position is found, the claim is RETRACTED in all three places it appears: the demo button and its caption, the Stalemate note in the page, and the README. Retracted, not softened.", "met": null, "release_blocker": true },
-              { "id": "M4-T1-AC4", "text": "Whichever way it resolves, a test pins the outcome so the claim cannot silently return.", "met": null, "release_blocker": true }
+              {
+                "id": "M4-T1-AC1",
+                "text": "A sweep searches for a position where a king shed is sound against CORRECT play -- after the shed, the opponent has no win, not merely a stalemate available. The search budget and result are recorded either way.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tools/shed-sweep.js, 2026-09-17, seed 20260917: 400,000 constructed sparse endgames plus 400 check-biased playouts, 480s budget. Examined 69,193 positions, 56,186 with a legal self-capture, producing 91,563 shed verdicts in 495.6s. Result: 5,071 DRAWN (every one INSUFFICIENT, zero by OPP_STALEMATE / FORCED_STALEMATE / FORCED_INSUFFICIENT), 5,825 OPP_WINS, 80,659 UNDETERMINED, 8 SHEDDER_WINS. SOUND sheds 0, sound KING sheds 0. Budget and result are both in _context/shed-sweep.json."
+              },
+              {
+                "id": "M4-T1-AC2",
+                "text": "If such a position exists, the demo button loads it and the caption describes it accurately.",
+                "met": true,
+                "evidence": "VACUOUS - the antecedent is false. No sound position was found, so the demo button loads nothing new and AC3 governs instead."
+              },
+              {
+                "id": "M4-T1-AC3",
+                "text": "If no such position is found, the claim is RETRACTED in all three places it appears: the demo button and its caption, the Stalemate note in the page, and the README. Retracted, not softened.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Retracted in all three places, not softened. (1) Demo button: \"Demo: shed\" -> \"Demo: the shed swindle\". (2) Its caption now says Qh3 is mate and that the shed is not even Black best try, since only Ng5+ of Black four legal moves avoids a forced loss inside the same three plies. (3) The page Stalemate note: \"it becomes reachable on purpose, which standard chess cannot do\" is GONE, replaced by the sweep numbers and the reason the mechanism fails (a check against a side with no legal moves is mate, not stalemate). (4) README: rewritten from \"unproven, treat as an open question\" to \"claimed, searched for, and retracted\", carrying the counts and the honest limit."
+              },
+              {
+                "id": "M4-T1-AC4",
+                "text": "Whichever way it resolves, a test pins the outcome so the claim cannot silently return.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/shed.js, 26 checks, registered in tests/run-all.js. It re-derives the demo defect from the FEN (4 legal moves, 26 replies after the shed, exactly one mate Qh3# and exactly one stalemate Qf8, only Ng5+ survives), checks the classifier DISCRIMINATES by returning INSUFFICIENT, OPP_STALEMATE and SHEDDER_WINS on positions built to reach each, reads the sweep record, and asserts the retracted wording is absent from both the page and the README with a control that the text is still being read at all."
+              }
             ]
           },
           {
             "id": "M4-T2",
             "level": "task",
             "title": "Stress-test the AI for STRATEGIC self-capture",
-            "status": "pending",
+            "status": "done",
             "notes": "Derek: 'I'm sure it was built around standard chess models. I have yet to see it take its own piece for a strategic purpose rather than just to save the king from imminent checkmate.' The engine's search is rule-agnostic -- a self-capture is an ordinary move-list entry -- but its EVALUATION is stock piece-square-table material, which prices an execution purely as a loss. That is the hypothesis to test, and it predicts exactly the behaviour Derek reports.",
             "criteria": [
-              { "id": "M4-T2-AC1", "text": "A harness plays the engine a stated number of games and positions and classifies EVERY self-capture it chooses into: forced (no legal alternative), escape-from-check, mate-delivering, or other.", "met": null, "release_blocker": true },
-              { "id": "M4-T2-AC2", "text": "The count in the 'other' bucket is reported as a number against a stated sample size. Zero is a valid and publishable result.", "met": null, "release_blocker": true },
-              { "id": "M4-T2-AC3", "text": "At least one position is constructed where a self-capture is objectively best for positional reasons rather than immediate mate or escape, and the engine's choice at each strength is recorded.", "met": null, "release_blocker": true },
-              { "id": "M4-T2-AC4", "text": "The finding is reported before any eval change is proposed. If the engine is blind to strategic execution, that is a measurement to hand to Derek, not a licence to start tuning.", "met": null, "release_blocker": true },
-              { "id": "M4-T2-AC5", "text": "The harness is deterministic: a fixed depth and seed reproduce the same classification counts.", "met": null }
+              {
+                "id": "M4-T2-AC1",
+                "text": "A harness plays the engine a stated number of games and positions and classifies EVERY self-capture it chooses into: forced (no legal alternative), escape-from-check, mate-delivering, or other.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tools/ai-selfcapture.js, 2026-09-17, depth 4 pinned, seed 20260917: 25 engine-vs-engine games from distinct random openings plus 450 single decisions from check-biased playout positions = 2,587 engine decisions. Every self-capture the engine chose was classified into Derek four buckets, with all raw flags kept alongside so the bucket ordering hides nothing."
+              },
+              {
+                "id": "M4-T2-AC2",
+                "text": "The count in the 'other' bucket is reported as a number against a stated sample size. Zero is a valid and publishable result.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "33 self-captures chosen out of 2,587 decisions: forced 4, escape-from-check 10, mate-delivering 0, OTHER 19. The 19 were then re-scored with a FULL-WINDOW search per root move (not think() per-move values, which the goal tree non_goals correctly rule out): 17 strictly better than every ordinary move, 1 tied, 1 in a position where every move loses by force. Separately, 32 of the 33 captured a PAWN and the single exception was forced - the engine has never voluntarily executed anything above a pawn in this sample."
+              },
+              {
+                "id": "M4-T2-AC3",
+                "text": "At least one position is constructed where a self-capture is objectively best for positional reasons rather than immediate mate or escape, and the engine's choice at each strength is recorded.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Probe clearance-min, 4K3/3r2k1/3p2r1/8/8/8/8/8 b - - 8 38, CONSTRUCTED by minimisation: four men were deleted one at a time from a sweep position, each deletion kept only if the whole property still held. Five pieces remain. Rd(x)d6 is the unique move forcing mate in two; the mover is not in check, nothing mates in one, and the OTHER rook taking the same pawn does not force mate - so the idea is which rook belongs on d6, not remove the obstruction. Engine choice recorded at all three shipped strengths and again with the clock removed: easy misses it (Rc7) both ways, medium and hard find it both ways. The pre-minimisation original, mul-0004, is kept as a second row and gives the same answer."
+              },
+              {
+                "id": "M4-T2-AC4",
+                "text": "The finding is reported before any eval change is proposed. If the engine is blind to strategic execution, that is a measurement to hand to Derek, not a licence to start tuning.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "No evaluation change is proposed. The tool header states this in the file itself, and the README Honest limits bullet ends \"Reported as a measurement; no evaluation change is proposed off the back of it.\" The finding refines Derek hypothesis rather than confirming it: the engine is NOT blind to strategic execution, it just will not pay more than a pawn for one."
+              },
+              {
+                "id": "M4-T2-AC5",
+                "text": "The harness is deterministic: a fixed depth and seed reproduce the same classification counts.",
+                "met": true,
+                "evidence": "Two runs at --games 6 --positions 90 --depth 4 --seed 31337 returned identical decision counts (637), identical bucket counts, identical preference verdicts, AND an identical event list position by position. The report also carries a budgetBound flag, because the sweep breaks on elapsed time and determinism holds only while that ceiling is not reached; both runs reported false."
+              }
             ]
           }
         ]
@@ -178,19 +382,43 @@
         "id": "M5",
         "level": "milestone",
         "title": "Documentation stays current",
-        "status": "pending",
+        "status": "done",
         "notes": "Derek: 'It should stay current with the changes that happen.' The README was refreshed on 2026-09-17 before this tree was authored; this node is the refresh AFTER the work lands.",
         "children": [
           {
             "id": "M5-T1",
             "level": "task",
             "title": "README refresh at the close",
-            "status": "pending",
+            "status": "done",
             "criteria": [
-              { "id": "M5-T1-AC1", "text": "Every puzzle family that exists in puzzles.json is described in the README, with its real count.", "met": null, "release_blocker": true },
-              { "id": "M5-T1-AC2", "text": "The stated test counts equal what node tests/run-all.js actually prints on the day it is written.", "met": null, "release_blocker": true },
-              { "id": "M5-T1-AC3", "text": "The Honest limits section reflects what is still unproven after this round -- including the AI finding from M4-T2 and the shed outcome from M4-T1.", "met": null, "release_blocker": true },
-              { "id": "M5-T1-AC4", "text": "No claim in the README is stated as verified unless a check was run that day. A carried-forward claim is re-run or re-worded.", "met": null, "release_blocker": true }
+              {
+                "id": "M5-T1-AC1",
+                "text": "Every puzzle family that exists in puzzles.json is described in the README, with its real count.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "README Puzzles table now lists all four families with the counts in puzzles.json: escape 34, tactical 20, restraint 40, multistep 27, total 121. Each row states its predicate, and the measured per-family yield is quoted from generator.yield."
+              },
+              {
+                "id": "M5-T1-AC2",
+                "text": "The stated test counts equal what node tests/run-all.js actually prints on the day it is written.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "README states \"262 checks, six files, 27 / 8 / 24 / 13 / 164 / 26\" and \"100 checks in headless Chrome\". Both printed by node tests/run-all.js and node tests/browser.js on 2026-09-17 immediately before recording, and re-confirmed after the post-deepcheck fixes moved both numbers (261->262 when the cross-family overlap check was added, 89->100 when the game-ending-wrong-answer block was added). The in-page 48 was read off the page by clicking the button."
+              },
+              {
+                "id": "M5-T1-AC3",
+                "text": "The Honest limits section reflects what is still unproven after this round -- including the AI finding from M4-T2 and the shed outcome from M4-T1.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Honest limits rewritten. The old \"the engine has not been stress-tested for strategic self-capture\" bullet is replaced by the real M4-T2 numbers including the never-above-a-pawn finding and the horizon result; the shed outcome from M4-T1 is named with a pointer to the stalemate section and its UNDETERMINED limit; puzzle difficulty is restated against the real 15-of-34 figure."
+              },
+              {
+                "id": "M5-T1-AC4",
+                "text": "No claim in the README is stated as verified unless a check was run that day. A carried-forward claim is re-run or re-worded.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "Every count in the README was printed by a command run on 2026-09-17. The three carried-forward claims that could NOT be re-run today are re-worded rather than left standing as current: the 1,669-position escape sweep, the centipawn-margin zero result, and the 68-of-71 think() figure each now say measured in an earlier round and not re-run for this one."
+              }
             ]
           }
         ]

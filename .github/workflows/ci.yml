@@ -12,7 +12,11 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          # 22, not 20: tests/browser.js drives Chrome over the DevTools
+          # protocol using Node's OWN global WebSocket rather than an npm
+          # dependency, and that global is only unflagged from v22. The Node
+          # suites below run on anything; the browser one does not.
+          node-version: '22'
 
       # Fails the build if src/tyranny.html was edited without rebuilding.
       # This is what makes the published page and the source unable to drift.
@@ -21,3 +25,21 @@ jobs:
 
       - name: rule and engine suites
         run: node tests/run-all.js
+
+      # Named separately so a missing browser reads as "the runner changed",
+      # not as a failing assertion. ubuntu-latest ships Google Chrome; if that
+      # ever stops being true, this is the line that says so.
+      - name: chrome is present for the browser suite
+        run: |
+          which google-chrome || which chromium || which chromium-browser
+          google-chrome --version || chromium --version
+
+      # The Node suites cannot see ANY of the page's UI: no suite under tests/
+      # references marksVisible, markBtn, showMarks, the hl-* marker classes,
+      # puzToggle or puzRetry. Without this step the marker toggle, puzzle-mode
+      # suppression and the Try again reset could all be deleted and CI would
+      # stay green. It exits 2 rather than 1 when it cannot run at all, and a
+      # non-zero exit fails the build either way, which is the intent: a browser
+      # suite that silently does not run is the gap this step exists to close.
+      - name: browser suite (headless Chrome, real DOM)
+        run: node tests/browser.js
