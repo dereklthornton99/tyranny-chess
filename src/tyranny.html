@@ -1331,6 +1331,25 @@ function puzLoad(i){
   render();
 }
 
+/* Fisher-Yates, and it runs on every ENTRY rather than once per page load, so
+   leaving puzzles and coming back deals a new order too.
+
+   The set used to be served in generation order, which is grouped by family:
+   34 escapes, then 20 tacticals, then 40 restraints, then 27 multisteps. Every
+   session therefore opened with the same 34 escapes in the same sequence, and
+   nobody reached a multistep without working through 94 other positions first.
+
+   It shuffles r.list, which puzRead() built with filter() and which therefore
+   does NOT alias window.TYRANNY_PUZZLES.puzzles. The shipped data is never
+   reordered, only the copy this session is playing. */
+function puzShuffle(a){
+  for(var i = a.length - 1; i > 0; i--){
+    var j = Math.floor(Math.random() * (i + 1));
+    var t = a[i]; a[i] = a[j]; a[j] = t;
+  }
+  return a;
+}
+
 function puzEnter(){
   var r = puzRead();
   if(!r.ok) return;
@@ -1341,7 +1360,7 @@ function puzEnter(){
   // rule off the temptation it is built around would not be on the board at
   // all, so the puzzle would teach nothing.
   selfCap = true;
-  puz = { list:r.list, i:0, state:"open", tries:0, warn:"", solved:puzSolvedSet() };
+  puz = { list:puzShuffle(r.list), i:0, state:"open", tries:0, warn:"", solved:puzSolvedSet() };
   puzSyncControls();
   puzLoad(0);
 }

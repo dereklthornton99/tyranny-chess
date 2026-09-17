@@ -99,6 +99,14 @@ inside its predicate alone. The sweep runs until the rarest family reaches `--ta
 the common ones overshoot; `--cap` (default 40) keeps the set balanced, and the yield block
 records both `found` and `kept` so capping never hides the measurement.
 
+**The set is shuffled on every entry.** Generation order groups by family, so before this
+every session opened with the same 34 escapes in the same sequence and nobody reached a
+multistep without working through 94 other positions first. The shuffle runs on entry, not
+once per page load, so leaving and coming back deals a new order too. It shuffles the
+reader's own filtered copy, never the shipped data. One cost worth naming: family order
+used to give an implicit easy-to-hard ramp, and mixing the families removes it — the
+per-puzzle difficulty bars are what is left.
+
 **Difficulty is no longer only low, but the easy tail is still there.** 15 of the 34
 escapes have exactly one legal move, which is solvable by elimination rather than insight.
 The two new families are the answer to that: no multistep puzzle can be a difficulty 1,
@@ -197,7 +205,7 @@ suites, plus the puzzle validator, run under Node:
 
 ```
 node tests/run-all.js     262 checks, six files    27 / 8 / 24 / 13 / 164 / 26
-node tests/browser.js     100 checks in headless Chrome, against the real DOM
+node tests/browser.js     106 checks in headless Chrome, against the real DOM
 ```
 
 Both numbers were printed by those two commands on **2026-09-17**, and the in-page 48 was

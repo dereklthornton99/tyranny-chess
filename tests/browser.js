@@ -439,7 +439,11 @@ async function main(){
     await load();                                        // real puzzle set back
     await ev('document.getElementById("puzToggle").click();');
     const solve = await ev(
-      'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
+      /* Not the LAST entry: the set is shuffled on entry now, so "first puzzle
+         with a non-promotion solution" is no longer guaranteed to be index 0,
+         and landing on the last one would make the Next assertion below fail
+         for a reason that has nothing to do with what is being tested. */
+      'for(var i=0;i<window.puz.list.length-1;i++){ var p = window.puz.list[i];' +
       '  if(!p.solutions[0].promo){ return {i:i, from:p.solutions[0].from, to:p.solutions[0].to, id:p.id}; } }' +
       'return null;');
     await ev('puzLoad(' + solve.i + '); return 1;');
@@ -515,6 +519,32 @@ async function main(){
     chk('AC4  a schema this page has never seen is refused, not read as an old one',
       JSON.parse(refused).why, 'unknown-schema');
     chk('AC4  and it refuses without throwing', JSON.parse(refused).ok, false);
+
+    /* ---------------- the set is dealt in a new order every time ---------------- */
+    head('Puzzles are shuffled on entry, not served in generation order');
+    await load();
+    const ids = 'return window.puz.list.map(function(p){ return p.id; });';
+    const dealA = await ev('document.getElementById("puzToggle").click();' + ids);
+    await ev('document.getElementById("puzToggle").click();');            // leave
+    const dealB = await ev('document.getElementById("puzToggle").click();' + ids);
+    chk('     both deals contain the whole set', dealA.length + '/' + dealB.length, '121/121');
+    chk('two entries deal a DIFFERENT order',
+      JSON.stringify(dealA) === JSON.stringify(dealB), false);
+    /* The half that matters more than the shuffle itself: a bad shuffle that
+       drops or duplicates entries would still pass the check above. */
+    chk('but exactly the same puzzles — none dropped, none duplicated',
+      JSON.stringify(dealA.slice().sort()) === JSON.stringify(dealB.slice().sort()), true);
+    chk('     and no duplicates inside one deal', new Set(dealA).size, dealA.length);
+    /* puzRead() filters, so r.list is its own array; shuffling it must not
+       reorder the data the page shipped with. */
+    chk('the shipped data itself is untouched, still in generation order',
+      await ev('var p = window.TYRANNY_PUZZLES.puzzles;' +
+               'return p[0].id + "," + p[p.length-1].id;'), 'esc-0001,mul-0027');
+    chk('     the families are genuinely interleaved now, not still grouped',
+      await ev('var seen = {}, runs = 0, last = null;' +
+               'window.puz.list.forEach(function(p){ if(p.family !== last){ runs++; last = p.family; } });' +
+               'return runs > 4;'), true);
+    await ev('document.getElementById("puzToggle").click();');            // leave clean
 
     /* ---------------- a wrong answer that ENDS the game ---------------- */
     /*
