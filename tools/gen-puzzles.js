@@ -57,6 +57,20 @@ const { toFen } = require('./fen-write.js');
    scale. It is imported rather than copied so the two tools cannot drift, and
    requiring the file runs nothing: its CLI is behind require.main === module. */
 const { trySurvival } = require('./lichess-seed.js');
+/* The continuation a multi-move puzzle is played through. Called for EVERY
+   multistep entry this file builds, from the sweep and from the Lichess seed
+   alike, so there is one place that decides what a line is. It used to be a
+   separate tool that edited puzzles.json in place; this generator knew nothing
+   about it, so regenerating the file would have reverted the schema and dropped
+   every line. */
+const { lineFor } = require('./line.js');
+
+/* The schema this generator WRITES, and the number tests/puzzles.js compares
+   against the committed file. It is a named constant rather than a literal in
+   the document so the generator and the data it produced cannot disagree
+   without a test noticing. 5 added `line` (the continuation of a multi-move
+   puzzle) and let a multistep puzzle carry a Lichess `source`. */
+const SCHEMA = 5;
 
 /* ------------------------------ predicates ------------------------------ */
 
@@ -289,6 +303,17 @@ function buildEntry(id, family, S, solutionMoves, ms, std) {
     : family === 'tactical' ? tacticalDifficulty(ms)
     : family === 'multistep' ? multistepDifficulty(ms)
     : restraintDifficulty(ms, selfCount);
+  /* A multistep puzzle is only a multistep puzzle if the player is asked for the
+     second move, so the line is not optional garnish: failing to build one is a
+     defect in the predicate or the position and stops the run. Emitting a
+     multistep record WITHOUT a line is exactly the bug this field fixes --
+     round 2 shipped that, with every data check green. */
+  let L = null;
+  if (family === 'multistep') {
+    const r = lineFor(S, solutionMoves[0]);
+    if (!r.line) throw new Error('multistep ' + id + ' has no line: ' + r.why + ' -- ' + toFen(S));
+    L = r.line;
+  }
   return {
     id: id,
     family: family,
@@ -304,6 +329,9 @@ function buildEntry(id, family, S, solutionMoves, ms, std) {
     solutions: sols,
     solutionsUci: solutionMoves.map(uci),
     solutionsSan: solutionMoves.map(function (m) { return san(S, m, true); }),
+    /* Present only on a multistep entry; spread so the other families keep the
+       exact key set they always had. Placed beside the answer it continues. */
+    ...(L ? { line: L } : {}),
     decoys: decoys,
     rationale: RATIONALE[family],
     difficulty: diff
@@ -439,6 +467,64 @@ function inline(srcPath, docPath) {
               path.basename(SRCF) + ' between the PUZZLE-DATA markers');
 }
 
+/* ------------------------- Lichess-seeded multistep ------------------------- */
+
+/* Turn the seed tools/lichess-multistep.js wrote into finished entries.
+ *
+ * The seed supplies a POSITION and where it came from, and nothing else is
+ * trusted. The solution, the line, the decoys and the difficulty are recomputed
+ * here from the FEN by this file's own predicate, and the seed's recorded answer
+ * is used only to CONTRADICT that derivation if the two ever disagree. A seed
+ * that no longer satisfies the predicate throws: dropping it quietly would make
+ * a regeneration look like it worked while shipping fewer puzzles than the seed
+ * promised. The same discipline as the survival family.
+ *
+ * Ids are `mls-<lichess puzzle id>-<ply>`, built from the position's own
+ * identity and not from a running number. Solved-state is stored in the player's
+ * browser keyed by id, so an id has to keep meaning the same position. A running
+ * number (`mls-0001`, which is what this first used) renumbers whenever the seed
+ * is re-mined with different parameters -- another row bound, another reply
+ * filter -- and would silently point a returning player's solved marks at
+ * different puzzles. (Found by deepcheck: the comment here promised exactly the
+ * stability the code did not deliver.) The `sur-` ids are still running numbers;
+ * they predate this and carry the same exposure.
+ *
+ * Returns entries with no sweep FEN check -- the caller has the sweep and does
+ * that comparison, which is the one check that needs it. */
+function deriveMultistepSeeds(seed) {
+  const out = [];
+  const seen = new Set();
+  const ids = new Set();
+  (seed.puzzles || []).forEach(function (p, i) {
+    const tag = 'multistep seed ' + (p.source && p.source.id ? p.source.id : '#' + (i + 1));
+    const S = fen(p.fen);
+    const r = tryMultistep(S);
+    if (!r) throw new Error(tag + ': the position no longer satisfies the predicate -- ' + p.fen);
+    if (uci(r.sole) !== p.solutionUci) {
+      throw new Error(tag + ': the seed says ' + p.solutionUci + ', the predicate says ' + uci(r.sole));
+    }
+    const f = toFen(S);
+    if (seen.has(f)) throw new Error(tag + ': the same position appears twice in the seed -- ' + f);
+    seen.add(f);
+    const src = p.source;
+    if (!src || typeof src.id !== 'string' || !src.id || !Number.isInteger(src.ply) || src.ply < 0) {
+      throw new Error(tag + ': needs source.id and a non-negative integer source.ply, because the puzzle id is built from them');
+    }
+    const id = 'mls-' + src.id + '-' + src.ply;
+    if (ids.has(id)) throw new Error(tag + ': the id ' + id + ' appears twice in the seed');
+    ids.add(id);
+    const e = buildEntry(id, 'multistep', S, [r.sole], r.ms, legal(S, false).length);
+    /* CC0 asks for no attribution. The link is here because a position a reader
+       can trace back to a real game is worth more than one that appeared from
+       nowhere. The rating is the Lichess rating of the STANDARD puzzle the
+       position came from, and `ply` says where along that puzzle's line it sits
+       -- provenance and a loose prior, not the difficulty of this puzzle. */
+    e.source = p.source;
+    out.push(e);
+  });
+  return out;
+}
+
 /* ------------------------------ cli ------------------------------ */
 
 function arg(name, dflt) {
@@ -479,15 +565,31 @@ if (require.main === module) {
      a pure function of the seed; the wall-clock stamp was the one thing that was
      not, and without a way to pin it the criterion could never be checked. */
   const now = arg('--now', new Date().toISOString().replace(/\.\d+Z$/, 'Z'));
+  /* The Lichess-seeded multistep puzzles, mined by tools/lichess-multistep.js.
+     `--multistep none` skips them, which is how "the generator alone reproduces
+     the sweep's puzzles" is checked without the seed in the way. */
+  const multistepPath = arg('--multistep', path.join(ROOT, 'puzzles', 'multistep-seed.json'));
 
-  console.error('sweeping: games<=' + opts.games + ' seed=' + opts.seed + ' bias=' + opts.bias + ' target=' + opts.target + '/family');
-  const r = sweep(opts);
+  /* A path the caller TYPED must exist. The two defaults may legitimately be
+     absent -- a checkout from before the seed was built -- but an explicit
+     argument that points nowhere used to be skipped in silence: exit 0 and a
+     file missing every seeded puzzle, found only when a later test compared the
+     committed data to the seed. (Found by deepcheck: a one-letter typo in
+     --multistep produced exactly that.) */
+  if (process.argv.indexOf('--survival') >= 0 && !fs.existsSync(survivalPath)) {
+    throw new Error('--survival ' + survivalPath + ' does not exist');
+  }
+  if (process.argv.indexOf('--multistep') >= 0 && multistepPath !== 'none' && !fs.existsSync(multistepPath)) {
+    throw new Error('--multistep ' + multistepPath + ' does not exist (pass "none" to skip it deliberately)');
+  }
 
   const puzzles = [];
   const counts = {}, yield_ = {};
 
-  /* Read first, so a malformed seed fails before a 200-second sweep is thrown
-     away rather than after it. */
+  /* Both seeds are read and DERIVED before the sweep, so a malformed or stale
+     one fails in seconds rather than after a 200-second sweep is thrown away.
+     (This comment used to say exactly that while the sweep ran first; the order
+     now matches what it always claimed.) */
   let survival = [];
   if (fs.existsSync(survivalPath)) {
     const seed = JSON.parse(fs.readFileSync(survivalPath, 'utf8'));
@@ -534,6 +636,28 @@ if (require.main === module) {
       return e;
     });
   }
+
+  let multistepSeed = null, seeded = [];
+  if (multistepPath !== 'none' && fs.existsSync(multistepPath)) {
+    multistepSeed = JSON.parse(fs.readFileSync(multistepPath, 'utf8'));
+    seeded = deriveMultistepSeeds(multistepSeed);
+  }
+
+  console.error('sweeping: games<=' + opts.games + ' seed=' + opts.seed + ' bias=' + opts.bias + ' target=' + opts.target + '/family');
+  const r = sweep(opts);
+
+  /* The one seed check that needs the sweep: a Lichess position must not also be
+     a puzzle the playout found. Throws rather than dropping one, because a
+     duplicate means the two sources overlap in a way nobody has looked at. */
+  if (seeded.length) {
+    const taken = new Set();
+    FAMILIES.forEach(function (F) { r.found[F.name].forEach(function (p) { taken.add(p.fen); }); });
+    seeded.forEach(function (p) {
+      if (taken.has(p.fen)) throw new Error('multistep seed ' + p.source.id +
+        ' is also found by the sweep -- ' + p.fen);
+    });
+  }
+
   FAMILIES.forEach(function (F) {
     const all = r.found[F.name];
     const got = all.slice(0, opts.cap);
@@ -554,6 +678,22 @@ if (require.main === module) {
        puzzles.json" (M3-T1-AC6) by two bytes and nothing else -- which is
        exactly how this was found. It is printed below instead. */
     got.forEach(function (p) { puzzles.push(p); });
+    /* The Lichess-seeded puzzles are the same family and go straight after the
+       sweep's, so the file stays grouped tactical, restraint, multistep,
+       survival -- the order the page and tests/browser.js read it in. The
+       family count includes them (the page and the validator count by family);
+       the sweep's own yield above stays about the sweep, and the seed's is
+       recorded beside it rather than blended in. */
+    if (F.name === 'multistep' && seeded.length) {
+      seeded.forEach(function (p) { puzzles.push(p); });
+      counts.multistep = got.length + seeded.length;
+      yield_.multistepSeeded = {
+        kept: seeded.length,
+        rowsScanned: multistepSeed.scan.rowsScanned,
+        minReplies: multistepSeed.scan.minReplies,
+        candidates: multistepSeed.selection.candidates
+      };
+    }
   });
 
   if (survival.length) {
@@ -564,14 +704,20 @@ if (require.main === module) {
   }
 
   const doc = {
-    /* Schema 4: the escape family value is gone, survival and its source/depth
-       fields are new. Bumped WITH the page reader in the same change. */
-    schema: 4,
+    /* Schema 5 added `line` and a multistep `source`; schema 4 retired the
+       escape family value and added survival with its source/depth fields. Each
+       is bumped WITH the page reader in the same change -- and tests/puzzles.js
+       reads SCHEMA from this file, so the generator and the committed data
+       cannot silently disagree about which one they are. */
+    schema: SCHEMA,
     generatedAt: now,
     generator: {
       strategy: 'check-biased playout from startState, depth-free predicates',
       familyPrecedence: FAMILIES.map(function (F) { return F.name; }).concat(survival.length ? ['survival'] : []),
       survivalSource: survival.length ? { file: path.basename(survivalPath), db: 'lichess-cc0' } : null,
+      /* Only present when there is a seed, so a run without one produces the
+         exact byte layout it always did. */
+      ...(seeded.length ? { multistepSource: { file: path.basename(multistepPath), db: 'lichess-cc0' } } : {}),
       checkBias: opts.bias,
       games: r.games,
       positionsVisited: r.positions,
@@ -599,4 +745,5 @@ if (require.main === module) {
   console.error('wrote ' + out);
 }
 
-module.exports = { isMate, matesIn2, tryEscape, tryTactical, tryMultistep, tryRestraint, sweep, mulberry32 };
+module.exports = { isMate, matesIn2, tryEscape, tryTactical, tryMultistep, tryRestraint, sweep, mulberry32,
+                   SCHEMA, buildEntry, deriveMultistepSeeds };

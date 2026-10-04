@@ -223,6 +223,23 @@ function validate(p) {
     else if (p.source.db !== 'lichess-cc0') bad.push('survival source.db is ' + p.source.db + ', expected lichess-cc0');
     if (p.depth !== 1 && p.depth !== 3) bad.push('survival depth is ' + p.depth + ', expected 1 or 3');
   }
+  /* A multistep puzzle MAY carry a source: the Lichess-seeded ones do, the
+     random-playout ones have none to give. When it is there it has to be a real
+     trail back to a game, and an id in the seeded range (`mls-`) cannot exist
+     without one. `ply` is where along the Lichess puzzle's line the position
+     sits -- the rating belongs to that standard puzzle, not to this one, so
+     without the ply a reader cannot tell what the rating is a rating OF. */
+  if (p.family === 'multistep' && p.source !== undefined) {
+    const s = p.source;
+    if (!s || typeof s.id !== 'string' || !s.id) bad.push('multistep source has no id');
+    else {
+      if (s.db !== 'lichess-cc0') bad.push('multistep source.db is ' + s.db + ', expected lichess-cc0');
+      if (typeof s.url !== 'string' || !/^https:\/\/lichess\.org\//.test(s.url)) bad.push('multistep source.url is not a lichess.org link');
+      if (!Number.isInteger(s.rating) || s.rating < 0) bad.push('multistep source.rating is not a non-negative integer');
+      if (!Number.isInteger(s.ply) || s.ply < 0) bad.push('multistep source.ply is not a non-negative integer');
+    }
+  }
+  if (/^mls-/.test(String(p.id)) && !p.source) bad.push('a Lichess-seeded id (mls-) with no source to trace it to');
   if (!Array.isArray(p.solutions)) { bad.push('solutions is not an ARRAY'); return bad; }
   if (p.solutions.length === 0) bad.push('solutions is empty');
   if (!Array.isArray(p.decoys)) bad.push('decoys is not an array');
@@ -354,6 +371,72 @@ function validate(p) {
         bad.push('MULTISTEP forcing line is INCOMPLETE: ' + (L.why ||
           (L.gaps.length + ' of ' + L.count + ' replies have no mating answer: ' + L.gaps.slice(0, 4).join(','))));
       }
+
+      /* R3-M1-AC4: the stored `line` is re-derived from the FEN here, in this
+         file's own terms. The point is not that the generator agrees with
+         itself -- it is that the continuation the PAGE will play is the one the
+         rules actually produce.
+
+         The load-bearing half is the every-reply check. `line` stores ONE
+         opponent reply, and that is only sound because every reply loses. L.ok
+         above has already proven exactly that over all L.count replies, so the
+         stored reply being one of them is what makes fixing it lossless rather
+         than a quiet narrowing of the puzzle. */
+      if (p.line) {
+        const st = p.line.steps;
+        if (!Array.isArray(st) || st.length !== 3) {
+          bad.push('line must have exactly 3 steps for a mate-in-two, has ' +
+                   (Array.isArray(st) ? st.length : typeof st));
+        } else {
+          if (p.line.plies !== 3) bad.push('line.plies is ' + p.line.plies + ', want 3');
+          if (st[0].side !== 'solver' || st[1].side !== 'opponent' || st[2].side !== 'solver') {
+            bad.push('line sides must be solver/opponent/solver, are ' +
+                     st.map(function (s) { return s.side; }).join('/'));
+          }
+          /* step 0 must be the answer the record already ships */
+          const a0 = (st[0].accept || []).slice().sort().join(',');
+          const s0 = (p.solutionsUci || []).slice().sort().join(',');
+          if (a0 !== s0) bad.push('line step 0 accept [' + a0 + '] != solutionsUci [' + s0 + ']');
+          if (a0 !== uci(forcing[0])) {
+            bad.push('line step 0 accept [' + a0 + '] is not the unique forcing execution ' + uci(forcing[0]));
+          }
+          /* the stored reply must be a real, legal reply with a mating answer */
+          const T = apply(S, forcing[0]);
+          const rep = legal(T, true);
+          const hit = rep.filter(function (r) { return uci(r) === st[1].reply; });
+          if (hit.length !== 1) {
+            bad.push('line step 1 reply ' + st[1].reply + ' is not a legal reply here (' +
+                     rep.length + ' legal)');
+          } else {
+            if (st[1].of !== rep.length) {
+              bad.push('line step 1 `of` says ' + st[1].of + ' replies, the rules give ' + rep.length);
+            }
+            const U = apply(T, hit[0]);
+            const kills = legal(U, true).filter(function (x) { return isMate(apply(U, x)); });
+            const want = kills.map(uci).sort().join(',');
+            const got = (st[2].accept || []).slice().sort().join(',');
+            if (want !== got) bad.push('line step 2 accept [' + got + '] != the mating moves [' + want + ']');
+            if (!kills.length) bad.push('line step 2 has no mating move at all');
+            if (st[2].mate !== true) bad.push('line step 2 is not flagged mate');
+            /* AC3: the stored reply must be a minimal-answer one, or the choice
+               was not the documented one and the file is not reproducible. */
+            const counts = rep.map(function (r) {
+              const V = apply(T, r);
+              return legal(V, true).filter(function (x) { return isMate(apply(V, x)); }).length;
+            });
+            const lo = Math.min.apply(null, counts);
+            if (kills.length !== lo) {
+              bad.push('line stored a reply with ' + kills.length +
+                       ' mating answers; the fewest available is ' + lo);
+            }
+            /* and among those tied at the minimum, the first by UCI */
+            const tied = rep.filter(function (r, i) { return counts[i] === lo; }).map(uci).sort();
+            if (tied[0] !== st[1].reply) {
+              bad.push('line stored reply ' + st[1].reply + '; the UCI tie-break gives ' + tied[0]);
+            }
+          }
+        }
+      }
     }
   } else if (p.family === 'restraint') {
     const selfs = ms.filter(function (m) { return m.kind === 'self'; });
@@ -411,7 +494,29 @@ hd('File-level schema');
 /* Schema 3, bumped WITH the reader in the same change (M3-T2-AC4): two new
    family values plus the selfCaptureCount field. The page refuses a schema it
    does not know rather than reading a newer file as if it were a schema-2 one. */
-chk('schema is 4', doc.schema, 4);
+/* Three things have to agree about the schema -- the generator that writes it,
+   the committed file, and the page that reads it -- and each pair is checked.
+   The first pair is the one that went unchecked: puzzles.json was once edited
+   in place by a standalone tool the generator knew nothing about, so a plain
+   regeneration would have quietly written schema 4 again and dropped every
+   `line`. Nothing failed until somebody committed the result. */
+const GEN = require('../tools/gen-puzzles.js');
+chk('the committed file has the schema the generator writes', doc.schema, GEN.SCHEMA);
+chk('and that schema is one that carries `line` (5 or later)', doc.schema >= 5, true);
+/* The bump is only safe if the page was taught the new number in the same
+   change. puzRead REFUSES a schema it has never seen, which would take puzzle
+   mode offline for every puzzle, not just the new ones -- so this reads the
+   page's own list rather than trusting that someone remembered. */
+const PAGE = require('fs').readFileSync(
+  require('path').join(__dirname, '..', 'src', 'tyranny.html'), 'utf8');
+const schemaLine = (PAGE.match(/var PUZ_SCHEMAS\s*=\s*\[([^\]]*)\]/) || [])[1] || '';
+chk('the page accepts the committed schema (' + doc.schema + ')',
+  new RegExp('\\b' + doc.schema + '\\b').test(schemaLine), true);
+chk('and still accepts the older ones it used to read',
+  ['2', '3', '4'].every(function (v) { return new RegExp('\\b' + v + '\\b').test(schemaLine); }), true);
+chk('every multistep puzzle carries a line',
+  (doc.puzzles || []).filter(function (p) { return p.family === 'multistep'; })
+      .every(function (p) { return !!(p.line && p.line.steps); }), true);
 chk('puzzles is an array', Array.isArray(doc.puzzles), true);
 chk('at least one puzzle', (doc.puzzles || []).length > 0, true);
 chk('has a generator block', !!doc.generator, true);
@@ -662,6 +767,368 @@ if (!res || !mul) {
     m.decoys = [{ uci: uci(notSelf), san: san(Sr, notSelf, true) }];
     mustReject('a restraint decoy that is not a self-capture', m);
   }
+
+  /* ---- R3-M1-AC4: the `line` checks must actually catch a bad line ----
+     Every check added for the continuation is mutated here. Without this the
+     new validation could be vacuous -- it would say PASS on 27 real records and
+     nobody would know whether it can say FAIL at all. That is the same trap as
+     the round-2 defect one level down: a check that only ever agrees. */
+  if (mul.line) {
+    const Sl = fen(mul.fen);
+    const m1 = legal(Sl, true).filter(function (x) { return uci(x) === mul.line.steps[0].accept[0]; })[0];
+    const Tl = apply(Sl, m1);
+    const repl = legal(Tl, true);
+
+    m = clone(mul); delete m.line.steps[2].mate;
+    mustReject('a line whose last step is not flagged mate', m);
+
+    m = clone(mul); m.line.plies = 5;
+    mustReject('a line claiming more plies than it has', m);
+
+    m = clone(mul); m.line.steps[1].side = 'solver';
+    mustReject('a line that asks the solver for the opponent move', m);
+
+    m = clone(mul); m.line.steps = m.line.steps.slice(0, 2);
+    mustReject('a truncated line with no mating step', m);
+
+    m = clone(mul); m.line.steps[1].of = (mul.line.steps[1].of || 0) + 7;
+    mustReject('a line overstating how many replies the opponent had', m);
+
+    m = clone(mul); m.line.steps[1].reply = 'a1a1';
+    mustReject('a line whose stored reply is not legal in the position', m);
+
+    m = clone(mul); m.line.steps[2].accept = ['a1a2'];
+    mustReject('a line whose final step is not a mating move', m);
+
+    /* The first step must still be the shipped answer; a line that quietly
+       disagrees with `solutions` would have the page and the data judging two
+       different puzzles. */
+    const other = legal(Sl, true).filter(function (x) { return uci(x) !== uci(m1); })[0];
+    if (other) {
+      m = clone(mul); m.line.steps[0].accept = [uci(other)];
+      mustReject('a line whose first step is not the puzzle solution', m);
+    }
+
+    /* AC3's tie-break, mutated: swap in a DIFFERENT legal reply that is not the
+       documented choice. This is the one mutation that proves the stored reply
+       was selected by the stated rule rather than by move-generation order.
+
+       It needs a puzzle where the opponent HAS a choice, so it deliberately
+       does not reuse `mul` -- 17 of the 27 shipped multisteps leave exactly one
+       legal reply, and on one of those this mutation is unconstructable and
+       silently skips. Picking the widest-choice record by `of` is what stops
+       the most important mutation here from being the one that never runs. */
+    const wide = (doc.puzzles || []).filter(function (p) {
+      return p.family === 'multistep' && p.line && (p.line.steps[1].of || 0) > 1;
+    }).sort(function (a, b) { return b.line.steps[1].of - a.line.steps[1].of; })[0];
+    if (!wide) {
+      console.log('FAIL  no multistep puzzle gives the opponent a choice, so the tie-break is untested');
+      fail++;
+    } else {
+      const Sw = fen(wide.fen);
+      const w1 = legal(Sw, true).filter(function (x) { return uci(x) === wide.line.steps[0].accept[0]; })[0];
+      const Tw = apply(Sw, w1);
+      const rw = legal(Tw, true);
+      const counts = rw.map(function (r) {
+        const V = apply(Tw, r);
+        return legal(V, true).filter(function (x) { return isMate(apply(V, x)); }).length;
+      });
+      const lo = Math.min.apply(null, counts);
+      const notChosen = rw.filter(function (r, i) {
+        return uci(r) !== wide.line.steps[1].reply && counts[i] >= lo;
+      })[0];
+      const V = apply(Tw, notChosen);
+      const kills = legal(V, true).filter(function (x) { return isMate(apply(V, x)); });
+      m = clone(wide);
+      m.line.steps[1].reply = uci(notChosen);
+      m.line.steps[1].replySan = san(Tw, notChosen, true);
+      m.line.steps[2].accept = kills.map(uci).sort();
+      m.line.steps[2].acceptSan = kills.map(function (x) { return san(V, x, true); });
+      mustReject('a line storing a reply the documented tie-break did not pick (' +
+                 wide.id + ', ' + wide.line.steps[1].of + ' replies)', m);
+      /* control: the UNMUTATED wide record must still pass, or the check above
+         is rejecting the puzzle rather than the mutation. */
+      const clean = validate(clone(wide));
+      chk('control: ' + wide.id + ' itself validates clean', clean.length ? clean[0] : 0, 0);
+    }
+  } else {
+    console.log('FAIL  the multistep puzzle used for mutations carries no line');
+    fail++;
+  }
+}
+
+/* ===================== the generator and the data agree ===================== */
+/*
+ * Everything above checks the committed DATA against the rules. None of it
+ * checks that the thing which WRITES the data still writes what is committed,
+ * and that is the gap that let a regeneration revert the schema: puzzles.json
+ * had been edited in place by a standalone tool, the generator knew nothing
+ * about it, and no check compared the two. A full regeneration takes minutes,
+ * which is too long for a unit suite, but the generator's record construction
+ * is a pure function of (position, answer) and can be compared record by record
+ * in well under a second.
+ */
+hd('The generator rebuilds every committed sweep record exactly');
+{
+  const sweepRecs = list.filter(function (p) { return /^(tac|res|mul)-/.test(p.id); });
+  let same = 0;
+  const diffs = [];
+  for (const rec of sweepRecs) {
+    const S = fen(rec.fen);
+    const ms = legal(S, true);
+    const sols = rec.solutionsUci.map(function (u) {
+      return ms.filter(function (m) { return uci(m) === u; })[0];
+    });
+    if (sols.some(function (s) { return !s; })) { diffs.push(rec.id + ' (a stored answer is not legal)'); continue; }
+    const rebuilt = GEN.buildEntry(rec.id, rec.family, S, sols, ms, legal(S, false).length);
+    JSON.stringify(rebuilt) === JSON.stringify(rec) ? same++ : diffs.push(rec.id);
+  }
+  chk('there are sweep records to compare, so this is not vacuous', sweepRecs.length > 0, true);
+  chk('every tac/res/mul record is exactly what buildEntry makes from its FEN and answer',
+    same, sweepRecs.length);
+  console.log('      ' + same + ' of ' + sweepRecs.length + ' sweep records rebuilt identically by buildEntry' +
+              ' (' + ['tac', 'res', 'mul'].map(function (k) {
+                return k + ' ' + sweepRecs.filter(function (p) { return p.id.indexOf(k + '-') === 0; }).length;
+              }).join(', ') + ')');
+  if (diffs.length) console.log('       differ: ' + diffs.slice(0, 8).join(', '));
+}
+
+hd('The multistep seed and the puzzles built from it agree');
+{
+  const seedPath = path.join(__dirname, '..', 'puzzles', 'multistep-seed.json');
+  const seeded = list.filter(function (p) { return /^mls-/.test(p.id); });
+  if (!fs.existsSync(seedPath)) {
+    chk('no seed file, and so no Lichess-seeded puzzles in the data', seeded.length, 0);
+    chk('and the generator block does not claim a seed',
+      !!(doc.generator && doc.generator.multistepSource), false);
+  } else {
+    const seed = JSON.parse(fs.readFileSync(seedPath, 'utf8'));
+    const derived = GEN.deriveMultistepSeeds(seed);
+    chk('the committed data holds exactly the puzzles the seed derives, in order',
+      JSON.stringify(derived) === JSON.stringify(seeded), true);
+    chk('the seed is not empty, so that comparison is not vacuous', (seed.puzzles || []).length > 0, true);
+    chk('the generator block names the seed it used',
+      !!(doc.generator && doc.generator.multistepSource), true);
+    chk('the multistep family count includes the seeded puzzles',
+      doc.counts.multistep, list.filter(function (p) { return p.family === 'multistep'; }).length);
+    /* The database is republished and its rows are not stable, so the seed has
+       to say WHICH file it was cut from, or "reproducible" is a claim with no
+       way to check it. */
+    chk('the seed records which database file it was cut from',
+      !!(seed.dbFile && /^[0-9a-f]{64}$/.test(seed.dbFile.sha256 || '')), true);
+    chk('and how many rows it scanned', Number.isInteger(seed.scan && seed.scan.rowsScanned), true);
+    chk('and that every seeded id is unique', new Set(seeded.map(function (p) { return p.id; })).size, seeded.length);
+    console.log('      ' + seeded.length + ' seeded puzzles in the data, ' + derived.length +
+                ' derived from the seed; seed cut from ' + (seed.dbFile ? seed.dbFile.file : '?') +
+                ', ' + (seed.scan ? seed.scan.rowsScanned : '?') + ' rows scanned');
+  }
+}
+
+hd('Seeding a multistep puzzle: derived from the FEN, never trusted');
+{
+  const { execFileSync } = require('child_process');
+  const os = require('os');
+  const base = list.filter(function (p) { return p.family === 'multistep' && p.line; })[0];
+  const tacRec = list.filter(function (p) { return p.family === 'tactical'; })[0];
+  const SRC = { db: 'lichess-cc0', id: 'testRow', rating: 1500, popularity: 90,
+                themes: 'advantage', url: 'https://lichess.org/testgame', ply: 1 };
+  const good = { puzzles: [{ fen: base.fen, solutionUci: base.solutionsUci[0], source: SRC }] };
+
+  const out = GEN.deriveMultistepSeeds(good);
+  chk('a good seed derives one entry', out.length, 1);
+  chk('with an id built from the Lichess puzzle id and the ply', out[0].id, 'mls-testRow-1');
+  chk('in the multistep family', out[0].family, 'multistep');
+  chk('carrying the very line the generator builds for that position',
+    JSON.stringify(out[0].line), JSON.stringify(base.line));
+  chk('and the source it was handed', JSON.stringify(out[0].source), JSON.stringify(SRC));
+  chk('and the independent validator accepts it', validate(out[0]).join(' | '), '');
+
+  function outcome(seed, re) {
+    try { GEN.deriveMultistepSeeds(seed); return 'did not throw'; }
+    catch (e) { return re.test(e.message) ? 'threw as expected' : 'threw: ' + e.message; }
+  }
+  chk('a position that no longer qualifies THROWS rather than being dropped',
+    outcome({ puzzles: [{ fen: tacRec.fen, solutionUci: tacRec.solutionsUci[0], source: SRC }] },
+            /no longer satisfies/), 'threw as expected');
+  chk('a seed whose answer the predicate contradicts THROWS',
+    outcome({ puzzles: [{ fen: base.fen, solutionUci: 'a1a1', source: SRC }] }, /the seed says/),
+    'threw as expected');
+  chk('the same position twice in one seed THROWS',
+    outcome({ puzzles: [good.puzzles[0], good.puzzles[0]] }, /twice/), 'threw as expected');
+
+  /* Ids come from the position's own identity, so they cannot move when the
+     seed is re-mined. This is the property the id exists to have, tested as a
+     property: the same two positions in either order get the same two ids. A
+     running number (what this first used) fails it. */
+  const base2 = list.filter(function (p) { return p.family === 'multistep' && p.line; })[1];
+  const second = { fen: base2.fen, solutionUci: base2.solutionsUci[0],
+                   source: Object.assign({}, SRC, { id: 'otherRow', ply: 3 }) };
+  const idByFen = function (arr) {
+    const m = {}; arr.forEach(function (e) { m[e.fen] = e.id; }); return JSON.stringify(Object.keys(m).sort().map(function (k) { return [k, m[k]]; }));
+  };
+  chk('an id does not depend on where the position sits in the seed',
+    idByFen(GEN.deriveMultistepSeeds({ puzzles: [good.puzzles[0], second] })) ===
+    idByFen(GEN.deriveMultistepSeeds({ puzzles: [second, good.puzzles[0]] })), true);
+  chk('and the ply is part of the id', GEN.deriveMultistepSeeds({ puzzles: [second] })[0].id, 'mls-otherRow-3');
+  chk('a seed entry with no ply cannot be given an id, so it THROWS',
+    outcome({ puzzles: [{ fen: base.fen, solutionUci: base.solutionsUci[0],
+                          source: { db: 'lichess-cc0', id: 'x', rating: 1, url: 'https://lichess.org/x' } }] },
+            /source\.ply/), 'threw as expected');
+  chk('two different positions claiming the same id THROW',
+    outcome({ puzzles: [good.puzzles[0], Object.assign({}, second, { source: SRC })] }, /appears twice/),
+    'threw as expected');
+
+  /* The ordering claim, tested rather than commented: a stale seed must fail
+     BEFORE the sweep starts. The comment in the generator used to say so while
+     the sweep ran first; this is what makes it true and keeps it true. */
+  const badSeed = path.join(os.tmpdir(), 'tyranny-bad-seed.json');
+  fs.writeFileSync(badSeed, JSON.stringify({ puzzles: [
+    { fen: tacRec.fen, solutionUci: tacRec.solutionsUci[0], source: SRC }] }));
+  let err = null;
+  const t0 = Date.now();
+  try {
+    execFileSync(process.execPath, [path.join(__dirname, '..', 'tools', 'gen-puzzles.js'),
+      '--games', '1', '--multistep', badSeed, '--out', path.join(os.tmpdir(), 'tyranny-bad-out.json')],
+      { stdio: 'pipe' });
+  } catch (e) { err = e; }
+  fs.unlinkSync(badSeed);
+  chk('the generator exits non-zero on a stale seed', !!err && err.status !== 0, true);
+  chk('and says why', /no longer satisfies/.test(err ? String(err.stderr) : ''), true);
+  chk('and fails BEFORE the sweep begins (the sweep prints "sweeping:" first if it runs)',
+    /sweeping:/.test(err ? String(err.stderr) : ''), false);
+  chk('in seconds, not after a sweep', Date.now() - t0 < 30000, true);
+
+  /* A path the caller TYPED must exist. A mistyped --multistep used to be
+     skipped in silence: exit 0 and a file missing every seeded puzzle. */
+  ['--multistep', '--survival'].forEach(function (flag) {
+    let e = null;
+    try {
+      execFileSync(process.execPath, [path.join(__dirname, '..', 'tools', 'gen-puzzles.js'),
+        '--games', '1', flag, path.join(os.tmpdir(), 'tyranny-no-such-seed.json'),
+        '--out', path.join(os.tmpdir(), 'tyranny-bad-out.json')], { stdio: 'pipe' });
+    } catch (x) { e = x; }
+    chk('an explicit ' + flag + ' path that does not exist is an ERROR, not a silent skip',
+      !!e && e.status !== 0 && /does not exist/.test(String(e.stderr)), true);
+    chk('...raised before the sweep starts (' + flag + ')', /sweeping:/.test(e ? String(e.stderr) : ''), false);
+  });
+
+  /* validate() must catch a bad source -- every new rule above is mutated. */
+  let m;
+  m = clone(out[0]); m.source.db = 'somewhere-else';
+  mustReject('a seeded multistep claiming a database it did not come from', m);
+  m = clone(out[0]); delete m.source;
+  mustReject('a seeded (mls-) puzzle with no source to trace it to', m);
+  m = clone(out[0]); m.source.url = 'http://example.com/not-a-game';
+  mustReject('a seeded multistep whose link is not a lichess.org game', m);
+  m = clone(out[0]); m.source.ply = -1;
+  mustReject('a seeded multistep with a negative ply', m);
+  m = clone(out[0]); m.source.rating = '1500';
+  mustReject('a seeded multistep whose rating is not a number', m);
+  m = clone(out[0]); delete m.source.id;
+  mustReject('a seeded multistep whose source has no id', m);
+}
+
+/* ===================== the data tools' own self-tests ===================== */
+/*
+ * Each data tool ships a --self-test and the README advertises them, but nothing
+ * ever ran them: not this file, not run-all.js, not CI (found by deepcheck). A
+ * test nobody runs is a claim that quietly stops being true, and these cover
+ * exactly the logic the pipeline stands on -- the continuation builder, the
+ * shard merge that refuses a missing shard, the survival seeder. Together they
+ * take under ten seconds.
+ */
+hd("The data tools' own self-tests are run, and pass");
+{
+  const { execFileSync } = require('child_process');
+  ['line.js', 'lichess-multistep.js', 'lichess-seed.js'].forEach(function (f) {
+    let out = '', ok = true;
+    try {
+      out = String(execFileSync(process.execPath,
+        [path.join(__dirname, '..', 'tools', f), '--self-test'], { stdio: 'pipe' }));
+    } catch (e) { ok = false; out = String(e.stdout || '') + String(e.stderr || ''); }
+    const m = out.match(/(\d+) passed, (\d+) failed/);
+    chk('tools/' + f + ' --self-test exits 0', ok, true);
+    chk('tools/' + f + ' --self-test reports passing checks and no failure',
+      !!m && Number(m[1]) > 0 && Number(m[2]) === 0, true);
+    console.log('      tools/' + f + ': ' + (m ? m[1] + ' passed, ' + m[2] + ' failed' : 'NO RESULT LINE'));
+  });
+}
+
+/* ===================== the README says what the data has ===================== */
+/*
+ * Derek, 2026-09-17: the README "should stay current with the changes that
+ * happen." A reminder in a file is not a mechanism, and the README had already
+ * gone stale once (it described a different program from the one just shipped),
+ * so the numbers it quotes are compared to the data here. If the format of those
+ * lines changes this fails loudly, which is the right outcome: it demands that
+ * someone look, instead of letting a count drift unseen.
+ *
+ * Only the counts that are a pure function of puzzles.json are checked. The
+ * test-count figures the README quotes come from running the suites and are
+ * updated by hand at the close.
+ */
+hd('The README states the puzzle counts the data actually has');
+{
+  const total = list.length;
+  const byFam = {};
+  list.forEach(function (p) { byFam[p.family] = (byFam[p.family] || 0) + 1; });
+  const words = { two: 2, three: 3, four: 4, five: 5, six: 6 };
+  const rows = { survival: 'Survival', tactical: 'Tactical', restraint: 'Restraint', multistep: 'Multistep' };
+
+  /* Everything the README claims about the data, returned as a list of what is
+     WRONG. It is a function over text so the same rules can be shown a
+     deliberately wrong README below: a check that has only ever read a correct
+     one has not been shown to be able to fail. */
+  function readmeProblems(text) {
+    const bad = [];
+    const head = text.match(/\*\*(\d+) puzzles in\s+(\w+)\s+families\*\*/);
+    if (!head) bad.push('the headline gives no puzzle total');
+    else {
+      if (Number(head[1]) !== total) bad.push('headline says ' + head[1] + ' puzzles, the data has ' + total);
+      if (words[head[2]] !== Object.keys(byFam).length) {
+        bad.push('headline says ' + head[2] + ' families, the data has ' + Object.keys(byFam).length);
+      }
+    }
+    const sect = text.match(/^(\d+) positions\./m);
+    if (!sect) bad.push('the Puzzles section opens with no total');
+    else if (Number(sect[1]) !== total) bad.push('Puzzles section says ' + sect[1] + ', the data has ' + total);
+    Object.keys(rows).forEach(function (fam) {
+      const m = text.match(new RegExp('\\|\\s*\\*\\*' + rows[fam] + '\\*\\*\\s*\\|\\s*(\\d+)\\s*\\|'));
+      if (!m) bad.push('no table row for ' + fam);
+      else if (Number(m[1]) !== (byFam[fam] || 0)) {
+        bad.push('table says ' + m[1] + ' ' + fam + ' puzzles, the data has ' + (byFam[fam] || 0));
+      }
+    });
+    /* The standalone tool was retired because it wrote puzzles.json behind the
+       generator's back; the README must not send anyone back to it. */
+    if (text.indexOf('backfill-lines') >= 0) bad.push('the README points at the retired backfill tool');
+    return bad;
+  }
+
+  const README = fs.readFileSync(path.join(__dirname, '..', 'README.md'), 'utf8');
+  chk('the README matches the data on every count it quotes',
+    readmeProblems(README).join(' | '), '');
+
+  /* The other half: the same rules must REJECT a wrong README. */
+  function mutantCaught(label, text) {
+    const bad = readmeProblems(text);
+    const ok = bad.length > 0;
+    ok ? pass++ : (fail++, failures.push('README MUTATION NOT CAUGHT: ' + label));
+    console.log((ok ? 'PASS  ' : 'FAIL  ') + 'rejects ' + label +
+      (ok ? '   [' + bad[0].slice(0, 62) + ']' : '   *** ACCEPTED A WRONG README'));
+  }
+  mutantCaught('a README whose headline total is off by one',
+    README.replace(/\*\*(\d+) puzzles in/, function (m, n) { return '**' + (Number(n) + 1) + ' puzzles in'; }));
+  mutantCaught('a README whose Puzzles-section total is off by one',
+    README.replace(/^(\d+) positions\./m, function (m, n) { return (Number(n) + 1) + ' positions.'; }));
+  mutantCaught('a README whose multistep row is stale',
+    README.replace(/(\|\s*\*\*Multistep\*\*\s*\|\s*)(\d+)/, function (m, a, n) { return a + (Number(n) - 1); }));
+  mutantCaught('a README that names the wrong number of families',
+    README.replace(/puzzles in\s+four\s+families/, 'puzzles in three families'));
+  mutantCaught('a README that points at the retired backfill tool',
+    README + '\nnode tools/backfill-lines.js --write\n');
+  mutantCaught('a README with the family table removed',
+    README.replace(/\|\s*\*\*Survival\*\*\s*\|/, '| Survival |'));
 }
 
 /* ===================== the same seed reproduces the same file ===================== */
@@ -693,6 +1160,18 @@ hd('Reproducibility: the same seed writes the same bytes');
     chk('and the same bytes', a.equals(b), true);
     chk('the run actually produced puzzles, so this is not comparing two empty files',
       JSON.parse(a.toString()).puzzles.length > 0, true);
+    /* What the generator ACTUALLY wrote, not what its source says it would. */
+    const wrote = JSON.parse(a.toString());
+    chk('the file it wrote carries the schema the generator declares', wrote.schema, GEN.SCHEMA);
+    const wroteMul = wrote.puzzles.filter(function (p) { return p.family === 'multistep'; });
+    /* 20 games rarely find a multistep by themselves, so the seed is what makes
+       the next check real: when the seed is committed it guarantees some. */
+    if (fs.existsSync(path.join(__dirname, '..', 'puzzles', 'multistep-seed.json'))) {
+      chk('the seed guarantees multistep puzzles in the output, so the next check is not vacuous',
+        wroteMul.length > 0, true);
+    }
+    chk('and every multistep puzzle it wrote carries a line',
+      wroteMul.every(function (p) { return !!(p.line && p.line.steps); }), true);
     fs.unlinkSync(tmpA); fs.unlinkSync(tmpB);
   } catch (e) {
     console.log('FAIL  reproducibility run failed: ' + e.message);

@@ -7,7 +7,7 @@ capture an enemy. Same board, same objective, same everything else.
 
 **▶ Play it: https://dereklthornton99.github.io/tyranny-chess/**
 
-Hot-seat for two players, an engine opponent at three strengths, and **240 puzzles in four
+Hot-seat for two players, an engine opponent at three strengths, and **280 puzzles in four
 families** — positions no other chess program can generate. In three of them the answer is
 an execution; in one it is refusing one. One self-contained HTML file, no build step for
 the player, no dependencies, no network.
@@ -64,7 +64,7 @@ stays out of this file and the page.
 
 ## Puzzles
 
-240 positions. All four predicates are **depth-free** — exhaustive ply enumeration using
+280 positions. All four predicates are **depth-free** — exhaustive ply enumeration using
 only `legal()`, `apply()` and `inCheck()`, no search and no engine scoring.
 
 | Family | Count | Predicate |
@@ -72,7 +72,104 @@ only `legal()`, `apply()` and `inCheck()`, no search and no engine scoring.
 | **Survival** | 153 | **Checkmate under standard rules**, three ways out under Tyranny, and **exactly one of them is still alive after the reply**. The other two are legal, look no different, and lose. |
 | **Tactical** | 20 | A self-capture is mate in one, no other move is mate in one, **and no ordinary move forces mate within two plies**. |
 | **Restraint** | 40 | A self-capture is available and an ordinary move mates at once, and **no self-capture mates in one or forces mate within three plies**. The answer is the ordinary move; the executions are the decoys. |
-| **Multistep** | 27 | Exactly one self-capture **forces mate within three plies**, nothing mates in one, and **no ordinary move forces it either**. You have to see past the first move, and skipping the execution does not win. |
+| **Multistep** | 67 | Exactly one self-capture **forces mate within three plies**, nothing mates in one, and **no ordinary move forces it either**. You have to see past the first move, and skipping the execution does not win. **Played as two moves of yours**: you find the execution, the opponent answers, you finish it. 27 come from the random playout, 40 from real games. |
+
+### Multistep puzzles are played as multistep puzzles
+
+They were not, and that was a defect rather than a design. The family was generated and
+validated as forced mates in two, and every one of them really is one — but each record
+held a single move and nothing after it, so the page judged that move correct and ended the
+puzzle. Every data check was green, because the checks were about the data and not about
+what the player is asked to do. The fix has two halves.
+
+**The data.** A puzzle may carry a `line` (schema 5): an ordered list of steps, solver and
+opponent alternating, where each solver step holds `accept` — **every** move that is correct
+at that point, so finding a different mate is not marked wrong. It stores **one** opponent
+reply, and that loses nothing, because the family's defining property is that *every* reply
+loses: the generator refuses to emit a line unless every reply has a mating answer, and
+`tests/puzzles.js` re-derives all of them rather than the one stored. The stored reply is
+the one with the fewest mating answers, ties broken by move string, so the same input
+always yields the same file. `depth` was deliberately not reused for this: on survival
+puzzles it already means something else.
+
+**The page.** A correct first move leaves the puzzle open, the opponent's reply is played,
+and you are asked for the finishing move. A wrong second move offers Try again, which
+restarts the whole puzzle; Reveal shows the whole remaining line; Next stays disabled
+mid-line, so the second move cannot be skipped. A click made while the opponent's reply is
+still pending (about half a second) is ignored rather than judged; before that was fixed, a
+stray click right after a correct move was scored "Not it", counted a try, and cancelled the
+reply. This interaction is checked in a real headless Chrome — the check round two did not
+have. The opponent's step says honestly whether the reply was "the only legal reply" or "one
+of 26".
+
+**What this does not make hard.** 17 of the 27 playout puzzles leave the opponent exactly
+one legal reply, so their second move is a forced recapture. They now play as two moves, but
+the second is easy to see, and only three of the 27 give the opponent more than four replies.
+
+### Where the 40 real-game multistep puzzles come from
+
+From the same Lichess CC0 database as the survival family, mined by
+`tools/lichess-multistep.js`. Survival uses the *last* position of each line, where the
+loser has just been mated. A multistep puzzle wants the attacker, a move or two earlier, so
+**every** position along each line is a candidate and the predicate decides. The database is
+a position source and nothing more: no Lichess move is ever used as an answer, and every
+solution, line and decoy is re-derived from the FEN by the generator, which throws if a
+position stops qualifying.
+
+**Measured, plain counts.** The first 200,000 of 6,157,341 rows (3.25%), on 7 parallel shards
+in 19 minutes: **1,125,354** positions tested; **234** passed the multistep predicate;
+**167** of those were rejected because the opponent had fewer than two replies; **67** kept,
+one per source row. The first **40** in scan order ship. `puzzles/multistep-seed.json`
+records the database file's size and SHA-256, because the database is republished and its
+rows are not stable. **That hash is of the file named at merge time (`--db`), and the shards
+read a pipe and do not verify it**: merging with the wrong `--db` would write a false
+provenance line. It is correct for this seed (the file was re-hashed after the scan and
+matched), but nothing in the tooling would have caught the mistake, and a fingerprint of the
+rows each shard actually read would close it. That has not been built.
+
+Three things that scan taught, each a number rather than an opinion:
+
+- **No mate-theme prefilter.** It would have been the obvious speedup, and it is lossy: only
+  7 of the 40 came from rows carrying a mate theme at all. A self-capture opens forced mates
+  that standard chess does not have, so the rows worth scanning are not the rows Lichess
+  labelled as mates.
+- **A small slice misleads.** The first 20,000-row block gave 12 candidates; across the ten
+  blocks the range is 4 to 12 with a mean of 6.7. A projection from that first block was
+  about twice too high, which is why the yield is reported from the whole 200,000.
+- **The full file is not a single run.** One row costs about 40 ms of one core, so the whole
+  database is roughly 9 to 10 hours even on 7 shards. That figure is extrapolated from the
+  rate, **not run**.
+
+**What these puzzles are not.** `source.rating` is the Lichess rating of the *standard*
+puzzle the position came from. The position can sit anywhere along that puzzle's line
+(`source.ply` says where) and its answer is a self-capture the standard puzzle never
+contains, so the rating is provenance and a loose prior — not the difficulty of this puzzle.
+`difficulty` comes from the generator's own rule, like every family. The opponent was
+required to have at least two replies, a design choice meant to make "every reply loses"
+something you must check rather than a single forced line. It has **not** been measured that
+players find these harder, and 32 of the 40 give exactly two replies.
+
+### What a standard engine can and cannot do here
+
+Stockfish 19 (the ARM64 build, depth 16) was tried, because the question was a fair one.
+**It cannot score Tyranny positions**, and the reason is the whole variant: it assumes
+neither side can capture its own piece, so it is blind to the *defender's* new escapes and
+to the attacker's self-capture mates. `tac-0003` is the clean case. Stockfish and
+python-chess both say Qe6 is checkmate. Under this rule it is not — Black answers with the
+king executing his own pawn onto g7 — and the puzzle's real answer is a different move
+entirely, a bishop self-capture that mates at once.
+
+That is a wrong *move*, not a wrong verdict: White still wins there, just not by the move
+Stockfish names. How often a standard mate-in-one is refuted here was measured in an earlier
+round — 463 of 900 sampled real-game positions, 51.4% — and it too is a statement about
+mating *moves*. Whether Stockfish misjudges *who is winning*, as opposed to which move wins,
+was **not measured**: the 12 positions probed are wins by construction, so they could not
+show it either way.
+
+So nothing in `puzzles.json` came from Stockfish. The probe is
+kept as `_context/sf-probe.py`, with that finding in its header, because the measurement is
+worth more than the engine. What found the puzzles is the depth-free predicates, and what
+made them real positions is the Lichess data.
 
 ### The escape family was retired, and why is the interesting part
 
@@ -137,7 +234,7 @@ The cost is measured; the full yield is not.
 
 **The set is shuffled on every entry.** Generation order groups by family, so without it
 every session would open with the same 20 tacticals in the same sequence and nobody would
-reach a survival puzzle without working through 87 other positions first. The shuffle runs on entry, not
+reach a survival puzzle without working through 127 other positions first. The shuffle runs on entry, not
 once per page load, so leaving and coming back deals a new order too. It shuffles the
 reader's own filtered copy, never the shipped data. One cost worth naming: family order
 used to give an implicit easy-to-hard ramp, and mixing the families removes it — the
@@ -150,7 +247,7 @@ rejects anything below that, and multistep rejects every one-mover by constructi
 
 Three puzzles are still rated difficulty 1, and they are restraints rather than a leftover
 tail: a position with few legal moves and only one or two executions on offer is a genuine
-puzzle, just a small one. The spread across the whole set is **3 / 188 / 49**.
+puzzle, just a small one. The spread across the whole set is **3 / 200 / 77**.
 
 ## Reading the board
 
@@ -190,10 +287,15 @@ or supporting.
 src/tyranny.html        the whole game - markup, CSS, rules engine, AI, puzzle mode
 build.js                src/ + puzzles/ -> index.html
 index.html              GENERATED. do not edit; your changes will be overwritten
-puzzles/puzzles.json    GENERATED by tools/gen-puzzles.js
-tools/gen-puzzles.js    the sweep, the predicates, the survival merge, and --inline
+puzzles/puzzles.json    GENERATED by tools/gen-puzzles.js, and by nothing else
+tools/gen-puzzles.js    the ONLY writer of puzzles.json: the sweep, the predicates, both
+                        seed merges, and --inline
+tools/line.js           the continuation a multi-move puzzle is played through
 tools/lichess-seed.js   derives survival puzzles from the Lichess CC0 database
 puzzles/survival-seed.json  GENERATED, committed: positions and their provenance
+tools/lichess-multistep.js  mines the same database for multi-move puzzles, in shards
+puzzles/multistep-seed.json GENERATED, committed: positions, provenance, and the
+                        database file's SHA-256 so "reproducible" can be checked
 tools/fen-write.js      toFen(state); the page ships only a parser
 tools/shed-sweep.js     is a king shed ever sound? --check <fen> classifies one position
 tools/ai-selfcapture.js what the engine does with self-captures, and whether it prefers them
@@ -235,6 +337,34 @@ The seed supplies a position and where it came from, and nothing else is trusted
 `gen-puzzles.js` re-runs the predicate on every entry, recomputes the depth, the decoys and
 each refutation from the FEN, and **throws** if its answer disagrees with the seeder.
 
+The multi-move family has a second seed, `puzzles/multistep-seed.json`, built the same way
+but scanned in parallel shards (the corpus is 6.16 million rows and one row costs about
+40 ms on one core):
+
+```
+# K shards over the first R rows - run these side by side, one per core
+zstd -dc lichess_db_puzzle.csv.zst | node tools/lichess-multistep.js --rows R --shard I/K --out shard-I.json
+# combine them; refuses unless every shard 0..K-1 is present and agrees on every setting
+node tools/lichess-multistep.js --merge shard-0.json ... --db lichess_db_puzzle.csv.zst --cap 40
+node tools/lichess-multistep.js --self-test
+node tools/line.js --self-test
+```
+
+`gen-puzzles.js` derives **both** seeds before it starts the sweep, so a stale one fails in
+seconds rather than after a multi-minute sweep is thrown away. A test now proves that,
+because the generator's own comment claimed exactly this while the code ran the sweep
+first. `--multistep none` skips the multistep seed, which is how the sweep's own output is
+checked in isolation.
+
+**One writer.** `puzzles.json` is written by `tools/gen-puzzles.js` and by nothing else.
+An earlier standalone tool edited the file in place to add the continuations; the generator
+knew nothing about it, so a plain regeneration would have written schema 4 again and
+dropped every one of them, with nothing failing until somebody committed the result. It was
+deleted, its logic moved into `tools/line.js`, and the generator was run in full with the
+committed parameters to prove it reproduces the file **byte for byte**. `tests/puzzles.js`
+now keeps that true cheaply: it rebuilds every committed sweep record through the
+generator's own `buildEntry` and compares the schema constant to the file.
+
 `--target` is per family and the sweep stops when the **rarest** one reaches it, so budget
 for multistep rather than for the average. `--cap` bounds what ships. `--now <iso>` pins
 `generatedAt`, which is the only reason "the same seed writes the same bytes" is a property
@@ -258,11 +388,11 @@ The page has a **Run tests** button that executes 48 rule checks in the browser.
 suites, plus the puzzle validator, run under Node:
 
 ```
-node tests/run-all.js     388 checks, six files    27 / 8 / 24 / 13 / 290 / 26
-node tests/browser.js     114 checks in headless Chrome, against the real DOM
+node tests/run-all.js     494 checks, six files    27 / 8 / 24 / 13 / 396 / 26
+node tests/browser.js     166 checks in headless Chrome, against the real DOM
 ```
 
-Both numbers were printed by those two commands on **2026-09-17**, and the in-page 48 was
+Both numbers were printed by those two commands on **2026-10-02**, and the in-page 48 was
 read off the page by clicking the button rather than inferred from the source.
 
 **CI runs both, and that is new.** It used to run only the Node suites — which meant the
@@ -282,6 +412,23 @@ about Node. It serves the page over `127.0.0.1` rather than `file://`, because
 `localStorage` on a file origin is opaque in Chrome and the persistence checks would test
 nothing there.
 
+**The browser suite was flaky before this round, and randomness was the cause, not Chrome.**
+The puzzle set is shuffled on every entry, and two sections drew on whichever puzzle came up
+first. One was a "select every piece" sweep that also *played* a move whenever the next piece
+it clicked was a legal target of the one it had just selected, which under this rule includes
+friendly pieces: it executed a move in 195 of today's 280 puzzles, and in five survival
+puzzles that move was the answer, so the puzzle came out marked solved and a later check
+failed. The other took the first restraint puzzle dealt, and two of the 40 are solved by a
+promotion, which a two-click helper cannot finish because it opens a piece-choice dialog.
+Together that was roughly a 7% chance of a failing run (5 of 240 plus 2 of 40) before any of
+this round's work, so earlier clean runs were partly luck. Each cause was reproduced
+deterministically on a real page and then fixed at the root: the sweep clears its selection
+before every click and asserts it played nothing, and both picks now come from the data in id
+order, not from the deal. The waits for the page's own timers also poll instead of sleeping,
+because a fixed 900 ms sleep failed once with every core busy. Afterwards the suite passed six
+runs in a row, and two more with 12 busy loops on 8 cores. That is evidence, not a proof
+that no other deal-dependent check exists.
+
 The load-bearing Node check is `perft` in `tests/test.js`: with the variant rule switched
 **off**, the engine reproduces the published standard-chess node counts exactly —
 20 / 400 / 8,902 / 197,281 — which proves the base engine is correct and that the only new
@@ -293,6 +440,13 @@ right kind *for its family*, the family predicate actually holds, and no decoy i
 solution. For a multistep puzzle it walks the **whole** forcing line — every legal opponent
 reply, each with the move that mates it — and names the reply if one escapes. It was
 written **before** the generator and caught a real defect in the seed data on its first run.
+
+Since the continuation work it also does three things the older checks could not. It
+re-derives every stored `line` from the FEN alone and mutates each rule it checks. It
+rebuilds every committed sweep record through the generator's own `buildEntry` and compares
+the generator's schema constant to the file, so a generator that has drifted from the data
+fails in under a second instead of after a regeneration. And it compares the puzzle counts
+this README quotes to the data, so those counts cannot go stale without a test failing.
 
 It also **discriminates**, which is the part that makes the rest mean anything: a section
 of deliberate corruptions must each be rejected, including the two the goal tree names as
@@ -326,6 +480,21 @@ and a multistep that is really a one-mover.
   unique survivor turned out not to exist in the sample. So the family is real but
   uniform in shape, and its difficulty field is 2 for all 153. The deep tier described in
   the Puzzles section is the measured route to a harder spread, at 4.8 hours of compute.
+- **A standard engine cannot rank these puzzles.** Measured with Stockfish 19 at depth 16:
+  it assumes neither side can capture its own piece, so it calls checkmate on positions the
+  variant says are not mate (`tac-0003`: Qe6 is mate to Stockfish, and Black escapes by
+  executing his own pawn). Nothing in the set is scored, ranked or selected by it.
+- **The real-game multistep puzzles' provenance is looser than it looks.** `source.rating`
+  belongs to the standard puzzle the position came from, not to the puzzle you are solving,
+  and requiring the opponent to have two replies is a design choice, not a measured effect
+  on difficulty. The yield figures come from a 3.25% prefix of the database; the projection
+  to the whole file is labelled as one and has not been run.
+- **Nobody can see the source link.** All 193 survival and real-game multistep puzzles carry
+  a Lichess id, rating and a link to the game, but the page never reads that field. It is in
+  `puzzles.json` and nowhere on screen.
+- **Most of the new second moves are two-way choices, not wide ones.** 32 of the 40
+  real-game multistep puzzles give the opponent exactly two replies, and 38 of the 40 have a
+  single mating answer at the end.
 - Verified on desktop Chrome only, now including an automated headless run. The iPad emoji
   bug described below is fixed *by construction* — there is no font left to substitute —
   but that fix has never been re-tested on an iPad, and nothing here has been tested on

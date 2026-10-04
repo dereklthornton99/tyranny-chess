@@ -203,6 +203,21 @@ async function main(){
   const pick = sq => 'document.querySelector(\'[data-sq="' + sq + '"]\').click();';
   const countMarks = 'return document.querySelectorAll("' + MARKS + '").length;';
 
+  /* Wait for the PAGE's own timers instead of guessing how long they take. The
+     opponent's scripted reply is a 520ms setTimeout inside the page. A fixed
+     900ms sleep passed on an idle machine and failed with every core busy ("the
+     reply landed on the board: got 2, want 3") -- which is how a shared CI
+     runner behaves. Poll the condition, give up only after ten seconds, and
+     return whether it held so the caller asserts on it. */
+  async function until(cond, limitMs){
+    const t0 = Date.now(), limit = limitMs || 10000;
+    for(;;){
+      if(await ev('return !!(' + cond + ');')) return true;
+      if(Date.now() - t0 > limit) return false;
+      await sleep(25);
+    }
+  }
+
   try {
     await load();
 
@@ -274,22 +289,36 @@ async function main(){
     // Select every piece of the side to move; not one of them may show a marker.
     // `moves` is the control that keeps this honest: a zero marker count means
     // nothing unless real, non-empty target sets were produced alongside it.
+    //
+    // The selection is CLEARED before every click, and that is the fix for a
+    // flaky test that predates the multi-move work. Clicking piece A selects it;
+    // clicking the next piece B then EXECUTES A-takes-B whenever B is one of A's
+    // targets, and under this rule friendly pieces are targets. So the "just
+    // select everything" sweep was quietly PLAYING a move in 195 of the 280
+    // puzzles, and in five survival puzzles (sur-0015, 0046, 0076, 0079, 0116)
+    // that move was the solution: the puzzle came out marked solved and the
+    // later check "nothing counted as solved yet" failed, about one run in fifty,
+    // on whichever puzzle the shuffle dealt first. Reproduced deterministically by
+    // dealing sur-0015: the sweep played K(x)h8 and the page marked it solved.
     const sweep = await ev(
-      'var S = window.hist[window.hist.length-1], n = 0, moves = 0, picked = 0;' +
+      'var S = window.hist[window.hist.length-1], n = 0, moves = 0, picked = 0, h0 = window.hist.length;' +
       'for(var i=0;i<64;i++){ if(S.b[i] && S.b[i][0] === S.turn){' +
+      '  window.sel = -1; window.targets = [];' +
       '  document.querySelector(\'[data-sq="\'+i+\'"]\').click(); picked++;' +
       '  moves += window.targets.length;' +
       '  n += document.querySelectorAll("' + MARKS + '").length; } }' +
-      'return {marks:n, moves:moves, picked:picked};');
+      'return {marks:n, moves:moves, picked:picked, played:window.hist.length - h0};');
     chk('AC1  no dot, no ring, no brackets on ANY square, over every movable piece', sweep.marks, 0);
     chk('AC1  control: the sweep really did select pieces', sweep.picked > 0, true);
     chk('AC1  control: those pieces really did have legal moves to mark', sweep.moves > 0, true);
+    chk('AC1  control: the sweep only SELECTED pieces, it never played a move', sweep.played, 0);
     // Mutation: with the puzzle-mode override removed, the SAME sweep must light up.
     // If it does not, the zero above was measuring nothing.
     const mutated = await ev(
       'var real = window.marksVisible; window.marksVisible = function(){ return window.showMarks; };' +
       'var S = window.hist[window.hist.length-1], n = 0;' +
       'for(var i=0;i<64;i++){ if(S.b[i] && S.b[i][0] === S.turn){' +
+      '  window.sel = -1; window.targets = [];' +
       '  document.querySelector(\'[data-sq="\'+i+\'"]\').click();' +
       '  n += document.querySelectorAll("' + MARKS + '").length; } }' +
       'window.marksVisible = real; render(); return n;');
@@ -387,7 +416,11 @@ async function main(){
     // A synthetic puzzle carrying BOTH castling rights and an en-passant square,
     // because the real set may contain neither and AC2 names them explicitly.
     const SYN = 'rnbqkbnr/pp1ppppp/8/2pP4/8/8/PPP1PPPP/RNBQKBNR w KQkq c6 0 3';
-    await ev('window.TYRANNY_PUZZLES = {schema:2, puzzles:[{id:"syn-1", family:"synthetic",' +
+    /* The stored solved-set is cleared first: this section asserts "nothing counted
+       as solved yet", which is a claim about THIS section and must not depend on
+       whatever an earlier one happened to leave in localStorage. */
+    await ev('localStorage.removeItem("tyranny.puzzles.solved.v1");' +
+      'window.TYRANNY_PUZZLES = {schema:2, puzzles:[{id:"syn-1", family:"synthetic",' +
       ' fen:"' + SYN + '", sideToMove:"w", solutions:[{from:27,to:18,promo:null}],' +
       ' solutionsSan:["dxc6"], rationale:"en passant", difficulty:1}]}; return 1;');
     await ev('document.getElementById("puzToggle").click();');
@@ -444,9 +477,15 @@ async function main(){
       /* Not the LAST entry: the set is shuffled on entry now, so "first puzzle
          with a non-promotion solution" is no longer guaranteed to be index 0,
          and landing on the last one would make the Next assertion below fail
-         for a reason that has nothing to do with what is being tested. */
+         for a reason that has nothing to do with what is being tested.
+
+         And not a LINE-CARRYING one either (schema 5): this check is the
+         one-move round trip, and a multi-move puzzle correctly answers its
+         first move with "mid" rather than "solved". Excluding it here is not
+         a coverage gap -- the multi-move path is R3-M1-AC5 below, which asserts
+         the opposite of this on purpose. */
       'for(var i=0;i<window.puz.list.length-1;i++){ var p = window.puz.list[i];' +
-      '  if(!p.solutions[0].promo){ return {i:i, from:p.solutions[0].from, to:p.solutions[0].to, id:p.id}; } }' +
+      '  if(!p.solutions[0].promo && !p.line){ return {i:i, from:p.solutions[0].from, to:p.solutions[0].to, id:p.id}; } }' +
       'return null;');
     await ev('puzLoad(' + solve.i + '); return 1;');
     await ev(pick(solve.from)); await ev(pick(solve.to));
@@ -476,10 +515,19 @@ async function main(){
                'window.TYRANNY_PUZZLES.puzzles.forEach(function(p){ f[p.family] = 1; });' +
                'return ["tactical","restraint","multistep","survival"].every(function(k){ return !!f[k]; }) && !f.escape;'), true);
     await ev('document.getElementById("puzToggle").click();');
+    /* Chosen from the DATA, not from the random deal. This used to take "the first
+       restraint puzzle the shuffle dealt", and two of the 40 (res-0029, res-0033)
+       are solved by a PROMOTION: clicking from-square then to-square opens a
+       piece-choice dialog instead of finishing the move, so the section failed
+       with "got open, want solved" whenever one of them came up first -- 2 runs in
+       40, and it was already so before the multi-move work. Sorted by id, and
+       restricted to puzzles whose answer and trap are plain two-click moves. */
     const restraint = await ev(
-      'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
-      '  if(p.family === "restraint" && p.decoys.length){' +
-      '    return {i:i, id:p.id, decoy:p.decoys[0].uci, selfs:p.selfCaptureCount, sols:p.solutions.length}; } }' +
+      'var L = window.puz.list.map(function(p, i){ return {p:p, i:i}; })' +
+      '  .sort(function(a, b){ return a.p.id < b.p.id ? -1 : 1; });' +
+      'for(var k=0;k<L.length;k++){ var p = L[k].p;' +
+      '  if(p.family === "restraint" && p.decoys.length && !p.solutions[0].promo && p.decoys[0].uci.length === 4){' +
+      '    return {i:L[k].i, id:p.id, decoy:p.decoys[0].uci, selfs:p.selfCaptureCount, sols:p.solutions.length}; } }' +
       'return null;');
     chk('     found a restraint puzzle with a temptation on the board', !!restraint, true);
     await ev('puzLoad(' + restraint.i + '); return 1;');
@@ -514,7 +562,7 @@ async function main(){
 
     head('M3-T2-AC4 the reader knows its own schema and refuses one it does not');
     await load();
-    chk('     the shipped file is schema 4', await ev('return window.TYRANNY_PUZZLES.schema'), 4);
+    chk('     the shipped file is schema 5', await ev('return window.TYRANNY_PUZZLES.schema'), 5);
     await ev('window.TYRANNY_PUZZLES = {schema:99, puzzles:[{id:"x", fen:"7k/8/8/8/8/8/8/7K w - - 0 1",' +
              ' solutions:[{from:63,to:62,promo:null}]}]}; return 1;');
     const refused = await ev('return JSON.stringify(puzRead());');
@@ -531,10 +579,15 @@ async function main(){
     head('Survival has wrong answers, and says what beat you');
     await load();
     await ev('document.getElementById("puzToggle").click();');
+    /* From the data (id order), not the deal, for the same reason as the restraint
+       section above: a dealt-order pick makes the outcome depend on a shuffle. */
     const sv = await ev(
-      'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
-      '  if(p.family === "survival" && p.decoys.length && p.decoys[0].refutedBy){' +
-      '    return {i:i, id:p.id, sol:p.solutionsUci[0], decoy:p.decoys[0].uci,' +
+      'var L = window.puz.list.map(function(p, i){ return {p:p, i:i}; })' +
+      '  .sort(function(a, b){ return a.p.id < b.p.id ? -1 : 1; });' +
+      'for(var k=0;k<L.length;k++){ var p = L[k].p;' +
+      '  if(p.family === "survival" && p.decoys.length && p.decoys[0].refutedBy' +
+      '     && p.solutionsUci[0].length === 4 && p.decoys[0].uci.length === 4){' +
+      '    return {i:L[k].i, id:p.id, sol:p.solutionsUci[0], decoy:p.decoys[0].uci,' +
       '            beats:p.decoys[0].refutedBy, legal:p.legalMoveCount,' +
       '            sols:p.solutions.length, url:p.source.url}; } }' +
       'return null;');
@@ -572,7 +625,13 @@ async function main(){
     const dealA = await ev('document.getElementById("puzToggle").click();' + ids);
     await ev('document.getElementById("puzToggle").click();');            // leave
     const dealB = await ev('document.getElementById("puzToggle").click();' + ids);
-    chk('     both deals contain the whole set', dealA.length + '/' + dealB.length, '240/240');
+    /* The size is read off the data the page shipped with, not a literal: a
+       magic number here broke every time the set grew, and a test that has to be
+       edited whenever the data changes teaches people to edit the test. */
+    const setSize = await ev('return window.TYRANNY_PUZZLES.puzzles.length;');
+    chk('     both deals contain the whole set',
+      dealA.length + '/' + dealB.length, setSize + '/' + setSize);
+    chk('     and the set is not empty, so that comparison means something', setSize > 0, true);
     chk('two entries deal a DIFFERENT order',
       JSON.stringify(dealA) === JSON.stringify(dealB), false);
     /* The half that matters more than the shuffle itself: a bad shuffle that
@@ -630,6 +689,250 @@ async function main(){
       await ev('return window.puz.list[' + ri + '].fen;'));
     chk('the board is playable again',
       await ev(pick(be2.from) + 'return window.targets.length > 0;'), true);
+
+    /* ---------------- R3-M1-AC5 : a multi-move puzzle takes more than one move ----
+     *
+     * THE CRITERION TC-R2 DID NOT HAVE, and the reason this section exists.
+     * Round 2's M3-T1 shipped `done` with six criteria, every one of them
+     * honestly met -- and all six were about the GENERATOR and the DATA. Its
+     * AC4 even walked the full forcing line. Not one of them said the PLAYER
+     * is asked for the second move, so the family was built, validated and
+     * shipped as a one-move puzzle. Derek, 2026-10-02: "Some of the ones that
+     * are in the app already say that they are multistep but are only one
+     * step."
+     *
+     * So these checks are deliberately about the INTERACTION. A green data
+     * test is not evidence here: the first assertion below is that a correct
+     * move does NOT solve the puzzle, which is the exact thing no data check
+     * can see.
+     */
+    head('R3-M1-AC5 a correct first move does not solve a multi-move puzzle');
+    await load();
+    /* Every multistep puzzle carries a line, and there are at least the 27 the
+       random playout produced. Compared to the family count rather than a
+       literal, so a seeded set growing the family does not weaken the check. */
+    chk('     every multistep puzzle the page ships carries a continuation', await ev(
+      'var m = window.TYRANNY_PUZZLES.puzzles.filter(function(p){ return p.family === "multistep"; });' +
+      'return m.length + "/" + m.filter(function(p){ return !!p.line; }).length;'),
+      await ev('var n = window.TYRANNY_PUZZLES.puzzles.filter(function(p){ return p.family === "multistep"; }).length;' +
+               'return n + "/" + n;'));
+    chk('     and there are at least the 27 the random playout produced', await ev(
+      'return window.TYRANNY_PUZZLES.puzzles.filter(function(p){ return p.family === "multistep"; }).length >= 27;'), true);
+    await ev('document.getElementById("puzToggle").click();');
+    /* The one with the MOST opponent replies, so the test runs on a position
+       where the reply is a real choice rather than the only legal move. Chosen
+       in-page by max `of`, not hardcoded, so regenerating the set cannot leave
+       this check silently pointing at a puzzle that no longer exists. */
+    const ms = await ev(
+      'var best = null;' +
+      'for(var i=0;i<window.puz.list.length;i++){ var p = window.puz.list[i];' +
+      '  if(!p.line) continue;' +
+      /* Not a promotion anywhere on the line: a click on a promoting move opens
+         a piece-choice dialog this section does not drive, and it would fail for
+         a reason unrelated to what is being tested. */
+      '  if(p.solutions[0].promo) continue;' +
+      '  if(p.line.steps[2].accept.some(function(u){ return u.length > 4; })) continue;' +
+      '  var n = p.line.steps[1].of || 0;' +
+      '  if(!best || n > best.of) best = {i:i, id:p.id, of:n, plies:p.line.plies,' +
+      '    from:p.solutions[0].from, to:p.solutions[0].to,' +
+      '    reply:p.line.steps[1].reply, mates:p.line.steps[2].accept}; }' +
+      'return best;');
+    chk('     found a multi-move puzzle with real opponent choice', !!ms && ms.of > 1, true);
+    console.log('       using ' + ms.id + ': ' + ms.of + ' legal replies, ' +
+                ms.plies + ' plies, ' + ms.mates.length + ' mating answer(s)');
+    await ev('puzLoad(' + ms.i + '); return 1;');
+    chk('     starts at step 0', await ev('return window.puz.step'), 0);
+
+    await ev(pick(ms.from)); await ev(ms.to !== null ? pick(ms.to) : 'return 1;');
+    chk('AC5  the correct first move does NOT solve it',
+      await ev('return window.puz.state'), 'mid');
+    chk('AC5  and nothing is recorded as solved yet',
+      await ev('return window.puz.solved["' + ms.id + '"] ? 1 : 0'), 0);
+    chk('AC5  Next stays disabled, so the second move cannot be skipped',
+      await ev('return document.getElementById("puzNext").disabled'), true);
+
+    head('R3-M1-AC5 the opponent actually replies, with the stored move');
+    const plyBefore = await ev('return window.hist.length;');
+    chk('AC5  the opponent replies (waited for, not slept for)', await until('window.puz.step === 2'), true);
+    chk('AC5  the reply landed on the board', await ev('return window.hist.length;'), plyBefore + 1);
+    chk('AC5  and it is the move the data stored',
+      await ev('var m = window.lastMv;' +
+               'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+               'return nm(m.from) + nm(m.to) + (m.promo || "");'), ms.reply);
+    chk('AC5  the step counter advanced to the second solver move',
+      await ev('return window.puz.step'), 2);
+    const asked = await ev('return document.getElementById("puzSay").textContent;');
+    console.log('       prompt: ' + asked);
+    chk('AC5  the player is told to finish it', /finish it/i.test(asked), true);
+    /* The opponent's reply must not read as the puzzle's solution: the first
+       wording said "The answer is Nf6" about the OPPONENT's move. */
+    chk('AC5  the prompt says the OPPONENT played the reply, not that it is "the answer"',
+      /The opponent plays/.test(asked) && !/The answer is/.test(asked), true);
+    /* Honest wording, not a blanket "forced": this puzzle has several replies. */
+    chk('AC5  and is told the reply was a choice, not forced',
+      /one of \d+ replies/.test(asked), true);
+    chk('AC5  without naming the mating square',
+      asked.indexOf(ms.mates[0].slice(2, 4)) < 0, true);
+
+    head('R3-M1-AC5 a wrong second move is wrong, and Try again restarts the puzzle');
+    const dud = await ev(
+      'var S = window.hist[window.hist.length-1];' +
+      'var acc = ' + JSON.stringify(ms.mates) + ';' +
+      'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+      'var m = legal(S, true).filter(function(x){' +
+      '  return acc.indexOf(nm(x.from)+nm(x.to)+(x.promo||"")) < 0 && !x.promo; })[0];' +
+      'return m ? {from:m.from, to:m.to} : null;');
+    chk('     there is a legal second move that is not the answer', !!dud, true);
+    await ev(pick(dud.from)); await ev(pick(dud.to));
+    chk('AC5  a legal non-mating second move is judged wrong',
+      await ev('return window.puz.state'), 'wrong');
+    chk('AC5  Try again is offered',
+      await ev('return document.getElementById("puzRetry").disabled'), false);
+    const midSay = await ev('return document.getElementById("puzSay").textContent;');
+    chk('AC5  and says the whole puzzle goes back, not just the move',
+      /whole puzzle back/.test(midSay), true);
+    await ev('document.getElementById("puzRetry").click();');
+    chk('AC5  Try again restores the ORIGINAL position, not the mid-line one',
+      toFen(await ev('return window.hist[window.hist.length-1];')),
+      await ev('return window.puz.list[' + ms.i + '].fen;'));
+    chk('AC5  and resets the step counter, so move one is asked for again',
+      await ev('return window.puz.step'), 0);
+
+    /* Found by deepcheck with a live repro: the correct first move followed AT
+       ONCE by any move on the opponent's side was scored "Not it", counted a
+       try, and cancelled the stored reply -- a right answer turned into a
+       failure by a click half a second later. Both clicks happen inside ONE
+       page evaluation, so the 520ms timer cannot fire between them and the
+       early move is made while the reply is still pending, every time, however
+       busy the machine is. */
+    head('R3-M1-AC5 a click inside the opponent reply window is ignored, not judged');
+    const early = await ev(
+      'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+      'function tap(s){ document.querySelector(\'[data-sq="\' + s + \'"]\').click(); }' +
+      'tap(' + ms.from + '); tap(' + ms.to + ');' +                              // the correct move 1
+      'var S = window.hist[window.hist.length-1];' +
+      'var stray = legal(S, true).filter(function(x){' +
+      '  return nm(x.from) + nm(x.to) + (x.promo || "") !== "' + ms.reply + '"; })[0];' +
+      'var before = {state: window.puz.state, hist: window.hist.length, tries: window.puz.tries};' +
+      'if(stray){ tap(stray.from); tap(stray.to); }' +                           // early, opponent-side
+      'return {hadStray: !!stray, before: before,' +
+      '  after: {state: window.puz.state, hist: window.hist.length, tries: window.puz.tries}};');
+    chk('     there was a legal opponent move to make early', early.hadStray, true);
+    chk('AC5  the early move is refused: still mid-line, not "wrong"', early.after.state, 'mid');
+    chk('AC5  no try is counted against the player', early.after.tries, early.before.tries);
+    chk('AC5  and the early move added nothing to the board', early.after.hist, early.before.hist);
+    chk('AC5  the stored reply still lands afterwards', await until('window.puz.step === 2'), true);
+    chk('AC5  and it is the stored one',
+      await ev('var m = window.lastMv;' +
+               'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+               'return nm(m.from) + nm(m.to) + (m.promo || "");'), ms.reply);
+
+    head('R3-M1-AC5 playing the whole line through solves it');
+    await ev('puzLoad(' + ms.i + '); return 1;');                      // fresh: the early-click test used it up
+    await ev(pick(ms.from)); await ev(pick(ms.to));
+    chk('     the opponent replied before the finishing move was asked for',
+      await until('window.puz.step === 2'), true);
+    const fin = await ev(
+      'var S = window.hist[window.hist.length-1];' +
+      'var want = ' + JSON.stringify(ms.mates[0]) + ';' +
+      'function nm(i){ return "abcdefgh"[i%8] + (8 - ((i/8)|0)); }' +
+      'var m = legal(S, true).filter(function(x){ return nm(x.from)+nm(x.to)+(x.promo||"") === want; })[0];' +
+      'return m ? {from:m.from, to:m.to} : null;');
+    chk('     the stored mating move is legal in the reached position', !!fin, true);
+    await ev(pick(fin.from)); await ev(pick(fin.to));
+    chk('AC5  the second move solves it', await ev('return window.puz.state'), 'solved');
+    chk('AC5  it really is mate on the board',
+      await ev('return String(window.overTxt).indexOf("checkmate") >= 0;'), true);
+    chk('AC5  counted as solved exactly once',
+      await ev('return window.puz.solved["' + ms.id + '"] ? 1 : 0'), 1);
+    chk('AC5  Next is enabled only now',
+      await ev('return document.getElementById("puzNext").disabled'), false);
+
+    head('R3-M1-AC8 Reveal mid-line gives the whole remaining line, not one move');
+    await load();
+    await ev('document.getElementById("puzToggle").click();');
+    /* Re-find it by id. Entering puzzle mode RESHUFFLES, so ms.i is an index
+       into the previous deal and reusing it here silently tests a different
+       puzzle -- which is what it did on the first run of this check, landing on
+       a survival one-mover and failing for the wrong reason. */
+    const msAgain = await ev(
+      'for(var i=0;i<window.puz.list.length;i++)' +
+      '  if(window.puz.list[i].id === "' + ms.id + '") return i;' +
+      'return -1;');
+    chk('     re-found ' + ms.id + ' in the new deal', msAgain >= 0, true);
+    await ev('puzLoad(' + msAgain + '); return 1;');
+    chk('     and it really is the multi-move one',
+      await ev('return window.puz.list[' + msAgain + '].id'), ms.id);
+    await ev('document.getElementById("puzReveal").click();');
+    const revAll = await ev('return document.getElementById("puzSay").textContent;');
+    console.log('       reveal: ' + revAll);
+    chk('AC8  Reveal names the opponent reply as part of the answer',
+      revAll.indexOf(ms.of + ', all losing') >= 0, true);
+    chk('AC8  and the mating move too',
+      revAll.length > 40 && /…/.test(revAll), true);
+
+    /* ---------------- R3-M2-AC5 : the page is not limited to two moves ----------
+     *
+     * No shipped puzzle is deeper than mate-in-two, so nothing in the real data
+     * can show that the page handles a longer line -- and "the representation
+     * needs no second schema change" is a claim about exactly that. This builds
+     * a FIVE-ply line (three solver moves, two scripted replies) out of the
+     * opening position, where every move is legal by inspection, and plays it
+     * through the same code path the real puzzles use.
+     *
+     * It tests the page's generality only. The generator and validator build
+     * and check three-ply lines, deliberately: the multistep family is mate in
+     * two. A deeper FAMILY would need its own predicate; a deeper LINE needs
+     * nothing from the page.
+     */
+    head('R3-M2-AC5 a five-ply line is played through by the same code');
+    const START = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    await load();
+    await ev('window.TYRANNY_PUZZLES = {schema:5, puzzles:[{id:"syn-deep", family:"synthetic",' +
+      ' fen:"' + START + '", sideToMove:"w", solutions:[{from:52,to:36,promo:null}],' +
+      ' solutionsSan:["e4"], rationale:"depth test", difficulty:1,' +
+      ' line:{plies:5, steps:[' +
+      '  {side:"solver", accept:["e2e4"], acceptSan:["e4"]},' +
+      '  {side:"opponent", reply:"e7e5", replySan:"e5", of:20},' +
+      '  {side:"solver", accept:["g1f3"], acceptSan:["Nf3"]},' +
+      '  {side:"opponent", reply:"b8c6", replySan:"Nc6", of:30},' +
+      '  {side:"solver", accept:["f1b5"], acceptSan:["Bb5"], mate:true}]}}]}; return 1;');
+    await ev('document.getElementById("puzToggle").click();');
+    chk('     loaded the synthetic five-ply puzzle', await ev('return window.puz.list[0].id'), 'syn-deep');
+
+    await ev(pick(52)); await ev(pick(36));                      // e2-e4
+    chk('deep  move 1 of 3 leaves it open', await ev('return window.puz.state'), 'mid');
+    await until('window.puz.step === 2');
+    chk('deep  the first scripted reply landed (e7-e5)',
+      await ev('return window.hist.length + "/" + window.puz.step'), '3/2');
+
+    /* A wrong move DEEP in the line restarts the whole puzzle, not just a move. */
+    await ev(pick(48)); await ev(pick(40));                      // a2-a3: legal, not the idea
+    chk('deep  a wrong move mid-line is judged wrong', await ev('return window.puz.state'), 'wrong');
+    await ev('document.getElementById("puzRetry").click();');
+    chk('deep  Try again restores the ORIGINAL position, five plies back',
+      toFen(await ev('return window.hist[window.hist.length-1];')), START);
+    chk('deep  and rewinds the step counter to the start',
+      await ev('return window.puz.state + "/" + window.puz.step'), 'open/0');
+
+    await ev(pick(52)); await ev(pick(36));                      // e4 again
+    await until('window.puz.step === 2');
+    await ev(pick(62)); await ev(pick(45));                      // Nf3
+    chk('deep  move 2 of 3 also leaves it open, not solved',
+      await ev('return window.puz.state + "/" + window.puz.step'), 'mid/3');
+    chk('deep  and nothing is recorded as solved with a move still to go',
+      await ev('return window.puz.solved["syn-deep"] ? 1 : 0'), 0);
+    await until('window.puz.step === 4');
+    chk('deep  the second scripted reply landed (b8-c6), one move to go',
+      await ev('return window.hist.length + "/" + window.puz.step'), '5/4');
+    chk('deep  Next is still disabled with one move to go',
+      await ev('return document.getElementById("puzNext").disabled'), true);
+    await ev(pick(61)); await ev(pick(25));                      // Bb5
+    chk('deep  the third move finally solves it', await ev('return window.puz.state'), 'solved');
+    chk('deep  counted as solved exactly once',
+      await ev('return window.puz.solved["syn-deep"] ? 1 : 0'), 1);
+    chk('deep  and only now is Next enabled',
+      await ev('return document.getElementById("puzNext").disabled'), false);
 
     /* ---------------- the in-page suite, actually run ---------------- */
     /*

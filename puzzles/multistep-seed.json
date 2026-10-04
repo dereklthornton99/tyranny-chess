@@ -1,0 +1,551 @@
+{
+  "tool": "tools/lichess-multistep.js",
+  "db": "lichess-cc0",
+  "dbFile": {
+    "file": "lichess_db_puzzle.csv.zst",
+    "bytes": 307234795,
+    "sha256": "76335bfa7d7c4a7f93c1366d81549e53951ebb79dd43d34904cab8f22d962f8d"
+  },
+  "scan": {
+    "rowsScanned": 200000,
+    "shards": 7,
+    "minReplies": 2,
+    "minRating": 0,
+    "perRow": 1
+  },
+  "stats": {
+    "rows": 200000,
+    "positions": 1125354,
+    "multistep": 234,
+    "tooNarrow": 167,
+    "kept": 67
+  },
+  "selection": {
+    "rule": "first N in scan order, one position per source row",
+    "cap": 40,
+    "candidates": 67,
+    "kept": 40
+  },
+  "puzzles": [
+    {
+      "fen": "5r1k/B1p3pp/2Qb1p2/3Pq3/P6P/8/2P2K2/3R1R2 b - - 2 36",
+      "solutionUci": "f8f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "002mG",
+        "rating": 2377,
+        "popularity": 88,
+        "themes": "advantage middlegame quietMove short",
+        "url": "https://lichess.org/age2hanq#71",
+        "ply": 1
+      }
+    },
+    {
+      "fen": "2rrR3/p4kp1/1p5p/2pq1p1P/8/P4QR1/5PP1/6K1 w - - 2 33",
+      "solutionUci": "f3h5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "00DII",
+        "rating": 1790,
+        "popularity": 97,
+        "themes": "advantage endgame intermezzo long",
+        "url": "https://lichess.org/vJnBcDxi/black#62",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "6rk/3Q2bp/p2p4/q4p2/P7/2p4P/2P5/K3R1R1 b - - 8 34",
+      "solutionUci": "a5c3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "01aP5",
+        "rating": 1453,
+        "popularity": 88,
+        "themes": "endgame long mate mateIn3 sacrifice",
+        "url": "https://lichess.org/Y9TYZm8S/black#68",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "4R3/1pp3pk/5p1p/3Q1P1P/8/2q5/r7/1K6 w - - 2 38",
+      "solutionUci": "d5f5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "04jHM",
+        "rating": 1497,
+        "popularity": 86,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/lz8zcLUY/black#72",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "r5k1/2R5/1p5p/p2PNpp1/3Q4/P3r2P/5qP1/7K w - - 1 38",
+      "solutionUci": "d4d5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "081gB",
+        "rating": 2190,
+        "popularity": 89,
+        "themes": "advantage discoveredAttack endgame long",
+        "url": "https://lichess.org/nfBWki5D/black#70",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "6k1/5ppp/2q1b3/1pP5/3Q1pP1/3P1P1P/r2bB3/1K1R4 b - - 1 30",
+      "solutionUci": "c6b5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "086bE",
+        "rating": 979,
+        "popularity": 75,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/cgHVZalS/black#60",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "2r4k/pp1b3p/4p1pP/4P3/1q1P1n2/2p2NR1/PP2Q1P1/K1R5 w - - 4 28",
+      "solutionUci": "e2e5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "08gJR",
+        "rating": 2304,
+        "popularity": 86,
+        "themes": "advantage master middlegame short",
+        "url": "https://lichess.org/wOmAMzo4#53",
+        "ply": 2
+      }
+    },
+    {
+      "fen": "1kr5/1P1qb3/Q3p3/P2pP1p1/3P4/6Pp/7P/1R5K b - - 0 36",
+      "solutionUci": "d7d5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "09AVY",
+        "rating": 1270,
+        "popularity": 94,
+        "themes": "advancedPawn crushing endgame long",
+        "url": "https://lichess.org/svdmfC1e/black#68",
+        "ply": 4
+      }
+    },
+    {
+      "fen": "1r4rk/1b1pqp2/5n1B/4pPp1/pb1pP2Q/3P3R/BPP3PP/RN4K1 w - g6 0 21",
+      "solutionUci": "h4h6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "09R64",
+        "rating": 1651,
+        "popularity": 93,
+        "themes": "advantage long middlegame",
+        "url": "https://lichess.org/Y4alvqHE#41",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "r3k2r/p3pp1p/3p1PpQ/q2P4/1n3P2/pPp4N/2P3PP/K1NRR3 b kq - 2 23",
+      "solutionUci": "a5a3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0APFK",
+        "rating": 2470,
+        "popularity": 90,
+        "themes": "advancedPawn clearance crushing middlegame veryLong",
+        "url": "https://lichess.org/KsjcIvm1#43",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "6rk/p2P2r1/P6p/1B6/2P5/1P3p1q/5P1Q/3R3K b - - 1 50",
+      "solutionUci": "h3f3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0BIew",
+        "rating": 1997,
+        "popularity": 88,
+        "themes": "crushing defensiveMove endgame exposedKing interference master veryLong",
+        "url": "https://lichess.org/tqT7CwEi#93",
+        "ply": 7
+      }
+    },
+    {
+      "fen": "r3nr1k/1p5q/2pp2QP/1p2p3/3nP3/PPNP4/1P3P2/1K4RR w - - 1 27",
+      "solutionUci": "h1h6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0C9wz",
+        "rating": 1458,
+        "popularity": 94,
+        "themes": "advancedPawn crushing kingsideAttack middlegame pin sacrifice short",
+        "url": "https://lichess.org/qDkRRdgS/black#52",
+        "ply": 1
+      }
+    },
+    {
+      "fen": "4r1k1/1R3Npp/p7/3p4/4n3/2P2QP1/q4PKP/8 w - - 1 30",
+      "solutionUci": "f3f7",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0D0eG",
+        "rating": 2168,
+        "popularity": 91,
+        "themes": "crushing endgame hangingPiece long",
+        "url": "https://lichess.org/1sp5nbl3#59",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "4r2k/ppp2R2/6Q1/P5p1/8/7P/1P1n1PPB/5K2 w - - 1 36",
+      "solutionUci": "f1g2",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0K8qS",
+        "rating": 1500,
+        "popularity": 69,
+        "themes": "attraction backRankMate long mate mateIn3 middlegame sacrifice",
+        "url": "https://lichess.org/78RyMSyV#67",
+        "ply": 4
+      }
+    },
+    {
+      "fen": "6r1/8/5R2/kp1pP3/2pP2qp/PpP1Q3/1P5P/7K w - - 1 39",
+      "solutionUci": "e3c3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0LkKw",
+        "rating": 1585,
+        "popularity": 78,
+        "themes": "crushing endgame short",
+        "url": "https://lichess.org/jAXS8Et1#73",
+        "ply": 4
+      }
+    },
+    {
+      "fen": "6rk/pp3p1p/2p2P1Q/2PpB1p1/3Pr3/7K/PP4PP/8 w - - 0 30",
+      "solutionUci": "e5f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0OY8g",
+        "rating": 1832,
+        "popularity": 87,
+        "themes": "crushing discoveredCheck doubleCheck endgame short trappedPiece",
+        "url": "https://lichess.org/pQLKhqJT#59",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "5b1r/1k3ppp/2R1p3/BN1n4/8/1N1r4/PP2bPPP/2R3K1 w - - 0 19",
+      "solutionUci": "b3a5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0P6tb",
+        "rating": 1250,
+        "popularity": 93,
+        "themes": "advantage hangingPiece long middlegame",
+        "url": "https://lichess.org/mNEmFU48#37",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "8/8/2p1p3/1PPpP1p1/2p3Pp/kbP2B1P/p7/K7 b - - 0 58",
+      "solutionUci": "c4b3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0PO0m",
+        "rating": 2238,
+        "popularity": 90,
+        "themes": "advancedPawn bishopEndgame crushing endgame promotion sacrifice veryLong",
+        "url": "https://lichess.org/ygqhNfiD/black#114",
+        "ply": 2
+      }
+    },
+    {
+      "fen": "r4r1k/2pb1p1q/3p1P2/p2P4/1p3Q2/6R1/PP4PP/R6K w - - 4 24",
+      "solutionUci": "f4f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0PatZ",
+        "rating": 2328,
+        "popularity": 86,
+        "themes": "advantage middlegame quietMove veryLong",
+        "url": "https://lichess.org/iJZp84jw/black#42",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "5r1k/1p3p1p/p2bpP1P/8/2P2P1Q/1q1r1N2/7P/5RBK w - - 1 31",
+      "solutionUci": "h4f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0Swc1",
+        "rating": 2991,
+        "popularity": 84,
+        "themes": "crushing defensiveMove intermezzo middlegame veryLong",
+        "url": "https://lichess.org/M0bE3cLf/black#56",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "5r2/2p3pk/3p2qp/P4R2/4P3/1Q3PpP/2Pr4/1R4K1 b - - 1 33",
+      "solutionUci": "g6g3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0WqBp",
+        "rating": 1702,
+        "popularity": 86,
+        "themes": "advantage enPassant endgame long",
+        "url": "https://lichess.org/T2lkWG6Z#61",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "r4rk1/ppp3p1/3p2Bp/4p2q/2P5/1N2PnPb/PPQB1P1P/R4R1K b - - 6 20",
+      "solutionUci": "h5f3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0WxsC",
+        "rating": 1448,
+        "popularity": 100,
+        "themes": "attraction discoveredAttack kingsideAttack mate mateIn2 middlegame sacrifice short",
+        "url": "https://lichess.org/q6Zqhaq2#39",
+        "ply": 1
+      }
+    },
+    {
+      "fen": "r6k/pppb4/3p1P1P/2b1p1NQ/2P5/P6P/1PqB1Pr1/R3K2R w KQ - 0 23",
+      "solutionUci": "h5h6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0XRx8",
+        "rating": 2660,
+        "popularity": 87,
+        "themes": "crushing fork middlegame sacrifice veryLong",
+        "url": "https://lichess.org/6WQAlY15#45",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "5br1/1p1q1p1k/p4B1p/4pPPQ/3pP3/1P5R/1P2r2P/6K1 b - - 1 31",
+      "solutionUci": "d7d4",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0a0fs",
+        "rating": 2029,
+        "popularity": 83,
+        "themes": "advantage discoveredAttack master middlegame quietMove sacrifice veryLong",
+        "url": "https://lichess.org/zLD0MC9U/black#58",
+        "ply": 4
+      }
+    },
+    {
+      "fen": "5r1k/7P/2q1P3/5B2/1p4P1/1Pp1bbB1/2P4P/5K2 b - - 1 36",
+      "solutionUci": "c6f3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0avZS",
+        "rating": 858,
+        "popularity": 91,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/TahssmeQ/black#72",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "4r1rk/p1p2p1p/2p2PpQ/3p4/5R1B/7P/PPPq2PK/8 w - - 12 31",
+      "solutionUci": "h4f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0diXL",
+        "rating": 1872,
+        "popularity": 82,
+        "themes": "advantage endgame quietMove short",
+        "url": "https://lichess.org/nR6vUJpY/black#60",
+        "ply": 1
+      }
+    },
+    {
+      "fen": "5rk1/4R1b1/1q1p2Pp/3P2P1/1P5Q/2r5/2P4P/5n1K b - - 0 27",
+      "solutionUci": "f8f1",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0e9hr",
+        "rating": 1481,
+        "popularity": 85,
+        "themes": "attraction exposedKing long mate mateIn3 middlegame",
+        "url": "https://lichess.org/iyuhWEPF/black#54",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "1rb3k1/4b3/p3p1NQ/8/1n6/1K6/P1r3P1/1R6 b - - 0 31",
+      "solutionUci": "c8e6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0f3Hz",
+        "rating": 2256,
+        "popularity": 89,
+        "themes": "advantage defensiveMove long middlegame",
+        "url": "https://lichess.org/HGbiwjW4/black#56",
+        "ply": 6
+      }
+    },
+    {
+      "fen": "r4b2/pb5Q/1n2p1B1/1ppqN1k1/3P3r/8/PPP2PPP/R5K1 w - - 4 23",
+      "solutionUci": "h7g6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0ffiD",
+        "rating": 2402,
+        "popularity": 86,
+        "themes": "advantage deflection exposedKing middlegame veryLong",
+        "url": "https://lichess.org/BG1xTWt3/black#40",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "5rk1/7p/p3R3/PpP2pK1/1P6/5qP1/8/4Q3 b - - 2 36",
+      "solutionUci": "f8f5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0gQMm",
+        "rating": 2148,
+        "popularity": 86,
+        "themes": "crushing endgame short",
+        "url": "https://lichess.org/lwIvwMuJ#69",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "5rk1/pp6/5QP1/5P2/8/1qPp4/1P4K1/4R3 w - - 1 37",
+      "solutionUci": "f6g6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0hv4i",
+        "rating": 2259,
+        "popularity": 90,
+        "themes": "advancedPawn clearance crushing endgame long",
+        "url": "https://lichess.org/umyQIpFX#73",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "5b1k/4q2p/1p1p4/3B4/1P4Q1/3Pp1P1/4r3/2R3K1 b - - 2 31",
+      "solutionUci": "e7e3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0kCMz",
+        "rating": 2304,
+        "popularity": 93,
+        "themes": "advantage endgame master short",
+        "url": "https://lichess.org/zI7q81TO/black#60",
+        "ply": 2
+      }
+    },
+    {
+      "fen": "4r3/1p3kpQ/1qn5/4p1R1/8/PpP1PP1P/3r4/1K5R b - - 0 26",
+      "solutionUci": "b6b3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0muVr",
+        "rating": 2939,
+        "popularity": 86,
+        "themes": "crushing defensiveMove long middlegame quietMove",
+        "url": "https://lichess.org/LJyp9TuR#49",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "8/4B2R/pk4pP/1p4P1/2b5/K7/P3r3/8 b - - 1 36",
+      "solutionUci": "b6b5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0rDfS",
+        "rating": 2249,
+        "popularity": 86,
+        "themes": "advantage endgame quietMove veryLong",
+        "url": "https://lichess.org/d30zptjs#67",
+        "ply": 5
+      }
+    },
+    {
+      "fen": "8/r3kpQ1/p3p3/q3P1P1/1p1P4/2r1R3/8/1K5R b - - 0 35",
+      "solutionUci": "a5b4",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0ryOz",
+        "rating": 1989,
+        "popularity": 84,
+        "themes": "advantage deflection endgame interference veryLong",
+        "url": "https://lichess.org/myUB3h9o/black#70",
+        "ply": 0
+      }
+    },
+    {
+      "fen": "5rk1/r7/p2p1p1Q/3Pn2R/Pp6/1P4PP/2q1N1BK/8 w - - 0 27",
+      "solutionUci": "g2d5",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0tsL6",
+        "rating": 2199,
+        "popularity": 87,
+        "themes": "crushing exposedKing long middlegame",
+        "url": "https://lichess.org/lBQasuIN/black#52",
+        "ply": 1
+      }
+    },
+    {
+      "fen": "2r4k/5p1p/p7/3p4/1P1P4/PKpPP3/4Q1R1/q7 b - - 6 38",
+      "solutionUci": "c8c3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0vE05",
+        "rating": 2369,
+        "popularity": 89,
+        "themes": "advancedPawn crushing endgame long",
+        "url": "https://lichess.org/FUPSBlAl#73",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "r5rk/p4p1p/3p1PpQ/1bpP4/2q1P3/5RN1/1B4PP/6K1 w - - 10 28",
+      "solutionUci": "b2f6",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0yUHp",
+        "rating": 2211,
+        "popularity": 83,
+        "themes": "crushing long middlegame quietMove",
+        "url": "https://lichess.org/wEPJCDOY/black#52",
+        "ply": 3
+      }
+    },
+    {
+      "fen": "8/1q4p1/3R2Qp/4Pp2/5P2/4PkP1/1r5P/6K1 w - - 3 40",
+      "solutionUci": "g6g3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0zywh",
+        "rating": 1871,
+        "popularity": 91,
+        "themes": "crushing endgame veryLong",
+        "url": "https://lichess.org/Cz9cBOp0#75",
+        "ply": 4
+      }
+    },
+    {
+      "fen": "5r1k/8/4Q3/8/R3Pq2/2P2pRP/5rPK/8 w - - 0 43",
+      "solutionUci": "e6h3",
+      "source": {
+        "db": "lichess-cc0",
+        "id": "11dBp",
+        "rating": 2261,
+        "popularity": 84,
+        "themes": "crushing endgame long",
+        "url": "https://lichess.org/yh5k59kH#79",
+        "ply": 6
+      }
+    }
+  ]
+}

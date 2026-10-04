@@ -1,6 +1,6 @@
 {
-  "schema": 4,
-  "generatedAt": "2026-09-17T20:54:09Z",
+  "schema": 5,
+  "generatedAt": "2026-10-03T01:47:33Z",
   "generator": {
     "strategy": "check-biased playout from startState, depth-free predicates",
     "familyPrecedence": [
@@ -11,6 +11,10 @@
     ],
     "survivalSource": {
       "file": "survival-seed.json",
+      "db": "lichess-cc0"
+    },
+    "multistepSource": {
+      "file": "multistep-seed.json",
       "db": "lichess-cc0"
     },
     "checkBias": 0.5,
@@ -44,6 +48,12 @@
         "short": 0,
         "perThousandUnique": 0.291
       },
+      "multistepSeeded": {
+        "kept": 40,
+        "rowsScanned": 200000,
+        "minReplies": 2,
+        "candidates": 67
+      },
       "survival": {
         "found": 153,
         "kept": 153,
@@ -58,7 +68,7 @@
   "counts": {
     "tactical": 20,
     "restraint": 40,
-    "multistep": 27,
+    "multistep": 67,
     "survival": 153
   },
   "puzzles": [
@@ -2458,6 +2468,36 @@
       "solutionsSan": [
         "Q⊗h5+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h7h5"
+            ],
+            "acceptSan": [
+              "Q⊗h5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h4h5",
+            "replySan": "Kxh5",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "a8h8"
+            ],
+            "acceptSan": [
+              "Rh8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "a8a4",
@@ -2497,6 +2537,36 @@
       "solutionsSan": [
         "R⊗h2+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h2"
+            ],
+            "acceptSan": [
+              "R⊗h2+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "d4h4",
+            "replySan": "Qh4",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h2h4"
+            ],
+            "acceptSan": [
+              "Rxh4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "c1d2",
@@ -2536,6 +2606,36 @@
       "solutionsSan": [
         "R⊗h2+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h2"
+            ],
+            "acceptSan": [
+              "R⊗h2+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "c8h3",
+            "replySan": "Bh3+",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h2h3"
+            ],
+            "acceptSan": [
+              "Rxh3#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "c1f4",
@@ -2575,6 +2675,36 @@
       "solutionsSan": [
         "Rd⊗d6"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d7d6"
+            ],
+            "acceptSan": [
+              "Rd⊗d6"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b4b5",
+            "replySan": "b5",
+            "of": 4
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g6e6"
+            ],
+            "acceptSan": [
+              "Rge6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "d7d8",
@@ -2614,6 +2744,36 @@
       "solutionsSan": [
         "B⊗f4+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d2f4"
+            ],
+            "acceptSan": [
+              "B⊗f4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a3d6",
+            "replySan": "Bd6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f4d6"
+            ],
+            "acceptSan": [
+              "Bxd6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "a6a7",
@@ -2653,6 +2813,36 @@
       "solutionsSan": [
         "B⊗f4+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d2f4"
+            ],
+            "acceptSan": [
+              "B⊗f4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b4d6",
+            "replySan": "Bd6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f4d6"
+            ],
+            "acceptSan": [
+              "Bxd6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "a6a7",
@@ -2692,6 +2882,36 @@
       "solutionsSan": [
         "B⊗f6+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e7f6"
+            ],
+            "acceptSan": [
+              "B⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a1a2",
+            "replySan": "Kxa2",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c1b2"
+            ],
+            "acceptSan": [
+              "Qb2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "c1b1",
@@ -2731,6 +2951,38 @@
       "solutionsSan": [
         "R⊗h5+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h8h5"
+            ],
+            "acceptSan": [
+              "R⊗h5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h3g4",
+            "replySan": "Kg4",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f7f5",
+              "g8f6"
+            ],
+            "acceptSan": [
+              "f5#",
+              "Nf6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "c6g2",
@@ -2770,6 +3022,38 @@
       "solutionsSan": [
         "R⊗h5+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h8h5"
+            ],
+            "acceptSan": [
+              "R⊗h5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h3g4",
+            "replySan": "Kg4",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f7f5",
+              "g8f6"
+            ],
+            "acceptSan": [
+              "f5#",
+              "Nf6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "d5g2",
@@ -2809,6 +3093,36 @@
       "solutionsSan": [
         "N⊗c3"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d5c3"
+            ],
+            "acceptSan": [
+              "N⊗c3"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f3f4",
+            "replySan": "f4",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d4a4"
+            ],
+            "acceptSan": [
+              "Ra4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "d4d5",
@@ -2848,6 +3162,36 @@
       "solutionsSan": [
         "R⊗h7+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h8h7"
+            ],
+            "acceptSan": [
+              "R⊗h7+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "e2h5",
+            "replySan": "Qh5",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h7h5"
+            ],
+            "acceptSan": [
+              "Rxh5#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "c8d7",
@@ -2887,6 +3231,38 @@
       "solutionsSan": [
         "R⊗b3+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c3b3"
+            ],
+            "acceptSan": [
+              "R⊗b3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b5a5",
+            "replySan": "K⊗a5",
+            "of": 3
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d4a1",
+              "d8a8"
+            ],
+            "acceptSan": [
+              "Qa1#",
+              "Rxa8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "b1c3",
@@ -2926,6 +3302,36 @@
       "solutionsSan": [
         "R⊗a7+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b7a7"
+            ],
+            "acceptSan": [
+              "R⊗a7+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "c3a4",
+            "replySan": "Na4",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "a7a4"
+            ],
+            "acceptSan": [
+              "Rxa4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "b4a3",
@@ -2965,6 +3371,36 @@
       "solutionsSan": [
         "R⊗h7+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h8h7"
+            ],
+            "acceptSan": [
+              "R⊗h7+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "c1h6",
+            "replySan": "Bh6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h7h6"
+            ],
+            "acceptSan": [
+              "Rxh6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "f3g2",
@@ -3004,6 +3440,36 @@
       "solutionsSan": [
         "R⊗b6"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b2b6"
+            ],
+            "acceptSan": [
+              "R⊗b6"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a3a2",
+            "replySan": "Ka2",
+            "of": 4
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e8a8"
+            ],
+            "acceptSan": [
+              "Ra8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "b6c5",
@@ -3043,6 +3509,36 @@
       "solutionsSan": [
         "R⊗b6"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b2b6"
+            ],
+            "acceptSan": [
+              "R⊗b6"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a3a2",
+            "replySan": "Ka2",
+            "of": 4
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h8a8"
+            ],
+            "acceptSan": [
+              "Ra8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "b2a2",
@@ -3082,6 +3578,36 @@
       "solutionsSan": [
         "R⊗h2"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h2"
+            ],
+            "acceptSan": [
+              "R⊗h2"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a7b7",
+            "replySan": "R⊗b7",
+            "of": 26
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h2h6"
+            ],
+            "acceptSan": [
+              "Rxh6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "e6f5",
@@ -3121,6 +3647,36 @@
       "solutionsSan": [
         "B⊗f6"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g7f6"
+            ],
+            "acceptSan": [
+              "B⊗f6"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b6b5",
+            "replySan": "b5",
+            "of": 6
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h5h4"
+            ],
+            "acceptSan": [
+              "Rh4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "h5g5",
@@ -3160,6 +3716,36 @@
       "solutionsSan": [
         "Q⊗g4+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g1g4"
+            ],
+            "acceptSan": [
+              "Q⊗g4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "c8b8",
+            "replySan": "K⊗b8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g4g8"
+            ],
+            "acceptSan": [
+              "Qg8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "a5c5",
@@ -3199,6 +3785,36 @@
       "solutionsSan": [
         "R⊗h2+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h2"
+            ],
+            "acceptSan": [
+              "R⊗h2+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h6g6",
+            "replySan": "Kg6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c4d3"
+            ],
+            "acceptSan": [
+              "Bd3#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "e7g5",
@@ -3238,6 +3854,36 @@
       "solutionsSan": [
         "R⊗h2+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h2"
+            ],
+            "acceptSan": [
+              "R⊗h2+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h6g6",
+            "replySan": "Kg6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d5e4"
+            ],
+            "acceptSan": [
+              "Be4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "e7g5",
@@ -3277,6 +3923,36 @@
       "solutionsSan": [
         "R⊗h4+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h3h4"
+            ],
+            "acceptSan": [
+              "R⊗h4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g7h6",
+            "replySan": "Bh6",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h4h6"
+            ],
+            "acceptSan": [
+              "Rxh6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "e7g6",
@@ -3316,6 +3992,36 @@
       "solutionsSan": [
         "R⊗g1+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1g1"
+            ],
+            "acceptSan": [
+              "R⊗g1+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8h8",
+            "replySan": "K⊗h8",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e7g7"
+            ],
+            "acceptSan": [
+              "Qg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "e7h7",
@@ -3355,6 +4061,36 @@
       "solutionsSan": [
         "Q⊗h7+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g6h7"
+            ],
+            "acceptSan": [
+              "Q⊗h7+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h4g3",
+            "replySan": "Kg3",
+            "of": 1
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h7h4"
+            ],
+            "acceptSan": [
+              "Qh4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "h7g6",
@@ -3394,6 +4130,36 @@
       "solutionsSan": [
         "B⊗c6+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d7c6"
+            ],
+            "acceptSan": [
+              "B⊗c6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "d3d5",
+            "replySan": "Rd5",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c6d5"
+            ],
+            "acceptSan": [
+              "Bxd5#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "g3h4",
@@ -3433,6 +4199,36 @@
       "solutionsSan": [
         "R⊗h3"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h3"
+            ],
+            "acceptSan": [
+              "R⊗h3"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h8h7",
+            "replySan": "Kh7",
+            "of": 13
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h3h6"
+            ],
+            "acceptSan": [
+              "Rh⊗h6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "g6h6",
@@ -3472,6 +4268,38 @@
       "solutionsSan": [
         "R⊗g5+"
       ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e5g5"
+            ],
+            "acceptSan": [
+              "R⊗g5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g6h6",
+            "replySan": "Kh6",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f8g7",
+              "f8h8"
+            ],
+            "acceptSan": [
+              "Qxg7#",
+              "Qh8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
       "decoys": [
         {
           "uci": "f8g7",
@@ -3488,6 +4316,3126 @@
       ],
       "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
       "difficulty": 3
+    },
+    {
+      "id": "mls-002mG-1",
+      "family": "multistep",
+      "fen": "5r1k/B1p3pp/2Qb1p2/3Pq3/P6P/8/2P2K2/3R1R2 b - - 2 36",
+      "sideToMove": "b",
+      "legalMoveCount": 46,
+      "selfCaptureCount": 11,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 35,
+      "solutions": [
+        {
+          "from": 5,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f8f6"
+      ],
+      "solutionsSan": [
+        "R⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f8f6"
+            ],
+            "acceptSan": [
+              "R⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f2g1",
+            "replySan": "Kg1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e5h2"
+            ],
+            "acceptSan": [
+              "Qh2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "e5f6",
+          "san": "Q⊗f6+"
+        },
+        {
+          "uci": "f6e5",
+          "san": "f⊗e5+"
+        },
+        {
+          "uci": "d6c5",
+          "san": "Bc5+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "002mG",
+        "rating": 2377,
+        "popularity": 88,
+        "themes": "advantage middlegame quietMove short",
+        "url": "https://lichess.org/age2hanq#71",
+        "ply": 1
+      }
+    },
+    {
+      "id": "mls-00DII-3",
+      "family": "multistep",
+      "fen": "2rrR3/p4kp1/1p5p/2pq1p1P/8/P4QR1/5PP1/6K1 w - - 2 33",
+      "sideToMove": "w",
+      "legalMoveCount": 42,
+      "selfCaptureCount": 11,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 31,
+      "solutions": [
+        {
+          "from": 45,
+          "to": 31,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f3h5"
+      ],
+      "solutionsSan": [
+        "Q⊗h5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f3h5"
+            ],
+            "acceptSan": [
+              "Q⊗h5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f7f6",
+            "replySan": "Kf6",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h5g6"
+            ],
+            "acceptSan": [
+              "Qg6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f3d5",
+          "san": "Qxd5+"
+        },
+        {
+          "uci": "f3f5",
+          "san": "Qxf5+"
+        },
+        {
+          "uci": "g3g7",
+          "san": "Rxg7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "00DII",
+        "rating": 1790,
+        "popularity": 97,
+        "themes": "advantage endgame intermezzo long",
+        "url": "https://lichess.org/vJnBcDxi/black#62",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-01aP5-0",
+      "family": "multistep",
+      "fen": "6rk/3Q2bp/p2p4/q4p2/P7/2p4P/2P5/K3R1R1 b - - 8 34",
+      "sideToMove": "b",
+      "legalMoveCount": 31,
+      "selfCaptureCount": 7,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 24,
+      "solutions": [
+        {
+          "from": 24,
+          "to": 42,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "a5c3"
+      ],
+      "solutionsSan": [
+        "Q⊗c3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "a5c3"
+            ],
+            "acceptSan": [
+              "Q⊗c3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a1a2",
+            "replySan": "Ka2",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c3b2"
+            ],
+            "acceptSan": [
+              "Qb2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g7c3",
+          "san": "B⊗c3+"
+        },
+        {
+          "uci": "a5a4",
+          "san": "Qxa4+"
+        },
+        {
+          "uci": "a5a6",
+          "san": "Q⊗a6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "01aP5",
+        "rating": 1453,
+        "popularity": 88,
+        "themes": "endgame long mate mateIn3 sacrifice",
+        "url": "https://lichess.org/Y9TYZm8S/black#68",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-04jHM-3",
+      "family": "multistep",
+      "fen": "4R3/1pp3pk/5p1p/3Q1P1P/8/2q5/r7/1K6 w - - 2 38",
+      "sideToMove": "w",
+      "legalMoveCount": 39,
+      "selfCaptureCount": 1,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 38,
+      "solutions": [
+        {
+          "from": 27,
+          "to": 29,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "d5f5"
+      ],
+      "solutionsSan": [
+        "Q⊗f5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d5f5"
+            ],
+            "acceptSan": [
+              "Q⊗f5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g7g6",
+            "replySan": "g6",
+            "of": 3
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f5g6"
+            ],
+            "acceptSan": [
+              "Qxg6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "d5g8",
+          "san": "Qg8+"
+        },
+        {
+          "uci": "e8h8",
+          "san": "Rh8+"
+        },
+        {
+          "uci": "b1a2",
+          "san": "Kxa2"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "04jHM",
+        "rating": 1497,
+        "popularity": 86,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/lz8zcLUY/black#72",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-081gB-5",
+      "family": "multistep",
+      "fen": "r5k1/2R5/1p5p/p2PNpp1/3Q4/P3r2P/5qP1/7K w - - 1 38",
+      "sideToMove": "w",
+      "legalMoveCount": 47,
+      "selfCaptureCount": 3,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 44,
+      "solutions": [
+        {
+          "from": 35,
+          "to": 27,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "d4d5"
+      ],
+      "solutionsSan": [
+        "Q⊗d5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d4d5"
+            ],
+            "acceptSan": [
+              "Q⊗d5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8f8",
+            "replySan": "Kf8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d5a8",
+              "d5f7"
+            ],
+            "acceptSan": [
+              "Qxa8#",
+              "Qf7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "c7c8",
+          "san": "Rc8+"
+        },
+        {
+          "uci": "c7g7",
+          "san": "Rg7+"
+        },
+        {
+          "uci": "d4e5",
+          "san": "Q⊗e5"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "081gB",
+        "rating": 2190,
+        "popularity": 89,
+        "themes": "advantage discoveredAttack endgame long",
+        "url": "https://lichess.org/nfBWki5D/black#70",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-086bE-0",
+      "family": "multistep",
+      "fen": "6k1/5ppp/2q1b3/1pP5/3Q1pP1/3P1P1P/r2bB3/1K1R4 b - - 1 30",
+      "sideToMove": "b",
+      "legalMoveCount": 53,
+      "selfCaptureCount": 9,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 44,
+      "solutions": [
+        {
+          "from": 18,
+          "to": 25,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c6b5"
+      ],
+      "solutionsSan": [
+        "Q⊗b5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c6b5"
+            ],
+            "acceptSan": [
+              "Q⊗b5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "d4b2",
+            "replySan": "Qb2",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "b5b2"
+            ],
+            "acceptSan": [
+              "Qxb2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "e6a2",
+          "san": "B⊗a2+"
+        },
+        {
+          "uci": "a2a1",
+          "san": "Ra1+"
+        },
+        {
+          "uci": "a2b2",
+          "san": "Rb2+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "086bE",
+        "rating": 979,
+        "popularity": 75,
+        "themes": "mate mateIn2 middlegame short",
+        "url": "https://lichess.org/cgHVZalS/black#60",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-08gJR-2",
+      "family": "multistep",
+      "fen": "2r4k/pp1b3p/4p1pP/4P3/1q1P1n2/2p2NR1/PP2Q1P1/K1R5 w - - 4 28",
+      "sideToMove": "w",
+      "legalMoveCount": 47,
+      "selfCaptureCount": 11,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 36,
+      "solutions": [
+        {
+          "from": 52,
+          "to": 28,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "e2e5"
+      ],
+      "solutionsSan": [
+        "Q⊗e5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e2e5"
+            ],
+            "acceptSan": [
+              "Q⊗e5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h8g8",
+            "replySan": "Kg8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e5g7"
+            ],
+            "acceptSan": [
+              "Qg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "a1a2",
+          "san": "K⊗a2"
+        },
+        {
+          "uci": "d4e5",
+          "san": "d⊗e5"
+        },
+        {
+          "uci": "e2b2",
+          "san": "Q⊗b2"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "08gJR",
+        "rating": 2304,
+        "popularity": 86,
+        "themes": "advantage master middlegame short",
+        "url": "https://lichess.org/wOmAMzo4#53",
+        "ply": 2
+      }
+    },
+    {
+      "id": "mls-09AVY-4",
+      "family": "multistep",
+      "fen": "1kr5/1P1qb3/Q3p3/P2pP1p1/3P4/6Pp/7P/1R5K b - - 0 36",
+      "sideToMove": "b",
+      "legalMoveCount": 35,
+      "selfCaptureCount": 6,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 29,
+      "solutions": [
+        {
+          "from": 11,
+          "to": 27,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "d7d5"
+      ],
+      "solutionsSan": [
+        "Q⊗d5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d7d5"
+            ],
+            "acceptSan": [
+              "Q⊗d5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h1g1",
+            "replySan": "Kg1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d5g2"
+            ],
+            "acceptSan": [
+              "Qg2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "c8c1",
+          "san": "Rc1+"
+        },
+        {
+          "uci": "d7c8",
+          "san": "Q⊗c8"
+        },
+        {
+          "uci": "d7e6",
+          "san": "Q⊗e6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "09AVY",
+        "rating": 1270,
+        "popularity": 94,
+        "themes": "advancedPawn crushing endgame long",
+        "url": "https://lichess.org/svdmfC1e/black#68",
+        "ply": 4
+      }
+    },
+    {
+      "id": "mls-09R64-0",
+      "family": "multistep",
+      "fen": "1r4rk/1b1pqp2/5n1B/4pPp1/pb1pP2Q/3P3R/BPP3PP/RN4K1 w - g6 0 21",
+      "sideToMove": "w",
+      "legalMoveCount": 45,
+      "selfCaptureCount": 15,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 30,
+      "solutions": [
+        {
+          "from": 39,
+          "to": 23,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h4h6"
+      ],
+      "solutionsSan": [
+        "Q⊗h6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h4h6"
+            ],
+            "acceptSan": [
+              "Q⊗h6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f6h7",
+            "replySan": "Nh7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6h7"
+            ],
+            "acceptSan": [
+              "Qxh7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h6g5",
+          "san": "Bxg5+"
+        },
+        {
+          "uci": "h6f8",
+          "san": "Bf8+"
+        },
+        {
+          "uci": "h6g7",
+          "san": "Bg7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "09R64",
+        "rating": 1651,
+        "popularity": 93,
+        "themes": "advantage long middlegame",
+        "url": "https://lichess.org/Y4alvqHE#41",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0APFK-3",
+      "family": "multistep",
+      "fen": "r3k2r/p3pp1p/3p1PpQ/q2P4/1n3P2/pPp4N/2P3PP/K1NRR3 b kq - 2 23",
+      "sideToMove": "b",
+      "legalMoveCount": 35,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 27,
+      "solutions": [
+        {
+          "from": 24,
+          "to": 40,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "a5a3"
+      ],
+      "solutionsSan": [
+        "Q⊗a3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "a5a3"
+            ],
+            "acceptSan": [
+              "Q⊗a3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a1b1",
+            "replySan": "Kb1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "a3b2"
+            ],
+            "acceptSan": [
+              "Qb2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "b4c2",
+          "san": "Nxc2+"
+        },
+        {
+          "uci": "a5a7",
+          "san": "Q⊗a7"
+        },
+        {
+          "uci": "a5b4",
+          "san": "Q⊗b4"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0APFK",
+        "rating": 2470,
+        "popularity": 90,
+        "themes": "advancedPawn clearance crushing middlegame veryLong",
+        "url": "https://lichess.org/KsjcIvm1#43",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-0BIew-7",
+      "family": "multistep",
+      "fen": "6rk/p2P2r1/P6p/1B6/2P5/1P3p1q/5P1Q/3R3K b - - 1 50",
+      "sideToMove": "b",
+      "legalMoveCount": 34,
+      "selfCaptureCount": 6,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 28,
+      "solutions": [
+        {
+          "from": 47,
+          "to": 45,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h3f3"
+      ],
+      "solutionsSan": [
+        "Q⊗f3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h3f3"
+            ],
+            "acceptSan": [
+              "Q⊗f3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h2g2",
+            "replySan": "Qg2",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f3g2"
+            ],
+            "acceptSan": [
+              "Qxg2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h3h2",
+          "san": "Qxh2+"
+        },
+        {
+          "uci": "g7g1",
+          "san": "Rg1+"
+        },
+        {
+          "uci": "h3f1",
+          "san": "Qf1+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0BIew",
+        "rating": 1997,
+        "popularity": 88,
+        "themes": "crushing defensiveMove endgame exposedKing interference master veryLong",
+        "url": "https://lichess.org/tqT7CwEi#93",
+        "ply": 7
+      }
+    },
+    {
+      "id": "mls-0C9wz-1",
+      "family": "multistep",
+      "fen": "r3nr1k/1p5q/2pp2QP/1p2p3/3nP3/PPNP4/1P3P2/1K4RR w - - 1 27",
+      "sideToMove": "w",
+      "legalMoveCount": 51,
+      "selfCaptureCount": 12,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 39,
+      "solutions": [
+        {
+          "from": 63,
+          "to": 23,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h1h6"
+      ],
+      "solutionsSan": [
+        "R⊗h6"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h1h6"
+            ],
+            "acceptSan": [
+              "R⊗h6"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "e8f6",
+            "replySan": "Nf6",
+            "of": 38
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g6g7"
+            ],
+            "acceptSan": [
+              "Qg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g6h7",
+          "san": "Qxh7+"
+        },
+        {
+          "uci": "g6f6",
+          "san": "Qf6+"
+        },
+        {
+          "uci": "g6g7",
+          "san": "Qg7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0C9wz",
+        "rating": 1458,
+        "popularity": 94,
+        "themes": "advancedPawn crushing kingsideAttack middlegame pin sacrifice short",
+        "url": "https://lichess.org/qDkRRdgS/black#52",
+        "ply": 1
+      }
+    },
+    {
+      "id": "mls-0D0eG-0",
+      "family": "multistep",
+      "fen": "4r1k1/1R3Npp/p7/3p4/4n3/2P2QP1/q4PKP/8 w - - 1 30",
+      "sideToMove": "w",
+      "legalMoveCount": 43,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 35,
+      "solutions": [
+        {
+          "from": 45,
+          "to": 13,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f3f7"
+      ],
+      "solutionsSan": [
+        "Q⊗f7+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f3f7"
+            ],
+            "acceptSan": [
+              "Q⊗f7+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8h7",
+            "replySan": "K⊗h7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f7g7"
+            ],
+            "acceptSan": [
+              "Qxg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f7h6",
+          "san": "Nh6+"
+        },
+        {
+          "uci": "b7f7",
+          "san": "R⊗f7"
+        },
+        {
+          "uci": "f3c3",
+          "san": "Q⊗c3"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0D0eG",
+        "rating": 2168,
+        "popularity": 91,
+        "themes": "crushing endgame hangingPiece long",
+        "url": "https://lichess.org/1sp5nbl3#59",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0K8qS-4",
+      "family": "multistep",
+      "fen": "4r2k/ppp2R2/6Q1/P5p1/8/7P/1P1n1PPB/5K2 w - - 1 36",
+      "sideToMove": "w",
+      "legalMoveCount": 3,
+      "selfCaptureCount": 2,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 1,
+      "solutions": [
+        {
+          "from": 61,
+          "to": 54,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f1g2"
+      ],
+      "solutionsSan": [
+        "K⊗g2"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f1g2"
+            ],
+            "acceptSan": [
+              "K⊗g2"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "e8g8",
+            "replySan": "Rg8",
+            "of": 25
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f7h7",
+              "g6h7"
+            ],
+            "acceptSan": [
+              "Rh7#",
+              "Qh7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f1f2",
+          "san": "K⊗f2"
+        },
+        {
+          "uci": "f1g1",
+          "san": "Kg1"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0K8qS",
+        "rating": 1500,
+        "popularity": 69,
+        "themes": "attraction backRankMate long mate mateIn3 middlegame sacrifice",
+        "url": "https://lichess.org/78RyMSyV#67",
+        "ply": 4
+      }
+    },
+    {
+      "id": "mls-0LkKw-4",
+      "family": "multistep",
+      "fen": "6r1/8/5R2/kp1pP3/2pP2qp/PpP1Q3/1P5P/7K w - - 1 39",
+      "sideToMove": "w",
+      "legalMoveCount": 40,
+      "selfCaptureCount": 9,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 31,
+      "solutions": [
+        {
+          "from": 44,
+          "to": 42,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "e3c3"
+      ],
+      "solutionsSan": [
+        "Q⊗c3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e3c3"
+            ],
+            "acceptSan": [
+              "Q⊗c3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a5a4",
+            "replySan": "Ka4",
+            "of": 3
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c3b4"
+            ],
+            "acceptSan": [
+              "Qb4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f6a6",
+          "san": "Ra6+"
+        },
+        {
+          "uci": "b2a3",
+          "san": "b⊗a3"
+        },
+        {
+          "uci": "b2c3",
+          "san": "b⊗c3"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0LkKw",
+        "rating": 1585,
+        "popularity": 78,
+        "themes": "crushing endgame short",
+        "url": "https://lichess.org/jAXS8Et1#73",
+        "ply": 4
+      }
+    },
+    {
+      "id": "mls-0OY8g-0",
+      "family": "multistep",
+      "fen": "6rk/pp3p1p/2p2P1Q/2PpB1p1/3Pr3/7K/PP4PP/8 w - - 0 30",
+      "sideToMove": "w",
+      "legalMoveCount": 27,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 19,
+      "solutions": [
+        {
+          "from": 28,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "e5f6"
+      ],
+      "solutionsSan": [
+        "B⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e5f6"
+            ],
+            "acceptSan": [
+              "B⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8g7",
+            "replySan": "Rg7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6g7"
+            ],
+            "acceptSan": [
+              "Qxg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h6f6",
+          "san": "Q⊗f6+"
+        },
+        {
+          "uci": "h6h7",
+          "san": "Qxh7+"
+        },
+        {
+          "uci": "h6g7",
+          "san": "Qg7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0OY8g",
+        "rating": 1832,
+        "popularity": 87,
+        "themes": "crushing discoveredCheck doubleCheck endgame short trappedPiece",
+        "url": "https://lichess.org/pQLKhqJT#59",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0P6tb-0",
+      "family": "multistep",
+      "fen": "5b1r/1k3ppp/2R1p3/BN1n4/8/1N1r4/PP2bPPP/2R3K1 w - - 0 19",
+      "sideToMove": "w",
+      "legalMoveCount": 53,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 45,
+      "solutions": [
+        {
+          "from": 41,
+          "to": 24,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "b3a5"
+      ],
+      "solutionsSan": [
+        "N⊗a5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b3a5"
+            ],
+            "acceptSan": [
+              "N⊗a5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b7a8",
+            "replySan": "Ka8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c6c8"
+            ],
+            "acceptSan": [
+              "Rc8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "b3c5",
+          "san": "Nc5+"
+        },
+        {
+          "uci": "b5d6",
+          "san": "Nd6+"
+        },
+        {
+          "uci": "c6b6",
+          "san": "Rb6+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0P6tb",
+        "rating": 1250,
+        "popularity": 93,
+        "themes": "advantage hangingPiece long middlegame",
+        "url": "https://lichess.org/mNEmFU48#37",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0PO0m-2",
+      "family": "multistep",
+      "fen": "8/8/2p1p3/1PPpP1p1/2p3Pp/kbP2B1P/p7/K7 b - - 0 58",
+      "sideToMove": "b",
+      "legalMoveCount": 14,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 6,
+      "solutions": [
+        {
+          "from": 34,
+          "to": 41,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c4b3"
+      ],
+      "solutionsSan": [
+        "c⊗b3"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c4b3"
+            ],
+            "acceptSan": [
+              "c⊗b3"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b5b6",
+            "replySan": "b6",
+            "of": 11
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "b3b2"
+            ],
+            "acceptSan": [
+              "b2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "a3b3",
+          "san": "K⊗b3"
+        },
+        {
+          "uci": "b3a2",
+          "san": "B⊗a2"
+        },
+        {
+          "uci": "b3c4",
+          "san": "B⊗c4"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0PO0m",
+        "rating": 2238,
+        "popularity": 90,
+        "themes": "advancedPawn bishopEndgame crushing endgame promotion sacrifice veryLong",
+        "url": "https://lichess.org/ygqhNfiD/black#114",
+        "ply": 2
+      }
+    },
+    {
+      "id": "mls-0PatZ-5",
+      "family": "multistep",
+      "fen": "r4r1k/2pb1p1q/3p1P2/p2P4/1p3Q2/6R1/PP4PP/R6K w - - 4 24",
+      "sideToMove": "w",
+      "legalMoveCount": 46,
+      "selfCaptureCount": 5,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 41,
+      "solutions": [
+        {
+          "from": 37,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f4f6"
+      ],
+      "solutionsSan": [
+        "Q⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f4f6"
+            ],
+            "acceptSan": [
+              "Q⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h7g7",
+            "replySan": "Qg7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f6g7"
+            ],
+            "acceptSan": [
+              "Qxg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g3g8",
+          "san": "Rg8+"
+        },
+        {
+          "uci": "a1a2",
+          "san": "R⊗a2"
+        },
+        {
+          "uci": "f4g3",
+          "san": "Q⊗g3"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0PatZ",
+        "rating": 2328,
+        "popularity": 86,
+        "themes": "advantage middlegame quietMove veryLong",
+        "url": "https://lichess.org/iJZp84jw/black#42",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-0Swc1-5",
+      "family": "multistep",
+      "fen": "5r1k/1p3p1p/p2bpP1P/8/2P2P1Q/1q1r1N2/7P/5RBK w - - 1 31",
+      "sideToMove": "w",
+      "legalMoveCount": 40,
+      "selfCaptureCount": 12,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 28,
+      "solutions": [
+        {
+          "from": 39,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h4f6"
+      ],
+      "solutionsSan": [
+        "Q⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h4f6"
+            ],
+            "acceptSan": [
+              "Q⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h8g8",
+            "replySan": "Kg8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f6g7"
+            ],
+            "acceptSan": [
+              "Qg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f1f3",
+          "san": "R⊗f3"
+        },
+        {
+          "uci": "f1g1",
+          "san": "R⊗g1"
+        },
+        {
+          "uci": "f3g1",
+          "san": "N⊗g1"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0Swc1",
+        "rating": 2991,
+        "popularity": 84,
+        "themes": "crushing defensiveMove intermezzo middlegame veryLong",
+        "url": "https://lichess.org/M0bE3cLf/black#56",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-0WqBp-5",
+      "family": "multistep",
+      "fen": "5r2/2p3pk/3p2qp/P4R2/4P3/1Q3PpP/2Pr4/1R4K1 b - - 1 33",
+      "sideToMove": "b",
+      "legalMoveCount": 43,
+      "selfCaptureCount": 10,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 33,
+      "solutions": [
+        {
+          "from": 22,
+          "to": 46,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "g6g3"
+      ],
+      "solutionsSan": [
+        "Q⊗g3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g6g3"
+            ],
+            "acceptSan": [
+              "Q⊗g3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g1f1",
+            "replySan": "Kf1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g3f2"
+            ],
+            "acceptSan": [
+              "Qf2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "d2d1",
+          "san": "Rd1+"
+        },
+        {
+          "uci": "d2g2",
+          "san": "Rg2+"
+        },
+        {
+          "uci": "c7d6",
+          "san": "c⊗d6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0WqBp",
+        "rating": 1702,
+        "popularity": 86,
+        "themes": "advantage enPassant endgame long",
+        "url": "https://lichess.org/T2lkWG6Z#61",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-0WxsC-1",
+      "family": "multistep",
+      "fen": "r4rk1/ppp3p1/3p2Bp/4p2q/2P5/1N2PnPb/PPQB1P1P/R4R1K b - - 6 20",
+      "sideToMove": "b",
+      "legalMoveCount": 54,
+      "selfCaptureCount": 14,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 40,
+      "solutions": [
+        {
+          "from": 31,
+          "to": 45,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h5f3"
+      ],
+      "solutionsSan": [
+        "Q⊗f3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h5f3"
+            ],
+            "acceptSan": [
+              "Q⊗f3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h1g1",
+            "replySan": "Kg1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f3g2"
+            ],
+            "acceptSan": [
+              "Qg2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h3g2",
+          "san": "Bg2+"
+        },
+        {
+          "uci": "a8a7",
+          "san": "R⊗a7"
+        },
+        {
+          "uci": "a8f8",
+          "san": "R⊗f8"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0WxsC",
+        "rating": 1448,
+        "popularity": 100,
+        "themes": "attraction discoveredAttack kingsideAttack mate mateIn2 middlegame sacrifice short",
+        "url": "https://lichess.org/q6Zqhaq2#39",
+        "ply": 1
+      }
+    },
+    {
+      "id": "mls-0XRx8-0",
+      "family": "multistep",
+      "fen": "r6k/pppb4/3p1P1P/2b1p1NQ/2P5/P6P/1PqB1Pr1/R3K2R w KQ - 0 23",
+      "sideToMove": "w",
+      "legalMoveCount": 44,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 36,
+      "solutions": [
+        {
+          "from": 31,
+          "to": 23,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h5h6"
+      ],
+      "solutionsSan": [
+        "Q⊗h6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h5h6"
+            ],
+            "acceptSan": [
+              "Q⊗h6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "c2h7",
+            "replySan": "Qh7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6h7"
+            ],
+            "acceptSan": [
+              "Qxh7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g5f7",
+          "san": "Nf7+"
+        },
+        {
+          "uci": "h5e8",
+          "san": "Qe8+"
+        },
+        {
+          "uci": "a1a3",
+          "san": "R⊗a3"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0XRx8",
+        "rating": 2660,
+        "popularity": 87,
+        "themes": "crushing fork middlegame sacrifice veryLong",
+        "url": "https://lichess.org/6WQAlY15#45",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0a0fs-4",
+      "family": "multistep",
+      "fen": "5br1/1p1q1p1k/p4B1p/4pPPQ/3pP3/1P5R/1P2r2P/6K1 b - - 1 31",
+      "sideToMove": "b",
+      "legalMoveCount": 43,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 35,
+      "solutions": [
+        {
+          "from": 11,
+          "to": 35,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "d7d4"
+      ],
+      "solutionsSan": [
+        "Q⊗d4+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "d7d4"
+            ],
+            "acceptSan": [
+              "Q⊗d4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g1h1",
+            "replySan": "Kh1",
+            "of": 3
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "d4d1"
+            ],
+            "acceptSan": [
+              "Qd1#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g8g5",
+          "san": "Rxg5+"
+        },
+        {
+          "uci": "e2e1",
+          "san": "Re1+"
+        },
+        {
+          "uci": "e2g2",
+          "san": "Rg2+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0a0fs",
+        "rating": 2029,
+        "popularity": 83,
+        "themes": "advantage discoveredAttack master middlegame quietMove sacrifice veryLong",
+        "url": "https://lichess.org/zLD0MC9U/black#58",
+        "ply": 4
+      }
+    },
+    {
+      "id": "mls-0avZS-0",
+      "family": "multistep",
+      "fen": "5r1k/7P/2q1P3/5B2/1p4P1/1Pp1bbB1/2P4P/5K2 b - - 1 36",
+      "sideToMove": "b",
+      "legalMoveCount": 48,
+      "selfCaptureCount": 4,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 44,
+      "solutions": [
+        {
+          "from": 18,
+          "to": 45,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c6f3"
+      ],
+      "solutionsSan": [
+        "Q⊗f3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c6f3"
+            ],
+            "acceptSan": [
+              "Q⊗f3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f1e1",
+            "replySan": "Ke1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e3d2"
+            ],
+            "acceptSan": [
+              "Bd2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "c6a6",
+          "san": "Qa6+"
+        },
+        {
+          "uci": "c6b5",
+          "san": "Qb5+"
+        },
+        {
+          "uci": "c6c4",
+          "san": "Qc4+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0avZS",
+        "rating": 858,
+        "popularity": 91,
+        "themes": "endgame mate mateIn2 short",
+        "url": "https://lichess.org/TahssmeQ/black#72",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0diXL-1",
+      "family": "multistep",
+      "fen": "4r1rk/p1p2p1p/2p2PpQ/3p4/5R1B/7P/PPPq2PK/8 w - - 12 31",
+      "sideToMove": "w",
+      "legalMoveCount": 35,
+      "selfCaptureCount": 6,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 29,
+      "solutions": [
+        {
+          "from": 39,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h4f6"
+      ],
+      "solutionsSan": [
+        "B⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h4f6"
+            ],
+            "acceptSan": [
+              "B⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8g7",
+            "replySan": "Rg7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6g7"
+            ],
+            "acceptSan": [
+              "Qxg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h6h7",
+          "san": "Qxh7+"
+        },
+        {
+          "uci": "h6g7",
+          "san": "Qg7+"
+        },
+        {
+          "uci": "f4f6",
+          "san": "R⊗f6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0diXL",
+        "rating": 1872,
+        "popularity": 82,
+        "themes": "advantage endgame quietMove short",
+        "url": "https://lichess.org/nR6vUJpY/black#60",
+        "ply": 1
+      }
+    },
+    {
+      "id": "mls-0e9hr-0",
+      "family": "multistep",
+      "fen": "5rk1/4R1b1/1q1p2Pp/3P2P1/1P5Q/2r5/2P4P/5n1K b - - 0 27",
+      "sideToMove": "b",
+      "legalMoveCount": 56,
+      "selfCaptureCount": 6,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 50,
+      "solutions": [
+        {
+          "from": 5,
+          "to": 61,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f8f1"
+      ],
+      "solutionsSan": [
+        "R⊗f1+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f8f1"
+            ],
+            "acceptSan": [
+              "R⊗f1+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "h1g2",
+            "replySan": "Kg2",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "b6g1"
+            ],
+            "acceptSan": [
+              "Qg1#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "b6g1",
+          "san": "Qg1+"
+        },
+        {
+          "uci": "f1g3",
+          "san": "Ng3+"
+        },
+        {
+          "uci": "b6d6",
+          "san": "Q⊗d6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0e9hr",
+        "rating": 1481,
+        "popularity": 85,
+        "themes": "attraction exposedKing long mate mateIn3 middlegame",
+        "url": "https://lichess.org/iyuhWEPF/black#54",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0f3Hz-6",
+      "family": "multistep",
+      "fen": "1rb3k1/4b3/p3p1NQ/8/1n6/1K6/P1r3P1/1R6 b - - 0 31",
+      "sideToMove": "b",
+      "legalMoveCount": 40,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 32,
+      "solutions": [
+        {
+          "from": 2,
+          "to": 20,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c8e6"
+      ],
+      "solutionsSan": [
+        "B⊗e6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c8e6"
+            ],
+            "acceptSan": [
+              "B⊗e6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b3a3",
+            "replySan": "Ka3",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "c2a2"
+            ],
+            "acceptSan": [
+              "Rxa2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "b4a6",
+          "san": "N⊗a6+"
+        },
+        {
+          "uci": "b4c2",
+          "san": "N⊗c2+"
+        },
+        {
+          "uci": "b8b4",
+          "san": "R⊗b4+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0f3Hz",
+        "rating": 2256,
+        "popularity": 89,
+        "themes": "advantage defensiveMove long middlegame",
+        "url": "https://lichess.org/HGbiwjW4/black#56",
+        "ply": 6
+      }
+    },
+    {
+      "id": "mls-0ffiD-5",
+      "family": "multistep",
+      "fen": "r4b2/pb5Q/1n2p1B1/1ppqN1k1/3P3r/8/PPP2PPP/R5K1 w - - 4 23",
+      "sideToMove": "w",
+      "legalMoveCount": 50,
+      "selfCaptureCount": 7,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 43,
+      "solutions": [
+        {
+          "from": 15,
+          "to": 22,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "h7g6"
+      ],
+      "solutionsSan": [
+        "Q⊗g6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "h7g6"
+            ],
+            "acceptSan": [
+              "Q⊗g6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g5h4",
+            "replySan": "K⊗h4",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g6g4"
+            ],
+            "acceptSan": [
+              "Qg4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h7h4",
+          "san": "Qxh4+"
+        },
+        {
+          "uci": "e5f3",
+          "san": "Nf3+"
+        },
+        {
+          "uci": "e5f7",
+          "san": "Nf7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0ffiD",
+        "rating": 2402,
+        "popularity": 86,
+        "themes": "advantage deflection exposedKing middlegame veryLong",
+        "url": "https://lichess.org/BG1xTWt3/black#40",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-0gQMm-3",
+      "family": "multistep",
+      "fen": "5rk1/7p/p3R3/PpP2pK1/1P6/5qP1/8/4Q3 b - - 2 36",
+      "sideToMove": "b",
+      "legalMoveCount": 38,
+      "selfCaptureCount": 5,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 33,
+      "solutions": [
+        {
+          "from": 5,
+          "to": 29,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f8f5"
+      ],
+      "solutionsSan": [
+        "R⊗f5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f8f5"
+            ],
+            "acceptSan": [
+              "R⊗f5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g5h4",
+            "replySan": "Kh4",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "f5h5"
+            ],
+            "acceptSan": [
+              "Rh5#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f3f5",
+          "san": "Q⊗f5+"
+        },
+        {
+          "uci": "f3g3",
+          "san": "Qxg3+"
+        },
+        {
+          "uci": "f3e3",
+          "san": "Qe3+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0gQMm",
+        "rating": 2148,
+        "popularity": 86,
+        "themes": "crushing endgame short",
+        "url": "https://lichess.org/lwIvwMuJ#69",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-0hv4i-0",
+      "family": "multistep",
+      "fen": "5rk1/pp6/5QP1/5P2/8/1qPp4/1P4K1/4R3 w - - 1 37",
+      "sideToMove": "w",
+      "legalMoveCount": 44,
+      "selfCaptureCount": 5,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 39,
+      "solutions": [
+        {
+          "from": 21,
+          "to": 22,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "f6g6"
+      ],
+      "solutionsSan": [
+        "Q⊗g6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "f6g6"
+            ],
+            "acceptSan": [
+              "Q⊗g6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8f8",
+            "replySan": "K⊗f8",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e1e8"
+            ],
+            "acceptSan": [
+              "Re8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "f6f8",
+          "san": "Qxf8+"
+        },
+        {
+          "uci": "f6e6",
+          "san": "Qe6+"
+        },
+        {
+          "uci": "f6f7",
+          "san": "Qf7+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0hv4i",
+        "rating": 2259,
+        "popularity": 90,
+        "themes": "advancedPawn clearance crushing endgame long",
+        "url": "https://lichess.org/umyQIpFX#73",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0kCMz-2",
+      "family": "multistep",
+      "fen": "5b1k/4q2p/1p1p4/3B4/1P4Q1/3Pp1P1/4r3/2R3K1 b - - 2 31",
+      "sideToMove": "b",
+      "legalMoveCount": 34,
+      "selfCaptureCount": 7,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 27,
+      "solutions": [
+        {
+          "from": 12,
+          "to": 44,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "e7e3"
+      ],
+      "solutionsSan": [
+        "Q⊗e3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e7e3"
+            ],
+            "acceptSan": [
+              "Q⊗e3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g1f1",
+            "replySan": "Kf1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e3f2"
+            ],
+            "acceptSan": [
+              "Qf2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "e2e1",
+          "san": "Re1+"
+        },
+        {
+          "uci": "e2g2",
+          "san": "Rg2+"
+        },
+        {
+          "uci": "e2e3",
+          "san": "R⊗e3"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0kCMz",
+        "rating": 2304,
+        "popularity": 93,
+        "themes": "advantage endgame master short",
+        "url": "https://lichess.org/zI7q81TO/black#60",
+        "ply": 2
+      }
+    },
+    {
+      "id": "mls-0muVr-3",
+      "family": "multistep",
+      "fen": "4r3/1p3kpQ/1qn5/4p1R1/8/PpP1PP1P/3r4/1K5R b - - 0 26",
+      "sideToMove": "b",
+      "legalMoveCount": 53,
+      "selfCaptureCount": 7,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 46,
+      "solutions": [
+        {
+          "from": 17,
+          "to": 41,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "b6b3"
+      ],
+      "solutionsSan": [
+        "Q⊗b3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b6b3"
+            ],
+            "acceptSan": [
+              "Q⊗b3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b1c1",
+            "replySan": "Kc1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "b3b2"
+            ],
+            "acceptSan": [
+              "Qb2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "d2b2",
+          "san": "Rb2+"
+        },
+        {
+          "uci": "d2d1",
+          "san": "Rd1+"
+        },
+        {
+          "uci": "b6b7",
+          "san": "Q⊗b7"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0muVr",
+        "rating": 2939,
+        "popularity": 86,
+        "themes": "crushing defensiveMove long middlegame quietMove",
+        "url": "https://lichess.org/LJyp9TuR#49",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-0rDfS-5",
+      "family": "multistep",
+      "fen": "8/4B2R/pk4pP/1p4P1/2b5/K7/P3r3/8 b - - 1 36",
+      "sideToMove": "b",
+      "legalMoveCount": 33,
+      "selfCaptureCount": 6,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 27,
+      "solutions": [
+        {
+          "from": 17,
+          "to": 25,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "b6b5"
+      ],
+      "solutionsSan": [
+        "K⊗b5"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b6b5"
+            ],
+            "acceptSan": [
+              "K⊗b5"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "e7b4",
+            "replySan": "Bb4",
+            "of": 13
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "e2a2"
+            ],
+            "acceptSan": [
+              "Rxa2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "e2a2",
+          "san": "Rxa2+"
+        },
+        {
+          "uci": "b5b4",
+          "san": "b4+"
+        },
+        {
+          "uci": "e2e3",
+          "san": "Re3+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0rDfS",
+        "rating": 2249,
+        "popularity": 86,
+        "themes": "advantage endgame quietMove veryLong",
+        "url": "https://lichess.org/d30zptjs#67",
+        "ply": 5
+      }
+    },
+    {
+      "id": "mls-0ryOz-0",
+      "family": "multistep",
+      "fen": "8/r3kpQ1/p3p3/q3P1P1/1p1P4/2r1R3/8/1K5R b - - 0 35",
+      "sideToMove": "b",
+      "legalMoveCount": 35,
+      "selfCaptureCount": 5,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 30,
+      "solutions": [
+        {
+          "from": 24,
+          "to": 33,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "a5b4"
+      ],
+      "solutionsSan": [
+        "Q⊗b4+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "a5b4"
+            ],
+            "acceptSan": [
+              "Q⊗b4+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b1a1",
+            "replySan": "Ka1",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "a7a6"
+            ],
+            "acceptSan": [
+              "R⊗a6#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "a5a1",
+          "san": "Qa1+"
+        },
+        {
+          "uci": "a5a2",
+          "san": "Qa2+"
+        },
+        {
+          "uci": "c3b3",
+          "san": "Rb3+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0ryOz",
+        "rating": 1989,
+        "popularity": 84,
+        "themes": "advantage deflection endgame interference veryLong",
+        "url": "https://lichess.org/myUB3h9o/black#70",
+        "ply": 0
+      }
+    },
+    {
+      "id": "mls-0tsL6-1",
+      "family": "multistep",
+      "fen": "5rk1/r7/p2p1p1Q/3Pn2R/Pp6/1P4PP/2q1N1BK/8 w - - 0 27",
+      "sideToMove": "w",
+      "legalMoveCount": 39,
+      "selfCaptureCount": 10,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 29,
+      "solutions": [
+        {
+          "from": 54,
+          "to": 27,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "g2d5"
+      ],
+      "solutionsSan": [
+        "B⊗d5+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g2d5"
+            ],
+            "acceptSan": [
+              "B⊗d5+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "a7f7",
+            "replySan": "Raf7",
+            "of": 3
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6h8"
+            ],
+            "acceptSan": [
+              "Qh8#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h6f8",
+          "san": "Qxf8+"
+        },
+        {
+          "uci": "h5g5",
+          "san": "Rg5+"
+        },
+        {
+          "uci": "h6g5",
+          "san": "Qg5+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0tsL6",
+        "rating": 2199,
+        "popularity": 87,
+        "themes": "crushing exposedKing long middlegame",
+        "url": "https://lichess.org/lBQasuIN/black#52",
+        "ply": 1
+      }
+    },
+    {
+      "id": "mls-0vE05-3",
+      "family": "multistep",
+      "fen": "2r4k/5p1p/p7/3p4/1P1P4/PKpPP3/4Q1R1/q7 b - - 6 38",
+      "sideToMove": "b",
+      "legalMoveCount": 29,
+      "selfCaptureCount": 3,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 26,
+      "solutions": [
+        {
+          "from": 2,
+          "to": 42,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "c8c3"
+      ],
+      "solutionsSan": [
+        "R⊗c3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "c8c3"
+            ],
+            "acceptSan": [
+              "R⊗c3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "b3a4",
+            "replySan": "Ka4",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "a1a3"
+            ],
+            "acceptSan": [
+              "Qxa3#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "a1c3",
+          "san": "Q⊗c3+"
+        },
+        {
+          "uci": "a1a3",
+          "san": "Qxa3+"
+        },
+        {
+          "uci": "a1a2",
+          "san": "Qa2+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 2,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0vE05",
+        "rating": 2369,
+        "popularity": 89,
+        "themes": "advancedPawn crushing endgame long",
+        "url": "https://lichess.org/FUPSBlAl#73",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-0yUHp-3",
+      "family": "multistep",
+      "fen": "r5rk/p4p1p/3p1PpQ/1bpP4/2q1P3/5RN1/1B4PP/6K1 w - - 10 28",
+      "sideToMove": "w",
+      "legalMoveCount": 47,
+      "selfCaptureCount": 10,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 37,
+      "solutions": [
+        {
+          "from": 49,
+          "to": 21,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "b2f6"
+      ],
+      "solutionsSan": [
+        "B⊗f6+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "b2f6"
+            ],
+            "acceptSan": [
+              "B⊗f6+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "g8g7",
+            "replySan": "Rg7",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h6g7"
+            ],
+            "acceptSan": [
+              "Qxg7#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "h6h7",
+          "san": "Qxh7+"
+        },
+        {
+          "uci": "h6g7",
+          "san": "Qg7+"
+        },
+        {
+          "uci": "e4d5",
+          "san": "e⊗d5"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0yUHp",
+        "rating": 2211,
+        "popularity": 83,
+        "themes": "crushing long middlegame quietMove",
+        "url": "https://lichess.org/wEPJCDOY/black#52",
+        "ply": 3
+      }
+    },
+    {
+      "id": "mls-0zywh-4",
+      "family": "multistep",
+      "fen": "8/1q4p1/3R2Qp/4Pp2/5P2/4PkP1/1r5P/6K1 w - - 3 40",
+      "sideToMove": "w",
+      "legalMoveCount": 38,
+      "selfCaptureCount": 8,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 30,
+      "solutions": [
+        {
+          "from": 22,
+          "to": 46,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "g6g3"
+      ],
+      "solutionsSan": [
+        "Q⊗g3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "g6g3"
+            ],
+            "acceptSan": [
+              "Q⊗g3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f3e2",
+            "replySan": "Ke2",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "g3f2"
+            ],
+            "acceptSan": [
+              "Qf2#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "g6g4",
+          "san": "Qg4+"
+        },
+        {
+          "uci": "g6h5",
+          "san": "Qh5+"
+        },
+        {
+          "uci": "d6g6",
+          "san": "R⊗g6"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "0zywh",
+        "rating": 1871,
+        "popularity": 91,
+        "themes": "crushing endgame veryLong",
+        "url": "https://lichess.org/Cz9cBOp0#75",
+        "ply": 4
+      }
+    },
+    {
+      "id": "mls-11dBp-6",
+      "family": "multistep",
+      "fen": "5r1k/8/4Q3/8/R3Pq2/2P2pRP/5rPK/8 w - - 0 43",
+      "sideToMove": "w",
+      "legalMoveCount": 39,
+      "selfCaptureCount": 4,
+      "soleLegalMove": false,
+      "standardLegalMoveCount": 35,
+      "solutions": [
+        {
+          "from": 20,
+          "to": 47,
+          "promo": null
+        }
+      ],
+      "solutionsUci": [
+        "e6h3"
+      ],
+      "solutionsSan": [
+        "Q⊗h3+"
+      ],
+      "line": {
+        "plies": 3,
+        "steps": [
+          {
+            "side": "solver",
+            "accept": [
+              "e6h3"
+            ],
+            "acceptSan": [
+              "Q⊗h3+"
+            ]
+          },
+          {
+            "side": "opponent",
+            "reply": "f4h4",
+            "replySan": "Qh4",
+            "of": 2
+          },
+          {
+            "side": "solver",
+            "accept": [
+              "h3h4"
+            ],
+            "acceptSan": [
+              "Qxh4#"
+            ],
+            "mate": true
+          }
+        ]
+      },
+      "decoys": [
+        {
+          "uci": "e6e5",
+          "san": "Qe5+"
+        },
+        {
+          "uci": "e6f6",
+          "san": "Qf6+"
+        },
+        {
+          "uci": "e6g8",
+          "san": "Qg8+"
+        }
+      ],
+      "rationale": "One execution forces mate in two: after it, every reply the opponent has still runs into mate. No execution mates at once, and no ordinary move forces mate either, so seeing one move ahead is not enough and skipping the execution does not win.",
+      "difficulty": 3,
+      "source": {
+        "db": "lichess-cc0",
+        "id": "11dBp",
+        "rating": 2261,
+        "popularity": 84,
+        "themes": "crushing endgame long",
+        "url": "https://lichess.org/yh5k59kH#79",
+        "ply": 6
+      }
     },
     {
       "id": "sur-0001",
