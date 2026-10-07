@@ -7,6 +7,9 @@ capture an enemy. Same board, same objective, same everything else.
 
 **▶ Play it: https://dereklthornton99.github.io/tyranny-chess/**
 
+A second rule set, **Coriantumr** (last man standing is the king), is a switch on the same
+page: see [Coriantumr](#coriantumr-a-second-rule-set).
+
 Hot-seat for two players, an engine opponent at three strengths, and **280 puzzles in four
 families** — positions no other chess program can generate. In three of them the answer is
 an execution; in one it is refusing one. One self-contained HTML file, no build step for
@@ -61,6 +64,105 @@ draw inside the three-ply budget the sweep uses. A sound shed could be in there.
 supports is *no evidence was found across a large sample under a stated test*, not *no such
 position exists*. `tests/shed.js` pins the outcome, including that the retracted wording
 stays out of this file and the page.
+
+## Coriantumr: a second rule set
+
+A rules switch on the same page (**Rules: Tyranny / Coriantumr**), named for the Book of
+Mormon figure who was the last man standing. The king is no longer the centre of the game:
+**the last piece on the board is the king.** Switching rules starts a fresh game, and the
+self-capture toggle, the Tyranny demos and puzzle mode are locked while it is on.
+
+**The rules**
+
+- **King and queen** both slide **up to four squares** in any of the eight directions.
+  Pieces in the way block them, an enemy on the last square can be captured, a friend never
+  can. They move identically.
+- Every other piece moves as in chess, including pawn double steps, en passant and
+  promotion. **No self-capture. No check, no checkmate, no castling.** Any move is legal even
+  if it leaves your king where it can be taken.
+- **Capturing a king is an ordinary capture.** It does not end the game.
+- **Succession.** After any capture, if a side still has pieces but **no king and no
+  queen**, its closest bishop becomes a king. No bishop: the closest knight, then rook, then
+  pawn. *Closest* means the smallest straight-line distance (squared) to the square where
+  the capture happened; a tie goes to the lower file, then the lower rank. A queen that is
+  alive when the king falls takes command **without changing**; a queen captured while the
+  king lives changes nothing.
+- A pawn reaching the far rank may become a queen, rook, bishop or knight, and also a
+  **king** when its side has no king piece.
+- **You win when the opponent has no pieces.** No legal move while you still have pieces is a
+  draw; so are the fifty-move rule and threefold repetition. There is no insufficient-material
+  draw.
+
+**Decisions that are the owner's** (2026-10-07): a surviving queen takes command rather than
+a bishop being promoted; a queen's death needs no replacement queen; ties are settled by a
+fixed rule, not a pop-up; a promoting pawn gets the king as a fifth choice; the first
+release is two players plus the engine, with puzzles staying Tyranny-only.
+
+**Succession is derived, not remembered.** The engine stores no "the king was lost" flag.
+It applies the rule after every capture from the board alone, so a position carries all the
+history it needs, undo needs no extra state, and a side whose king returns (a crowned
+piece, or a pawn promoted to king) simply has a king again. The rule set rides on the board
+state as `S.v === "c"`; it is absent, not false, for Tyranny and standard play, so no
+existing function signature changed.
+
+**How it was checked**
+
+- An independent reference, `tools/coriantumr-ref.py`, written in Python with a different
+  board representation and a global "after a capture" succession check. `tests/coriantumr-golden.json`
+  holds 15 hand-made positions (ties, distance-versus-class, queen-alive cases, promotion
+  with and without a king piece, en passant) and 300 sampled ones with a digest of every
+  move and resulting board; the JS engine matches all of them.
+- Perft from the start position under the variant: **20 / 400 / 9,122 / 207,622** at depths
+  1 to 4. Depth 3 was also derived by hand (8,902 plus 20 × 11); the Python reference
+  agrees at every depth. Tyranny and standard perft are unchanged.
+- Mutation testing: the engine tests carry 19 deliberate breaks of the engine source and the
+  engine-opponent tests 7 more (a wrong succession order, a flipped tie-break, a dropped
+  variant tag); each must be caught or the suite fails. The page checks were also run once
+  against nine deliberate breaks of the page and caught every one; that was a one-off run,
+  not a standing test.
+- Real-browser checks click the rules button and board squares and read the live DOM: the
+  switch, move highlights against an independently written slider, the queen taking command,
+  the crowning drawn as a king, the win, the draws, the promotion picker, the puzzle lock,
+  and a 50-ply game against the engine with the variant tag intact in every position and no
+  page errors.
+
+**The engine plays it, but only as well as its value guess.** It uses the same search with
+the variant's terminal rules (no pieces is a loss, no move with pieces is a draw, no
+insufficient-material shortcut). The values are the ordinary ones with king and queen both
+set to 800, **an estimate that has not been tuned or measured**. Nothing here claims its
+strength. `node tools/coriantumr-selfplay.js` reports plain counts at a pinned depth of 3
+and a 150-ply cap (2026-10-07): **100 games against a seeded random mover**, 100 won by the
+engine (mean 55.3 plies), 0 illegal moves, rule-set tag on every position; **20
+engine-versus-engine games** (each opened with 6 seeded random plies so they differ, and all
+20 are different games), 0 decisive: 9 ended by repetition and 11 reached the cap. That
+matches the endgame table below: the engine wins against a random mover, and two engines
+do not finish each other off.
+
+### Can a lone king be hunted down? Measured, and the answer is mostly no
+
+Because a king or queen that has been left alone slides four squares in any direction, the
+question is whether "last man standing" can be forced. `tools/coriantumr-endgame.js` solves
+the small endings by retrograde analysis (working backwards from captures) over every
+distinct position, and checks 6,000 of them against the real engine (0 differ; 1,357
+crownings and 1,334 last-piece captures all agree).
+
+| Material | Positions per side to move | Bigger side to move: forced win | Lone side to move: bigger side still wins |
+|---|---|---|---|
+| lone piece against lone piece | 4,032 | 1,208 | 0 |
+| plus one more slider | 124,992 | 63,692 (63,592 at once, 100 in three plies) | 8 (all with the lone piece cornered) |
+| plus a rook | 249,984 | 113,576, all at once | 0 |
+| plus a bishop | 249,984 | 98,200, all at once | 0 |
+| plus a knight | 249,984 | 87,480, all at once | 0 |
+
+**What it means.** One extra piece cannot force the capture of a lone four-square slider:
+every win is a capture that is already available, so a lone king is lost only to a blunder.
+Two sliders trap one only from eight cornered positions. Best-play endings will therefore
+usually end by the fifty-move rule or repetition, not by annihilation. **Not covered:**
+pawns, three or more attackers, and the fifty-move and repetition rules. Whether to add a
+rule so these endings can finish is the owner's call and has not been made.
+
+**Not built:** puzzles in the variant, a pick-your-own-tie step, and any rule patch for
+the undrawable endings above.
 
 ## Puzzles
 
@@ -299,7 +401,10 @@ puzzles/multistep-seed.json GENERATED, committed: positions, provenance, and the
 tools/fen-write.js      toFen(state); the page ships only a parser
 tools/shed-sweep.js     is a king shed ever sound? --check <fen> classifies one position
 tools/ai-selfcapture.js what the engine does with self-captures, and whether it prefers them
-tests/                  six Node suites, run against src/ not the built page
+tools/coriantumr-ref.py independent Python reference for the Coriantumr rules; --check verifies the fixture
+tools/coriantumr-endgame.js retrograde solver for the small Coriantumr endings; --self-test checks it against the engine
+tools/coriantumr-selfplay.js plain counts for engine games under the Coriantumr rules
+tests/                  eight Node suites, run against src/ not the built page
 tests/browser.js        SEPARATE runner: real DOM checks in headless Chrome, zero deps
 _context/               goal tree, run log, and the two measurement records
 ```
@@ -388,12 +493,14 @@ The page has a **Run tests** button that executes 48 rule checks in the browser.
 suites, plus the puzzle validator, run under Node:
 
 ```
-node tests/run-all.js     494 checks, six files    27 / 8 / 24 / 13 / 396 / 26
-node tests/browser.js     166 checks in headless Chrome, against the real DOM
+node tests/run-all.js     638 checks, eight files  27 / 8 / 24 / 13 / 396 / 117 / 27 / 26
+node tests/browser.js     241 checks in headless Chrome, against the real DOM
 ```
 
-Both numbers were printed by those two commands on **2026-10-02**, and the in-page 48 was
-read off the page by clicking the button rather than inferred from the source.
+Both numbers were printed by those two commands on **2026-10-07**, and the in-page 48 was
+read off the page by clicking the button rather than inferred from the source. Before the
+Coriantumr work they were 494 and 166; the Tyranny and standard suites are unchanged and
+the rest are additions (`coriantumr.js` 117, `coriantumr-ai.js` 27, 75 more browser checks).
 
 **CI runs both, and that is new.** It used to run only the Node suites — which meant the
 marker toggle, the puzzle-mode marker suppression and the Try again reset could all have

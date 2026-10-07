@@ -95,6 +95,7 @@ function chromePath(){
 }
 
 /* ---------- a minimal CDP client ---------- */
+let cdpEvents = null;     // set by main(): collects page exceptions and console.error
 function cdp(wsUrl){
   return new Promise((resolve, reject) => {
     const ws = new WebSocket(wsUrl);
@@ -102,6 +103,7 @@ function cdp(wsUrl){
     const waiting = new Map();
     ws.onmessage = ev => {
       const msg = JSON.parse(ev.data);
+      if(msg.method && cdpEvents) cdpEvents(msg);
       if(msg.id && waiting.has(msg.id)){
         const { res, rej } = waiting.get(msg.id);
         waiting.delete(msg.id);
@@ -174,6 +176,12 @@ async function main(){
   const c = await cdp(ver.webSocketDebuggerUrl);
   const { targetId } = await c.send('Target.createTarget', { url: 'about:blank' });
   const { sessionId } = await c.send('Target.attachToTarget', { targetId, flatten: true });
+  const pageErrors = [];
+  cdpEvents = msg => {
+    if(msg.method === 'Runtime.exceptionThrown') pageErrors.push('exception: ' + JSON.stringify(msg.params.exceptionDetails.text));
+    if(msg.method === 'Runtime.consoleAPICalled' && msg.params.type === 'error') pageErrors.push('console.error: ' + JSON.stringify(msg.params.args.map(a => a.value || a.description)));
+  };
+  await c.send('Runtime.enable', {}, sessionId);
 
   /* Evaluate in the page and hand back a real JS value. */
   async function ev(expr){
@@ -933,6 +941,230 @@ async function main(){
       await ev('return window.puz.solved["syn-deep"] ? 1 : 0'), 1);
     chk('deep  and only now is Next enabled',
       await ev('return document.getElementById("puzNext").disabled'), false);
+
+    /* ---------------- R4-M4 : the Coriantumr rules switch, in the real page ---------------- */
+    /*
+     * Round 3's contract checked data, not the player's interaction, so every
+     * check here clicks real buttons and squares and reads the live DOM. Board
+     * positions are loaded through the page's own resetTo()+fen(), but the RULES
+     * are always switched by clicking the rules button: the page's `variant`
+     * global is never assigned from here.
+     */
+    const START_FEN_C = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
+    const SQ = n => (8 - +n[1]) * 8 + 'abcdefgh'.indexOf(n[0]);
+    const clickBtn = sel => 'document.querySelector(\'' + sel + '\').click();';
+    const setPos = f => 'window.sel=-1; window.targets=[]; resetTo(Object.assign(fen("' + f + '"), {v:window.variant||undefined})); render();';
+    // Independent slider, written here from the rules and not copied from the engine.
+    function slide(placement, from, lim){
+      const b = [];
+      placement.split('/').forEach(row => { for(const ch of row){ if(/\d/.test(ch)) for(let k=0;k<+ch;k++) b.push(null); else b.push(ch); } });
+      const white = ch => ch === ch.toUpperCase();
+      let quiet = 0, cap = 0;
+      const quietSq = [], capSq = [];
+      const r0 = Math.floor(from / 8), c0 = from % 8;
+      for(const [dr, dc] of [[-1,-1],[-1,0],[-1,1],[0,-1],[0,1],[1,-1],[1,0],[1,1]]){
+        for(let s = 1; s <= lim; s++){
+          const r = r0 + dr * s, c = c0 + dc * s;
+          if(r < 0 || r > 7 || c < 0 || c > 7) break;
+          const t = b[r * 8 + c];
+          if(!t){ quiet++; quietSq.push(r * 8 + c); continue; }
+          if(white(t) !== white(b[from])){ cap++; capSq.push(r * 8 + c); }
+          break;
+        }
+      }
+      return { quiet, cap, quietSq, capSq };
+    }
+    const domSet = cls => ev('return Array.prototype.map.call(document.querySelectorAll(".sq.' + cls + '"), function(e){ return +e.dataset.sq; }).sort(function(a,b){ return a-b; }).join()');
+    const asSet = a => a.slice().sort((x, y) => x - y).join();
+    const countCls = cls => 'return document.querySelectorAll(".sq.' + cls + '").length;';
+
+    head('R4-M4-AC1 the rules switch is real and reversible');
+    await load();
+    chk('AC1  starts as Tyranny: no variant on the page', await ev('return String(window.variant)'), 'null');
+    chk('AC1  Tyranny rule line shown, Coriantumr one hidden',
+      await ev('return !document.getElementById("ruleLineT").hidden && document.getElementById("ruleLineC").hidden'), true);
+    chk('AC1  self-capture button usable in Tyranny', await ev('return document.getElementById("ruleBtn").disabled'), false);
+    chk('AC1  no square carries the command mark in Tyranny', await ev(countCls('cmd')), 0);
+    await ev(pick(SQ('e2'))); await ev(pick(SQ('e4')));
+    chk('AC1  precondition: a Tyranny move was played', await ev('return window.hist.length'), 2);
+    await ev(clickBtn('[data-rules="c"]'));
+    chk('AC1  clicking Coriantumr sets the variant on the page', await ev('return window.variant'), 'c');
+    chk('AC1  and starts a fresh game (history 1, no moves)', await ev('return window.hist.length + "/" + window.played.length'), '1/0');
+    chk('AC1  the board state itself carries the tag', await ev('return window.hist[0].v'), 'c');
+    chk('AC1  rules named on screen: status line says Coriantumr',
+      await ev('return document.getElementById("stateTxt").textContent.indexOf("Coriantumr") >= 0'), true);
+    chk('AC1  at the start both sides have a king, so nobody is named as commander',
+      await ev('return document.getElementById("stateTxt").textContent'), 'Move 1 · Coriantumr');
+    chk('AC1  Coriantumr rule line shown, Tyranny one hidden',
+      await ev('return document.getElementById("ruleLineT").hidden && !document.getElementById("ruleLineC").hidden'), true);
+    chk('AC1  in-page rules panel shown, Tyranny notes hidden',
+      await ev('return !document.getElementById("belowC").hidden && document.getElementById("belowT").hidden'), true);
+    chk('AC1  the rules panel is in the settled wording (succession, no check)',
+      await ev('var t = document.getElementById("belowC").textContent; return /no king and no queen/.test(t) && /no check, no checkmate/.test(t) && /last piece/.test(t)'), true);
+    chk('AC1  self-capture button locked in the variant', await ev('return document.getElementById("ruleBtn").disabled'), true);
+    chk('AC1  the Tyranny demo explanation is hidden with its buttons',
+      await ev('return document.getElementById("demoHint").hidden'), true);
+    chk('AC1  Tyranny demos locked in the variant',
+      await ev('return document.getElementById("demoBtn").disabled && document.getElementById("demo2Btn").disabled'), true);
+    chk('AC1  the Coriantumr button shows as selected',
+      await ev('return document.querySelector(\'[data-rules="c"]\').className'), 'btn on');
+    await ev(pick(SQ('e2'))); await ev(pick(SQ('e4')));
+    await ev('document.getElementById("newBtn").click();');
+    chk('AC1  New game keeps the variant', await ev('return window.variant + "/" + window.hist[0].v'), 'c/c');
+    await ev(pick(SQ('e2'))); await ev(pick(SQ('e4')));
+    await ev('document.getElementById("undoBtn").click();');
+    chk('AC1  Undo keeps the variant', await ev('return window.hist.every(function(S){ return S.v === "c"; })'), true);
+    await ev(clickBtn('[data-rules="t"]'));
+    chk('AC1  switching back clears the variant', await ev('return String(window.variant) + "/" + String(window.hist[0].v)'), 'null/undefined');
+    chk('AC1  and restores the Tyranny page',
+      await ev('return !document.getElementById("ruleLineT").hidden && document.getElementById("ruleLineC").hidden && !document.getElementById("belowT").hidden'), true);
+    chk('AC1  and the demo explanation is back', await ev('return document.getElementById("demoHint").hidden'), false);
+    chk('AC1  self-capture and demos usable again',
+      await ev('return !document.getElementById("ruleBtn").disabled && !document.getElementById("demoBtn").disabled'), true);
+
+    head('R4-M4-AC2 king and queen show exactly their four-square reach, and never a self-capture bracket');
+    // d4 queen, f4 enemy pawn (capture ends the ray), d6 FRIEND pawn (blocks, never capturable), kings far away.
+    const REACH = 'k7/8/3P4/8/3Q1p2/8/8/7K';
+    await ev(clickBtn('[data-rules="c"]'));
+    // an earlier section leaves the marker toggle OFF in this profile; this section reads the markers
+    if(!(await ev('return window.showMarks'))) await ev('document.getElementById("markBtn").click();');
+    await ev(setPos(REACH + ' w - - 0 1'));
+    const q4 = slide(REACH, SQ('d4'), 4), k4 = slide(REACH, SQ('h1'), 4);
+    await ev(pick(SQ('d4')));
+    chk('AC2  queen: quiet dots = independent count (' + q4.quiet + ')', await ev(countCls('hl-move')), q4.quiet);
+    chk('AC2  queen: capture rings = independent count (' + q4.cap + ')', await ev(countCls('hl-take')), q4.cap);
+    chk('AC2  queen: the dotted squares are exactly the independent set', await domSet('hl-move'), asSet(q4.quietSq));
+    chk('AC2  queen: the ringed squares are exactly the independent set', await domSet('hl-take'), asSet(q4.capSq));
+    chk('AC2  queen: zero self-capture brackets', await ev(countCls('hl-self')), 0);
+    chk('AC2  the friendly d6 pawn is NOT a target', await ev('return document.querySelector(\'[data-sq="' + SQ('d6') + '"]\').className.indexOf("hl-") < 0'), true);
+    chk('AC2  the square beyond the enemy pawn (g4) is not a target', await ev('return document.querySelector(\'[data-sq="' + SQ('g4') + '"]\').className.indexOf("hl-") < 0'), true);
+    await ev('window.sel=-1; window.targets=[]; render();');
+    await ev(pick(SQ('h1')));
+    chk('AC2  king: quiet dots = independent count (' + k4.quiet + ')', await ev(countCls('hl-move')), k4.quiet);
+    chk('AC2  king: capture rings = independent count (' + k4.cap + ')', await ev(countCls('hl-take')), k4.cap);
+    chk('AC2  king: the dotted squares are exactly the independent set', await domSet('hl-move'), asSet(k4.quietSq));
+    chk('AC2  control: both counts are non-zero, so the comparisons above could have failed',
+      q4.quiet > 0 && k4.quiet > 0, true);
+    // Control: the same board under Tyranny DOES offer the bracket, so the zero above could have failed.
+    await ev(clickBtn('[data-rules="t"]'));
+    await ev(setPos(REACH + ' w - - 0 1'));
+    await ev(pick(SQ('d4')));
+    chk('AC2  control: under Tyranny the same queen has a self-capture bracket on d6', await ev(countCls('hl-self')), 1);
+
+    head('R4-M4-AC3 the king falls and the queen is alive: she takes command, unchanged');
+    await ev(clickBtn('[data-rules="c"]'));
+    await ev(setPos('R3k2q/8/8/8/8/8/8/4K3 w - - 0 1'));
+    chk('AC3  before: the black queen carries no command mark (black has a king)', await ev(countCls('cmd')), 0);
+    await ev(pick(SQ('a8'))); await ev(pick(SQ('e8')));
+    chk('AC3  the king was captured and the game goes on',
+      await ev('var S = window.hist[window.hist.length-1]; return S.b.indexOf("bk") + "/" + String(window.overTxt)'), '-1/null');
+    chk('AC3  the queen is still a queen, same square (h8)', await ev('return window.hist[window.hist.length-1].b[' + SQ('h8') + ']'), 'bq');
+    chk('AC3  no piece was changed into a king', await ev('return window.hist[window.hist.length-1].cr === undefined'), true);
+    chk('AC3  the page says so in words',
+      await ev('return document.getElementById("varLine").textContent'), 'Black’s king fell — the queen takes command.');
+    chk('AC3  the commanding queen carries the crown mark on the board',
+      await ev('return document.querySelector(\'[data-sq="' + SQ('h8') + '"]\').classList.contains("cmd")'), true);
+    chk('AC3  and nobody else does (White still has its king)', await ev(countCls('cmd')), 1);
+    chk('AC3  the status line names the commander, and only Black',
+      await ev('return document.getElementById("stateTxt").textContent'), 'Move 1 \u00b7 Coriantumr \u00b7 Black: queen commands');
+    await ev(pick(SQ('h8'))); await ev(pick(SQ('h7')));          // Black's queen moves on
+    chk('AC3  precondition for the next check: Black really moved (history 3, White to move)',
+      await ev('return window.hist.length + "/" + window.hist[window.hist.length-1].turn'), '3/w');
+    chk('AC3  and it still names her after later moves, not only on the capture',
+      await ev('return document.getElementById("stateTxt").textContent.indexOf("Black: queen commands") >= 0'), true);
+
+    head('R4-M4-AC4 no king, no queen: the closest bishop is crowned and drawn as a king');
+    await ev(setPos('R3k3/3n4/2b5/7b/8/8/8/1b2K3 w - - 0 1'));
+    await ev(pick(SQ('a8'))); await ev(pick(SQ('e8')));
+    chk('AC4  c6 (closest bishop, not the nearer knight d7) became a king',
+      await ev('return window.hist[window.hist.length-1].b[' + SQ('c6') + ']'), 'bk');
+    chk('AC4  the other bishops and the knight are unchanged',
+      await ev('var b = window.hist[window.hist.length-1].b; return [b[' + SQ('h5') + '], b[' + SQ('b1') + '], b[' + SQ('d7') + ']].join()'), 'bb,bb,bn');
+    chk('AC4  the square draws the KING glyph, not the bishop glyph',
+      await ev('var el = document.querySelector(\'[data-sq="' + SQ('c6') + '"]\'); var d = document.createElement("div"); d.innerHTML = pieceSVG("bk"); var e = document.createElement("div"); e.innerHTML = pieceSVG("bb"); return el.innerHTML === d.innerHTML && el.innerHTML !== e.innerHTML'), true);
+    chk('AC4  the page names what happened',
+      await ev('return document.getElementById("varLine").textContent'), 'Black has no king or queen left — the closest bishop (c6) is crowned king.');
+    chk('AC4  a crowned piece is a king, so no separate command mark', await ev(countCls('cmd')), 0);
+    await ev('document.getElementById("undoBtn").click();');
+    chk('AC4  Undo takes the crowning back with the move', await ev('return window.hist[window.hist.length-1].b[' + SQ('c6') + ']'), 'bb');
+    chk('AC4  and the note goes with it', await ev('return document.getElementById("varLine").textContent'), '');
+
+    head('R4-M4-AC5 last man standing ends the game; a side with pieces and no move draws');
+    await ev(setPos('R3k3/8/8/8/8/8/8/4K3 w - - 0 1'));
+    await ev(pick(SQ('a8'))); await ev(pick(SQ('e8')));
+    chk('AC5  capturing the last piece wins', await ev('return document.getElementById("stateTxt").textContent'), 'White wins — last man standing');
+    await ev(pick(SQ('e1')));
+    chk('AC5  the board is closed after the win (no selection)', await ev('return window.sel'), -1);
+    await ev('document.getElementById("newBtn").click();');
+    chk('AC5  New game after the win restores the start position',
+      toFen(await ev('return window.hist[window.hist.length-1];')) + '|' + await ev('return String(window.overTxt) + "|" + window.hist.length'),
+      START_FEN_C + '|null|1');
+    await ev(setPos('8/8/8/8/8/p7/P7/7K b - - 0 1'));
+    chk('AC5  pieces left but no legal move is a draw, not a win',
+      await ev('return document.getElementById("stateTxt").textContent'), 'Draw — no legal move');
+    await ev(setPos('7k/8/8/8/8/8/8/K7 w - - 0 1'));
+    chk('AC5  king against king is NOT an insufficient-material draw in this variant',
+      await ev('return String(window.overTxt)'), 'null');
+    await ev(setPos('7k/8/8/8/8/8/8/K7 w - - 99 60'));
+    await ev(pick(SQ('a1'))); await ev(pick(SQ('a2')));
+    chk('AC5  the fifty-move rule still applies', await ev('return String(window.overTxt)'), 'Draw — fifty-move rule');
+
+    head('R4-M4-AC6 the promotion picker offers a KING only when the side has none');
+    await ev(setPos('1k6/P7/8/8/8/8/8/4Q3 w - - 0 1'));
+    await ev(pick(SQ('a7'))); await ev(pick(SQ('a8')));
+    chk('AC6  no king piece: five choices (Q R B N K)', await ev('return document.querySelectorAll("#veil .promo-row button").length'), 5);
+    await ev('document.querySelectorAll("#veil .promo-row button")[4].click();');
+    chk('AC6  choosing the king crowns the pawn as a king', await ev('return window.hist[window.hist.length-1].b[' + SQ('a8') + ']'), 'wk');
+    chk('AC6  the log writes it =K', await ev('return window.played[window.played.length-1].san.indexOf("=K") >= 0'), true);
+    await ev(setPos('1k6/P7/8/8/8/8/8/4K3 w - - 0 1'));
+    await ev(pick(SQ('a7'))); await ev(pick(SQ('a8')));
+    chk('AC6  with a king already on the board: four choices, no king', await ev('return document.querySelectorAll("#veil .promo-row button").length'), 4);
+    await ev('window.pending = null; render();');
+
+    head('R4-M4-AC7 puzzles stay Tyranny-only');
+    chk('AC7  in the variant the Start puzzles button is disabled', await ev('return document.getElementById("puzToggle").disabled'), true);
+    chk('AC7  and the page says why', await ev('return !document.getElementById("puzVarNote").hidden'), true);
+    await ev('document.getElementById("puzToggle").click();');
+    chk('AC7  clicking it does not start a puzzle', await ev('return String(window.puz)'), 'null');
+    await ev(clickBtn('[data-rules="t"]'));
+    chk('AC7  back in Tyranny the button works again', await ev('return document.getElementById("puzToggle").disabled'), false);
+    await ev('document.getElementById("puzToggle").click();');
+    chk('AC7  puzzle mode starts', await ev('return !!window.puz'), true);
+    chk('AC7  inside a puzzle the rules switch is locked',
+      await ev('return Array.prototype.every.call(document.querySelectorAll("#rulesSeg button"), function(b){ return b.disabled; })'), true);
+    await ev(clickBtn('[data-rules="c"]'));
+    chk('AC7  a click on it changes nothing', await ev('return String(window.variant)'), 'null');
+    await ev('document.getElementById("puzToggle").click();');
+
+    head('R4-M4-AC8 an engine game in the variant: 30+ plies, flag never dropped, no page errors');
+    await load();
+    pageErrors.length = 0;
+    await ev(clickBtn('[data-rules="c"]') + clickBtn('[data-level="easy"]') + clickBtn('[data-mode="hw"]'));
+    await ev(clickBtn('#flipBtn'));
+    chk('AC8  Flip board works in the variant: the first rank label reads 1 and the board is flipped',
+      await ev('return window.flipped + "/" + document.getElementById("ranks").children[0].textContent'), 'true/1');
+    await ev(clickBtn('#flipBtn'));
+    chk('AC8  and flips back', await ev('return window.flipped + "/" + document.getElementById("ranks").children[0].textContent'), 'false/8');
+    let humanMoves = 0;
+    while(humanMoves < 25){
+      if(await ev('return !!window.overTxt')) break;
+      const mv = await ev('var m = legal(cur(), false)[0]; return m ? {from:m.from, to:m.to} : null;');
+      if(!mv) break;
+      const len0 = await ev('return window.hist.length');
+      await ev(pick(mv.from)); await ev(pick(mv.to));
+      if(await ev('return !!window.pending')) await ev('document.querySelector("#veil .promo-row button").click();');
+      humanMoves++;
+      // wait for the engine's reply (or the end of the game) by polling the page, not by sleeping
+      const settled = await until('window.hist.length >= ' + (len0 + 2) + ' || !!window.overTxt', 20000);
+      if(!settled) break;
+    }
+    const plies = await ev('return window.hist.length - 1');
+    console.log('       engine game: ' + plies + ' plies, ' + (await ev('return String(window.overTxt)')));
+    chk('AC8  the game reached 30 plies or ended by a rule', (plies >= 30) || (await ev('return !!window.overTxt')), true);
+    chk('AC8  every position in the game carried the variant tag',
+      await ev('return window.hist.every(function(S){ return S.v === "c"; })'), true);
+    chk('AC8  the engine really replied (more plies than the human moved)', plies > humanMoves, true);
+    chk('AC8  zero page errors during the game', pageErrors.join(' | '), '');
 
     /* ---------------- the in-page suite, actually run ---------------- */
     /*

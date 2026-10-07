@@ -1,0 +1,134 @@
+{
+  "tool": "tools/coriantumr-endgame.js",
+  "what": "Retrograde analysis: which small endings can force the capture of a lone 4-square king or queen.",
+  "covers": "ALL legal placements of the pieces, not positions that arise in play; no pawns; at most two attackers; no repetition or 50-move rule applied (forceable, not allowed-by-the-draw-rules).",
+  "seconds": 1.5,
+  "results": [
+    {
+      "pieces": "S against S",
+      "attackerToMove": {
+        "positions": 4032,
+        "forcedWins": 1208
+      },
+      "defenderToMove": {
+        "positions": 4032,
+        "forcedWins": 0
+      },
+      "longestWinPlies": 1,
+      "winsNeedingMoreThan50Moves": 0,
+      "winsByPlies": {
+        "1": 1208
+      },
+      "defenderLossExamples": [],
+      "longestExample": {
+        "toMove": "attackers",
+        "attackers": "S@a8",
+        "defender": "S@b8",
+        "plies": 1
+      }
+    },
+    {
+      "pieces": "S+S against S",
+      "attackerToMove": {
+        "positions": 124992,
+        "forcedWins": 63692
+      },
+      "defenderToMove": {
+        "positions": 124992,
+        "forcedWins": 8
+      },
+      "longestWinPlies": 3,
+      "winsNeedingMoreThan50Moves": 0,
+      "winsByPlies": {
+        "1": 63592,
+        "2": 8,
+        "3": 100
+      },
+      "defenderLossExamples": [
+        "S@c7 S@c6 vs S@a8 (2 plies)",
+        "S@f7 S@f6 vs S@h8 (2 plies)",
+        "S@b6 S@c6 vs S@a8 (2 plies)",
+        "S@f6 S@g6 vs S@h8 (2 plies)",
+        "S@b3 S@c3 vs S@a1 (2 plies)",
+        "S@c3 S@c2 vs S@a1 (2 plies)",
+        "S@f3 S@g3 vs S@h1 (2 plies)",
+        "S@f3 S@f2 vs S@h1 (2 plies)"
+      ],
+      "longestExample": {
+        "toMove": "attackers",
+        "attackers": "S@b7 S@g3",
+        "defender": "S@h1",
+        "plies": 3
+      }
+    },
+    {
+      "pieces": "S+R against S",
+      "attackerToMove": {
+        "positions": 249984,
+        "forcedWins": 113576
+      },
+      "defenderToMove": {
+        "positions": 249984,
+        "forcedWins": 0
+      },
+      "longestWinPlies": 1,
+      "winsNeedingMoreThan50Moves": 0,
+      "winsByPlies": {
+        "1": 113576
+      },
+      "defenderLossExamples": [],
+      "longestExample": {
+        "toMove": "attackers",
+        "attackers": "S@a8 R@b8",
+        "defender": "S@c8",
+        "plies": 1
+      }
+    },
+    {
+      "pieces": "S+B against S",
+      "attackerToMove": {
+        "positions": 249984,
+        "forcedWins": 98200
+      },
+      "defenderToMove": {
+        "positions": 249984,
+        "forcedWins": 0
+      },
+      "longestWinPlies": 1,
+      "winsNeedingMoreThan50Moves": 0,
+      "winsByPlies": {
+        "1": 98200
+      },
+      "defenderLossExamples": [],
+      "longestExample": {
+        "toMove": "attackers",
+        "attackers": "S@a8 B@b8",
+        "defender": "S@a7",
+        "plies": 1
+      }
+    },
+    {
+      "pieces": "S+N against S",
+      "attackerToMove": {
+        "positions": 249984,
+        "forcedWins": 87480
+      },
+      "defenderToMove": {
+        "positions": 249984,
+        "forcedWins": 0
+      },
+      "longestWinPlies": 1,
+      "winsNeedingMoreThan50Moves": 0,
+      "winsByPlies": {
+        "1": 87480
+      },
+      "defenderLossExamples": [],
+      "longestExample": {
+        "toMove": "attackers",
+        "attackers": "S@a8 N@b8",
+        "defender": "S@a7",
+        "plies": 1
+      }
+    }
+  ]
+}

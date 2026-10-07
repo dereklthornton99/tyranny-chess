@@ -1,0 +1,220 @@
+/*
+ * coriantumr-ai.js -- the engine opponent in Coriantumr (R4-M3).
+ *
+ * What changes for the search in this rule set, and so what is checked:
+ *   * there is no check, so the search must not filter captures by king safety (quiescence used to skip EVERY
+ *     capture for a side with no king piece, which a queen-only side now is) and must not extend on "check";
+ *   * a side with no pieces has lost, so capturing the last piece scores as a mate and losing your own last
+ *     piece scores as a loss; no legal move with pieces left is a draw;
+ *   * a lone king can still capture a lone king, so there is no insufficient-material draw;
+ *   * king and queen are one 4-square piece, so they get one value, and the evaluation is colour-symmetric.
+ *
+ * Like coriantumr.js this is a battery over an engine, run on the real engine and on deliberately broken ones.
+ * Every position is built from a FEN; nothing depends on a random deal, and the games use seeded generators.
+ */
+const fs = require('fs');
+const path = require('path');
+
+const ENGINE_TEXT = fs.readFileSync(path.join(__dirname, 'engine.js'), 'utf8');
+const GOLDEN = JSON.parse(fs.readFileSync(path.join(__dirname, 'coriantumr-golden.json'), 'utf8'));
+
+function loadEngine(text) {
+  const m = { exports: {} };
+  new Function('module', 'exports', text)(m, m.exports);
+  return m.exports;
+}
+function mulberry32(a) {
+  return function () {
+    a |= 0; a = (a + 0x6D2B79F5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function battery(E, opts) {
+  opts = opts || {};
+  const out = [];
+  const t = (name, got, want) => out.push({ name, ok: String(got) === String(want), got, want });
+  const C = (f) => { const S = E.fen(f); S.v = 'c'; return S; };
+  const san = (S, m) => E.san(S, m, true);
+  const reset = () => {
+    E.ai.gameKeys = new Set(); E.ai.path = []; E.ai.killers = []; E.ai.hist = {};
+    E.ai.depthDone = 1; E.ai.deadline = Infinity; E.ai.aborted = false; E.ai.selfCap = true; E.ai.cp = E.CPC;
+  };
+  const pieceCount = (S, side) => S.b.filter((p) => p && p[0] === side).length;
+
+  // ---- R4-M3-AC1: no king safety anywhere in the search ----------------------------------------------
+  reset();
+  // White has only a queen, so no king piece. The old quiescence skipped every capture for such a side.
+  const noKing = C('3r3k/8/3Q4/8/8/8/8/8 w - - 0 1');   // Black rook d8? no: rook d8 with the queen on d6 attacking it
+  const hang = C('7k/8/3r4/8/3Q4/8/8/8 w - - 0 1');     // White Qd4 only; Black Rd6 is free, Kh8 cannot recapture
+  const standPat = E.evaluate(hang);
+  const q = E.qsearch(hang, -Infinity, Infinity, 0);
+  t('a side with no king piece still sees its captures in quiescence (free rook: value rises by more than 300)',
+    q > standPat + 300, true);
+  t('CONTROL: the free rook really is there to be captured',
+    E.legal(hang, true).some((m) => m.cap === 'br'), true);
+  reset();
+  t('no check extension: inCheck is false even with a king under attack',
+    E.inCheck(C('4k3/8/8/8/8/8/8/4RK2 b - - 0 1'), 'b'), false);
+
+  // ---- R4-M3-AC2: terminal scoring -------------------------------------------------------------------------
+  reset();
+  const last = C('4k3/8/8/8/8/8/8/4R2K w - - 0 1');
+  let r = E.think(last, { ms: 300, maxDepth: 4, history: [last] });
+  t('captures the opponent\'s last piece (Rxe8)', san(last, r.move), 'Rxe8');
+  t('...and scores it as a mate', r.score >= E.MATE - 2, true);
+  reset();
+  const kk = C('k7/K7/8/8/8/8/8/8 w - - 0 1');
+  r = E.think(kk, { ms: 300, maxDepth: 4, history: [kk] });
+  t('lone king beside lone king: the side to move captures and wins (no insufficient-material draw)',
+    san(kk, r.move) + '/' + (r.score >= E.MATE - 2), 'Kxa8/true');
+  reset();
+  const onlyQueen = C('3r3k/8/8/8/3Q4/8/8/8 w - - 0 1');   // Qxd8 Kxd8 would lose the queen, White's last piece
+  r = E.think(onlyQueen, { ms: 400, maxDepth: 5, history: [onlyQueen] });
+  const after = E.apply(onlyQueen, r.move);
+  t('does not walk its last piece into a recapture (not Qxd8)', san(onlyQueen, r.move) === 'Qxd8', false);
+  t('...and after its move the opponent cannot capture its last piece',
+    E.legal(after, true).some((m) => m.cap && m.cap[0] === 'w'), false);
+  reset();
+  t('a position with pieces but no legal move scores as a draw',
+    E.search(C('8/8/8/8/p7/P7/8/8 w - - 0 1'), 3, -Infinity, Infinity, 1), 0);
+  reset();
+  t('a side with no pieces scores as lost at the right ply',
+    E.search(E.apply(last, E.legal(last, true).find((m) => m.cap === 'bk')), 3, -Infinity, Infinity, 1) <= -E.MATE + 50, true);
+
+  // ---- R4-M3-AC3: evaluation ---------------------------------------------------------------------------------
+  const withQueen = C('3r3k/8/8/8/3Q4/8/8/8 w - - 0 1');
+  const withKing = C('3r3k/8/8/8/3K4/8/8/8 w - - 0 1');
+  t('king and queen on the same square are worth the same', E.evaluate(withKing), E.evaluate(withQueen));
+  const mirrorState = (S) => {
+    const b = new Array(64).fill(null);
+    for (let i = 0; i < 64; i++) {
+      const p = S.b[i];
+      if (p) b[(7 - E.rOf(i)) * 8 + E.cOf(i)] = (p[0] === 'w' ? 'b' : 'w') + p[1];
+    }
+    return { b, turn: S.turn === 'w' ? 'b' : 'w', cast: { K: false, Q: false, k: false, q: false }, ep: -1, half: 0, full: 1, v: 'c' };
+  };
+  let asym = 0, probed = 0;
+  for (const row of GOLDEN.children.slice(0, 60)) {
+    const S = C(row.fen);
+    probed++;
+    if (E.evaluate(S) !== E.evaluate(mirrorState(S))) asym++;
+  }
+  t('evaluation is colour-symmetric in ' + probed + ' positions (a position and its colour-flipped mirror score the same)', asym, 0);
+  t('CONTROL: the evaluation is not trivially zero',
+    GOLDEN.children.slice(0, 60).some((row) => E.evaluate(C(row.fen)) !== 0), true);
+  t('there is no bare-king or king-safety term: a lone king far from the action scores like a lone queen there',
+    E.evaluate(C('7k/8/8/8/8/8/8/K6R w - - 0 1')), E.evaluate(C('7k/8/8/8/8/8/8/Q6R w - - 0 1')));
+
+  // ---- R4-M3-AC5: the time budget holds in the variant, at each strength -------------------------------------
+  if (!opts.fast) {
+    for (const [label, ms, depth] of [['Easy', 150, 2], ['Medium', 600, 6], ['Hard', 1800, 9]]) {
+      reset();
+      const start = C('rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w - - 0 1');
+      const res = E.think(start, { ms, maxDepth: depth, history: [start] });
+      t(label + ' move on the start position finishes within 1.7x its budget plus 200ms (' + res.ms + 'ms of ' + ms + ')',
+        res.ms < ms * 1.7 + 200, true);
+    }
+  }
+
+  // ---- R4-M3-AC4: games terminate, with no illegal move and no exception (counts are reported by the caller) --
+  if (opts.games) {
+    const stats = { games: 0, plies: 0, illegal: 0, tagLost: 0, ended: 0, capped: 0, draws: 0, engineWins: 0, randomWins: 0 };
+    for (let g = 0; g < opts.games; g++) {
+      const rnd = mulberry32(900 + g);
+      const engineIsWhite = g % 2 === 0;
+      let S = E.startState('c');
+      const hist = [S];
+      let over = false;
+      for (let ply = 0; ply < 120 && !over; ply++) {
+        const ms = E.legal(S, true);
+        if (!ms.length) {
+          over = true; stats.ended++;
+          if (!E.hasPieces(S, S.turn)) { const winner = S.turn === 'w' ? 'b' : 'w'; ((winner === 'w') === engineIsWhite ? stats.engineWins++ : stats.randomWins++); }
+          else stats.draws++;
+          break;
+        }
+        const engineMove = (S.turn === 'w') === engineIsWhite;
+        let m;
+        if (engineMove) {
+          const res = E.think(S, { ms: 4, maxDepth: 3, history: hist });
+          m = res.move;
+          if (!ms.some((x) => x.from === m.from && x.to === m.to && x.promo === m.promo)) stats.illegal++;
+        } else {
+          const caps = ms.filter((x) => x.cap);
+          m = caps.length && rnd() < 0.5 ? caps[(rnd() * caps.length) | 0] : ms[(rnd() * ms.length) | 0];
+        }
+        S = E.apply(S, m);
+        hist.push(S);
+        stats.plies++;
+        if (S.v !== 'c') stats.tagLost++;
+      }
+      if (!over) stats.capped++;
+      stats.games++;
+    }
+    out.stats = stats;
+    t('every engine move is legal (' + stats.plies + ' plies in ' + stats.games + ' short games against a random mover)', stats.illegal, 0);
+    t('the rule-set tag survives engine play', stats.tagLost, 0);
+    t('every game either ended or hit the ply cap (none hung or threw)', stats.ended + stats.capped, stats.games);
+  }
+  return out;
+}
+
+// ============================================================================ run
+let pass = 0, fail = 0;
+const failures = [];
+const hd = (title) => console.log('\n== ' + title);
+function report(list) {
+  for (const r of list) {
+    if (r.ok) pass++;
+    else { fail++; failures.push(r.name); console.log('FAIL  ' + r.name + '   got ' + r.got + ', want ' + r.want); }
+  }
+}
+
+hd('Coriantumr engine opponent');
+const REAL = loadEngine(ENGINE_TEXT);
+const results = battery(REAL, { games: 6 });
+report(results);
+const s = results.stats;
+console.log('      ' + results.length + ' checks; ' + s.games + ' short games (' + s.plies + ' plies): ' + s.ended +
+  ' ended (' + s.engineWins + ' engine wins, ' + s.randomWins + ' random wins, ' + s.draws + ' draws), ' + s.capped + ' reached the ply cap');
+
+const MUTANTS = [
+  ['quiescence filters captures by king safety in the variant',
+   'if(S.v !== "c"){ var k=kingSq(T,side); if(k<0 || attacked(T,k,opp)) continue; }',
+   'var k=kingSq(T,side); if(k<0 || attacked(T,k,opp)) continue;'],
+  ['losing your last piece is not scored as a loss', 'return hasPieces(S, side) ? 0 : -MATE+ply;', 'return 0;'],
+  ['an insufficient-material draw applies in the variant', 'if(S.v !== "c" && insufficient(S.b)) return 0;', 'if(insufficient(S.b)) return 0;'],
+  ['the king gets the king-safety table in the variant', 'tbl = PST[t === "k" ? "q" : t];', 'tbl = PST[t];'],
+  ['the king is worth nothing in the variant', 'var CPC = {p:100, n:320, b:330, r:500, q:800, k:800};', 'var CPC = {p:100, n:320, b:330, r:500, q:800, k:0};'],
+  ['the variant uses the standard evaluation', 'if(S.v === "c") return evaluateC(S);', ''],
+  ['white is favoured by the variant evaluation', 'else             score -= CPC[t] + tbl[mirror(i)];', 'else             score -= CPC[t] + tbl[mirror(i)] + 7;'],
+];
+
+hd('Mutation: the checks above must be able to fail (' + MUTANTS.length + ' deliberate breaks of the engine source)');
+for (const [name, from, to] of MUTANTS) {
+  const occurrences = ENGINE_TEXT.split(from).length - 1;
+  if (occurrences !== 1) {
+    fail++; failures.push('mutant anchor: ' + name);
+    console.log('FAIL  mutant "' + name + '": anchor occurs ' + occurrences + ' times, expected exactly 1');
+    continue;
+  }
+  let verdict;
+  try {
+    const failed = battery(loadEngine(ENGINE_TEXT.replace(from, to)), { fast: true }).filter((r) => !r.ok);
+    verdict = failed.length ? 'caught by ' + failed.length + ' check(s), first: "' + failed[0].name.slice(0, 70) + '"' : null;
+  } catch (e) {
+    verdict = 'caught: the broken engine threw (' + String(e.message).slice(0, 50) + ')';
+  }
+  if (verdict) { pass++; console.log('PASS  mutant "' + name + '"   ' + verdict); }
+  else { fail++; failures.push('MUTANT SURVIVED: ' + name); console.log('FAIL  MUTANT SURVIVED: ' + name); }
+}
+
+hd(pass + ' passed, ' + fail + ' failed');
+if (fail) {
+  console.log('\nfailures:');
+  failures.forEach((f) => console.log('  - ' + f));
+  process.exit(1);
+}

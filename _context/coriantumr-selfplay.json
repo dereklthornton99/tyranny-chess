@@ -1,0 +1,32 @@
+{
+  "depth": 3,
+  "cap": 150,
+  "when": "2026-10-07T16:27:15.483Z",
+  "vsRandom": {
+    "games": 100,
+    "illegal": 0,
+    "tagLost": 0,
+    "plies": 5528,
+    "meanPlies": 55.3,
+    "distinctGames": 100,
+    "endings": {
+      "no pieces": 100
+    },
+    "engineWins": 100,
+    "randomWins": 0
+  },
+  "vsEngine": {
+    "games": 20,
+    "illegal": 0,
+    "tagLost": 0,
+    "plies": 2571,
+    "meanPlies": 128.6,
+    "distinctGames": 20,
+    "endings": {
+      "ply cap": 11,
+      "repetition": 9
+    },
+    "whiteWins": 0,
+    "blackWins": 0
+  }
+}

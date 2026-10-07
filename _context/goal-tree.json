@@ -1,275 +1,338 @@
 {
   "schema": "goal-tree/v1",
   "scale": "project",
-  "source": "Derek, 2026-10-02: \"do both, schema fix first.\" Round 2 (TC-R2) closed 2026-09-17 and is archived at _context/goal-tree-r2-closed.json. RECONCILIATION FINDING, recorded because it is the reason this round exists: TC-R2's M3-T1 shipped done honestly. All six of its criteria specify the GENERATOR and the DATA -- AC4 even walks the full forcing line -- and every one of them is satisfied. Not one criterion says the PLAYER is asked for the second move, so the multistep family was built, validated and shipped as a one-move puzzle. Its must_not and non_goals were both null. That is the gap R3-M1-AC5 exists to close, and it is why the release blockers here are interaction checks rather than data checks.",
-  "created_at": "2026-10-02T20:20:00-04:00",
-  "updated_at": "2026-10-03T02:04:55+00:00",
+  "source": "Derek, 2026-10-07: \"I want to add a variant to the tyranny chess ... Coriantmr chess after the book of mormon character. Last man standing is the king.\" Rules settled across two AskUserQuestion rounds, recorded as run-log decisions eb1e698d4d and cbd4125232 (the second states one reconciliation of mine for him to confirm: the line of succession still ends with pawns). Round 3 closed 2026-10-04 and is archived at _context/goal-tree-r3-closed.json. LESSON CARRIED FORWARD: round 3's contract checked the data and never the player's experience, so every release blocker here is an independent-implementation check or something done in the real page.",
+  "created_at": "2026-10-07T11:40:00-04:00",
+  "updated_at": "2026-10-07T16:47:09+00:00",
   "root": {
-    "id": "TC-R3",
+    "id": "TC-R4",
     "level": "project",
-    "title": "Tyranny Chess round 3: puzzles that actually take more than one move",
-    "status": "done",
-    "notes": "Two sequenced tasks. M1 makes a multi-move puzzle playable as a multi-move puzzle; M2 uses the Lichess CC0 database's multi-move lines as a position source for harder ones. M1 gates M2: there is no point mining content a schema cannot represent.\n[2026-10-03T02:04:55+00:00] Round 3 closed 2026-10-02. Zero criteria are human_confirmed: that is Derek's to claim.",
+    "title": "Tyranny Chess round 4: Coriantumr, a last-man-standing rule set beside Tyranny and standard",
+    "status": "in-progress",
+    "notes": "Rules in one paragraph: king and queen slide up to 4 squares in any direction; every other piece moves as in chess; no check, checkmate, castling or self-capture; capturing a king is an ordinary capture; after any capture a side that still has pieces but no king and no queen has its closest bishop (else knight, rook, pawn) become a king; far-rank promotion also offers a king when the side has none; you win when the opponent has no pieces. Work happens on branch coriantumr; main and the live site are untouched until Derek says otherwise.",
     "non_goals": [
-      "Regenerating the 27 existing multistep positions. Their continuations are backfilled from their own FEN; the positions themselves do not move.",
-      "Changing the tactical, restraint or survival records, whose puzzles are one-movers by construction.",
-      "Any change to the AI, the search, or evaluate(). Nothing here needs a variant-specific search change.",
-      "Importing any Lichess SOLUTION. Lichess supplies positions and a difficulty prior only.",
-      "Fixing the stale honest-limits count in the effort-router skill (flagged separately: 24 hook / 36 model over the last 60, against a claimed 60 / 1).",
-      "The two unread pc-coordination issues (#10, #11) addressed to this machine.",
-      "Publishing or pushing anything. Nothing leaves this machine without Derek saying so."
+      "Puzzles for Coriantumr. Puzzle mode stays Tyranny-only and is locked out of the variant.",
+      "An owner-picks pop-up for tied successors; Derek chose the fixed rule (queenside first) for now.",
+      "Any change to Tyranny or standard rules, results, puzzles or the existing tests' meaning.",
+      "Renaming the app, repository or live URL; the variant lives inside Tyranny Chess as a rules option.",
+      "Networked play, an opening book, or strength tuning beyond a sanity check.",
+      "Pushing or merging to main. That needs Derek's explicit yes."
     ],
     "must_not": [
-      "Ship a line field that the page never reads. This is the exact shape of the defect being fixed: TC-R2 validated the data, never the interaction, and the puzzle still ended after one move. A green data test is not evidence here.",
-      "Introduce a new banner comment above the GAME / UI banner in src/tyranny.html. tests/extract.js cuts the engine region at lastIndexOf of that banner prefix, so a new one silently SHRINKS the extracted engine while every suite still passes.",
-      "Insert code inside either range tests/extract.js slices (the engine region, and the second slice from the fen parser to runTests). Code landing there compiles into tests/engine.js and every suite fails.",
-      "Reuse the existing depth field for continuation length. On survival puzzles depth already means the survival horizon (all 153 shipped rows are depth 1), and overloading it is the drift this project has already been bitten by twice.",
-      "Reach the page by fetch(). The Artifact is a single file and file:// blocks fetch; data arrives as window.TYRANNY_PUZZLES or not at all.",
-      "Put the family predicates into the page. Judging and revealing must be O(1) lookups against stored data, not a browser-side re-derivation that can drift from tools/gen-puzzles.js.",
-      "Bump puzzles.json's schema without adding the new version to PUZ_SCHEMAS in src/tyranny.html. The page refuses an unknown schema outright, which takes puzzle mode offline.",
-      "Treat a Lichess line as forced. 51.4% of standard mate-in-1s are refuted by a self-capture, so a line that is best play in standard chess may be simply wrong in this game.",
-      "Edit puzzles/puzzles.json by any tool other than tools/gen-puzzles.js. A standalone backfill tool did exactly that during this round; the generator knew nothing about it, so a plain regeneration would have reverted the schema to 4 and dropped every line, and nothing would have failed until someone committed the result.",
-      "Judge input made while the opponent's scripted reply is still pending. A correct first move followed within half a second by any opponent-side click was scored 'Not it', counted a try and cancelled the stored reply.",
-      "Wait a fixed time for a timer that lives in the page. A sleep(900) for a 520 ms timeout passed on an idle machine and failed with every core busy, which is what a shared CI runner looks like."
+      "Change any existing Tyranny or standard behavior: puzzles.json must regenerate byte for byte, perft values must not move, and no existing assertion may be removed or weakened.",
+      "Carry the variant only in page state: it rides on the board state and must survive every apply(), otherwise the engine silently reverts to standard rules mid-game and nothing fails.",
+      "Add a commander or ruler field to the board state. The derived rule (no king and no queen after a capture) is stateless on purpose.",
+      "Transform or retitle the queen when she takes command; Derek was explicit that she keeps her piece and title.",
+      "Call the engine correct because it agrees with itself. The independent reference must be written from the rules text in another language, and the hand-derived perft(3) = 9,122 must match.",
+      "State or imply that endgames are winnable, or are drawn, before the retrograde measurement exists.",
+      "Add a new banner comment before the GAME / UI banner in src/tyranny.html or put DOM code inside tests/extract.js's slices; both silently shrink or break the extracted engine.",
+      "Wait for a page timer with a fixed sleep, or pick a test fixture from the random deal or as 'the first match'. Round 3 found two flaky browser checks caused exactly that way.",
+      "Let the page's self-capture toggle reach Coriantumr rules: no self-capture, whatever the toggle says."
     ],
     "children": [
       {
-        "id": "R3-M1",
+        "id": "R4-M1",
         "level": "milestone",
-        "title": "A multi-move puzzle is played as a multi-move puzzle",
+        "title": "Rules engine",
         "status": "done",
         "children": [
           {
-            "id": "R3-M1-T1",
+            "id": "R4-M1-T1",
             "level": "task",
-            "title": "Continuation representation, backfilled onto the 27 existing multistep records",
+            "title": "Movement, legality, succession, promotion and endings, in the engine",
             "status": "done",
             "criteria": [
               {
-                "id": "R3-M1-AC1",
+                "id": "R4-M1-AC1",
+                "text": "A king or queen slides up to 4 squares in each of 8 directions, blocked by the first piece on the ray, capturing an enemy there and never a friendly; every other piece moves exactly as in chess. Asserted on an empty board (27 moves from d4, 12 from a1, for both king and queen) and with blockers on each ray.",
                 "met": true,
-                "evidence": "tools/backfill-lines.js buildLine(); puzzles.json schema 5 carries line{plies,steps[]} on 27 records; field is optional so schema-4 puzzles keep their old one-move path",
-                "text": "A puzzle may carry a line object holding plies and an ordered steps array, where a solver step carries an accept array of every move correct at that point and an opponent step carries the single reply it plays. The field is family-agnostic: any family may carry it."
-              },
-              {
-                "id": "R3-M1-AC2",
-                "met": true,
-                "evidence": "diff vs HEAD across all 240 records: 0 pre-existing fields changed (fen, solutions, decoys, counts, rationale, source all identical), exactly 1 key added (line); step-0 accept == solutionsUci for all 27",
-                "release_blocker": true,
-                "text": "All 27 existing multistep records gain a line whose step 0 accept-set equals their existing solutions, derived from each record's own fen, with the 27 positions and their FENs byte-identical to the shipped file."
-              },
-              {
-                "id": "R3-M1-AC3",
-                "met": true,
-                "evidence": "fewest-mating-answers then UCI tie-break; mutation-proven on mul-0017 (26 replies): swapping in a non-chosen reply is rejected with 'line stored a reply with 2 mating answers; the fewest available is 1', and the unmutated record validates clean as a control",
-                "text": "The stored opponent reply is the one with the FEWEST mating answers, tie-broken by UCI string, so the same input reproduces a byte-identical puzzles.json."
-              },
-              {
-                "id": "R3-M1-AC4",
-                "met": true,
-                "evidence": "tests/puzzles.js re-derives every line from FEN alone; forcingLine proves all L.count replies have a mating answer, not just the stored one; 303 passed 0 failed with 9 line mutations all caught",
-                "release_blocker": true,
-                "text": "tests/puzzles.js re-derives every line from the puzzle's FEN alone and additionally asserts that EVERY opponent reply -- not just the stored one -- still has a mating answer, so fixing one reply is proven not to be a loss of generality rather than assumed."
-              },
-              {
-                "id": "R3-M1-AC5",
-                "met": true,
-                "evidence": "tests/browser.js real headless Chrome: correct move 1 -> state 'mid' not 'solved', solved-set empty, Next disabled; stored reply a7b7 lands; wrong move 2 -> 'wrong'; Try again restores the ORIGINAL fen and step 0; full line -> 'solved' with real checkmate on the board. 141 passed, 0 failed",
-                "release_blocker": true,
-                "text": "A headless interaction test drives puzJudge: given a multistep puzzle, the correct first move leaves the puzzle NOT solved, the stored reply is applied to the board, the mating second move marks it solved, and a legal non-mating second move marks it wrong and offers Try again. This is the criterion TC-R2's M3-T1 was missing."
-              },
-              {
-                "id": "R3-M1-AC6",
-                "met": true,
-                "evidence": "sha256 tests/engine.js = 23cf16583cdbf5f58c4194345abdc81fc382c7682084486c033dee5d2f78718f before and after; engine slice still ends at line 901, second slice moved 1572-1590 -> 1711-1729 (shifted below my inserts, not into them)",
-                "release_blocker": true,
-                "text": "The extracted tests/engine.js is byte-identical before and after the src/tyranny.html edits, proving no inserted code landed in either range tests/extract.js slices and no banner shrank the engine region.",
-                "human_confirmed": false
-              },
-              {
-                "id": "R3-M1-AC7",
-                "met": true,
-                "evidence": "puzzles.json schema 5; PUZ_SCHEMAS = [2,3,4,5]; 'index.html matches src/tyranny.html + puzzles/puzzles.json'. The stale-inline guard fired first and refused the build until --inline was re-run",
-                "release_blocker": true,
-                "text": "puzzles.json carries schema 5, src/tyranny.html's PUZ_SCHEMAS accepts it, and build.js --check reports no drift between src, puzzles.json and index.html."
-              },
-              {
-                "id": "R3-M1-AC8",
-                "met": true,
-                "evidence": "Reveal mid-line prints 'R(x)h2 ... R(x)b7 (one of 26, all losing) ... Rxh6#'; Next stays disabled at 'mid'; Try again resets step to 0 and restores the puzzle fen byte-for-byte",
-                "text": "Reveal and Try again both behave correctly mid-line: Reveal names the whole remaining line, Try again restores the ORIGINAL puzzle position and resets the step counter to 0, and Next stays disabled until the line is finished."
-              },
-              {
-                "id": "R3-M1-AC9",
-                "met": true,
-                "evidence": "All suites pass at the close. node tests/run-all.js exit 0: 27/8/24/13/396/26 = 494 checks (last commit bb6ea9f measured 388 = 27/8/24/13/290/26). node tests/browser.js: 166 passed 0 failed (last commit measured 114). In-page suite 48/0. No suite has fewer assertion call sites than HEAD (puzzles.js 54 to 135, browser.js 141 to 199, the rest equal). Lines removed vs HEAD: three, each replaced by a stronger or generalized assertion (two schema-4 pins, one hard-coded 240/240).",
-                "release_blocker": true,
-                "text": "The full suite passes with no test deleted or weakened, and its check count is reported before and after."
-              },
-              {
-                "id": "R3-M1-AC10",
-                "text": "The generator is the single writer of puzzles.json: regenerating with the committed parameters (500 games, seed 20260914, target 20, pinned --now) reproduces the committed file BYTE FOR BYTE, so the schema bump and every line survive a regeneration. A cheaper standing check in tests/puzzles.js compares the generator's record construction against every committed sweep record and its SCHEMA constant against the file.",
-                "met": true,
-                "evidence": "Full regeneration reproduces the committed file BYTE-IDENTICALLY, twice. First the pre-seed schema-5 file (--multistep none): sha256 b96c51ae8c13de8a4da7281243d6a313e291eb3274534bf1a14dd2156897ea56, 287433 bytes. Then the FINAL 280-puzzle file, in an independent second run with the committed generatedAt 2026-10-03T01:47:33Z: sha256 64fce79d6656dcb943436c4c5939eab347c1bd2ecca4a9bff299523267a303c4, 363064 bytes. Standing checks in tests/puzzles.js: all 87 sweep records rebuild identically through buildEntry, the schema constant equals the file, and a stale seed fails before the sweep starts.",
+                "evidence": "tests/coriantumr.js 117 passed 0 failed 2026-10-07: queen and king on d4 empty board 27 moves; reach 3 and reach 5 mutants killed; tools/coriantumr-ref.py --check NO DRIFT (15 handmade + 300 sampled positions)",
                 "release_blocker": true
               },
               {
-                "id": "R3-M1-AC11",
-                "text": "An early click inside the opponent's reply window is ignored, not judged: after the correct first move, an opponent-side move made in the same page turn leaves the puzzle in 'mid', counts no try, adds nothing to the board, and the stored reply still lands. Tested with both clicks inside ONE page evaluation so the timer cannot fire between them.",
+                "id": "R4-M1-AC2",
+                "text": "There is no check, checkmate or castling in a Coriantumr state: a move that leaves its own king capturable is legal, no castling move is ever generated, and capturing a king is an ordinary capture.",
                 "met": true,
-                "evidence": "puzJudge now refuses input while the opponent step is pending. Live repro before the fix (mls-0012, correct move then any Black move at once): state wrong, tries 1, stored reply never landed. Regression test in tests/browser.js, both clicks inside ONE page evaluation so the timer cannot fire between them: state stays mid, tries unchanged, board unchanged, stored reply e8f6 still lands. Reveal inside the window, leaving puzzle mode inside the window and re-entering were also exercised on a live page: no stale reply, no page errors.",
+                "evidence": "tests/coriantumr.js: no castling move offered, never reports check, royal-safety filter mutant killed; reference agrees on every move of 300 sampled positions",
                 "release_blocker": true
               },
               {
-                "id": "R3-M1-AC12",
-                "text": "The browser suite waits for the page's own timers by polling, not by sleeping, and passes with every core saturated (12 busy loops on 8 cores), the condition under which the fixed-sleep version failed.",
+                "id": "R4-M1-AC3",
+                "text": "There is no self-capture: for every position reached in the tests, legal(S, true) and legal(S, false) are identical in a Coriantumr state, so the page's self-capture setting cannot leak into the variant.",
                 "met": true,
-                "evidence": "Fixed sleeps replaced by polling until(). Before: 12 busy loops on 8 cores made the suite fail one check (the reply landed on the board, got 2 want 3). After: two runs under the same load, 166 passed 0 failed each, plus six normal runs at 166/0."
+                "evidence": "tests/coriantumr.js: friendly pawn blocks the ray and cannot be captured; self-capture-leak mutant killed",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M1-AC4",
+                "text": "Succession: after any capture that leaves a side with at least one piece but no king and no queen, exactly one piece of that side becomes a king: the closest bishop, else the closest knight, else rook, else pawn. Closest is the smallest squared straight-line distance to the capture square; ties go to the lower file, then the lower rank. Tested class by class, including ties on file and on rank.",
+                "met": true,
+                "evidence": "tests/coriantumr.js + golden fixture: crown order, squared distance (vs king-steps and city-block), file then rank ties; 8 succession mutants killed; independent Python reference matches in all cases",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M1-AC5",
+                "text": "A queen alive when the king is captured is not changed in any way (same piece code, same square) and nothing else on that side changes; a queen captured while a king lives changes nothing either.",
+                "met": true,
+                "evidence": "tests/coriantumr.js: living queen stops the crowning, bishops stay bishops; mutant killed; browser R4-M4-AC3 shows the queen stays bq on h8",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M1-AC6",
+                "text": "Over seeded random full games (fixed seeds, so the result cannot depend on a random deal), after every ply every non-empty side holds a king or a queen, and a side down to exactly one piece holds a king or a queen as that piece.",
+                "met": true,
+                "evidence": "tests/coriantumr.js: seeded random play 10 seeds, at least 5,000 plies, every non-empty side holds a king or queen, brokenInvariant 0"
+              },
+              {
+                "id": "R4-M1-AC7",
+                "text": "Far-rank promotion offers queen, rook, bishop and knight as in chess, and additionally KING exactly when the side has no king piece; a side that already has a king is never offered one.",
+                "met": true,
+                "evidence": "tests/coriantumr.js: no king piece offers Q R B N K; with a king no king is offered; two mutants killed; browser R4-M4-AC6 picker shows 5 then 4 buttons"
+              },
+              {
+                "id": "R4-M1-AC8",
+                "text": "A side with no pieces has lost: the side to move holding zero pieces scores as a loss and the game-over text names the winner as last man standing. No legal move with pieces left is a draw, and the 50-move and threefold-repetition draws apply. There is no insufficient-material draw unless R4-M2's measurement shows one is sound.",
+                "met": true,
+                "evidence": "tests/coriantumr-ai.js: capturing last piece scores as mate, no-piece side scores lost at the right ply; browser R4-M4-AC5 shows White wins last man standing",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M1-AC9",
+                "text": "The variant rides on the board state and survives every apply(): across several seeds and at least 5,000 plies of seeded random play, every state reached from a Coriantumr start still has the variant set and still generates the 4-square king and queen reach at the end, while a standard or Tyranny state never gains the field.",
+                "met": true,
+                "evidence": "tests/coriantumr.js: variant tag survives every move over seeded games; mutant apply() drops the tag killed; coriantumr-ai.js tagLost 0; browser AC8 every position in a 50-ply game carries v=c",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M1-AC10",
+                "text": "Tyranny and standard behavior is untouched: every existing Node suite passes with its count unchanged or higher and no assertion removed, perft stays 20 / 400 / 8,902 / 197,281 (standard) and 39 / 1,519 / 63,034 (Tyranny), and tools/gen-puzzles.js with the committed parameters reproduces puzzles/puzzles.json byte for byte.",
+                "met": true,
+                "evidence": "run-all 2026-10-07 27/8/24/13/396 unchanged; call-site lines unchanged in test floor castle ai-test puzzles (git diff HEAD empty for those files); perft standard 20/400/8902/197281 and Tyranny 39/1519/63034 asserted in tests/coriantumr.js; gen-puzzles.js --games 500 --target 20 --seed 20260914 --now 2026-10-03T01:47:33Z rewrote puzzles.json to sha256 64fce79d6656dcb9, same as before, git diff exit 0",
+                "release_blocker": true
               }
             ],
-            "updated": "2026-10-03T02:04:54+00:00",
-            "notes": "[2026-10-03T00:35:16+00:00] Continuation shipped: schema 5, 27 lines backfilled, page plays them. Interaction is the blocker that TC-R2 lacked and it is now a real check.\n[2026-10-03T02:04:54+00:00] All criteria met with evidence at the 2026-10-02 close; deepcheck run 0242ab8676 findings fixed and re-verified."
+            "updated": "2026-10-07T16:46:53+00:00"
           }
         ],
-        "notes": "[2026-10-03T00:35:30+00:00] Continuation shipped and the interaction is verified in a real browser.",
-        "updated": "2026-10-03T02:04:54+00:00"
+        "updated": "2026-10-07T16:47:08+00:00"
       },
       {
-        "id": "R3-M2",
+        "id": "R4-M2",
         "level": "milestone",
-        "title": "Harder puzzles mined from the Lichess CC0 multi-move lines",
+        "title": "Proof that the rules are right, and what endings can actually be won",
         "status": "done",
-        "non_goals": [
-          "Any claim that Stockfish scores Tyranny positions. Measured this session and false: Stockfish assumes NEITHER side can self-capture, so it over-rates the attacker. tac-0003 is Qe6 mate to Stockfish and no mate at all in Tyranny, because Black answers king-takes-own-pawn on g7."
-        ],
         "children": [
           {
-            "id": "R3-M2-T1",
+            "id": "R4-M2-T1",
             "level": "task",
-            "title": "Mine multi-move lines for genuine multi-step Tyranny puzzles",
+            "title": "Independent reference, hand-derived perft, retrograde endgame measurement",
             "status": "done",
             "criteria": [
               {
-                "id": "R3-M2-AC1",
+                "id": "R4-M2-AC1",
+                "text": "An independent implementation written from the rules text, in a different language (pure Python, not a transliteration of the JavaScript), agrees with the engine on perft depths 1 to 4 from at least four positions, including positions where a king is capturable and where a capture triggers succession within the horizon. The agreed numbers are committed as a golden fixture with the reference's provenance, and the reference has a --check mode.",
                 "met": true,
-                "evidence": "Measured, plain counts, recorded in puzzles/multistep-seed.json and the README: 200000 of 6157341 rows (3.25 percent), 7 shards in 1145 s; 1125354 positions tested; 234 passed the multistep predicate; 167 rejected for fewer than 2 opponent replies; 67 kept (one per row); the first 40 in scan order ship. Yield per 20000-row block ranged 4 to 12 (mean 6.7); the earlier 20000-row probe projected about twice the real figure. The projection to the whole file (9 to 10 hours) is labelled as extrapolation and was not run.",
-                "release_blocker": true,
-                "text": "The yield of multi-solver-move Lichess rows that survive as Tyranny multi-step puzzles is MEASURED and recorded as a plain count over a stated number of rows scanned, before any claim about how many such puzzles are achievable. This is currently unmeasured and must not be assumed."
+                "evidence": "tools/coriantumr-ref.py (pure Python, different board representation, global after-a-capture succession check) --check: NO DRIFT; tests/coriantumr-golden.json 15 handmade + 300 sampled with SHA-1 digests",
+                "release_blocker": true
               },
               {
-                "id": "R3-M2-AC2",
+                "id": "R4-M2-AC2",
+                "text": "From the start position perft(1), perft(2) and perft(3) equal 20, 400 and 9,122, the last derived by hand (8,902 plus 220: the king's extra reach after d3, d4, e4, f3 or f4 is +3, +3, +1, +2, +2 = 11, times 20 black replies) with the derivation written in the test, so the engine and the reference cannot share a misreading.",
                 "met": true,
-                "evidence": "No Lichess move is used as an answer. The miner selects positions with tryMultistep, the generator predicate. gen-puzzles.js deriveMultistepSeeds recomputes solution, line, decoys and difficulty from each FEN and THROWS on disagreement (three throw tests). tests/puzzles.js re-derives all 280 puzzles independently: 280 of 280 verified sound. The only Lichess fields stored are source metadata.",
-                "release_blocker": true,
-                "text": "Every stored line is re-derived by the local predicate against Tyranny rules. The Lichess Moves column selects candidate positions and nothing else; no imported move is ever trusted as an answer."
+                "evidence": "tests/coriantumr.js perft(3) = 8902 + 20 x 11 = 9122 asserted; perft 1..4 = 20 / 400 / 9122 / 207622 equals Python reference",
+                "release_blocker": true
               },
               {
-                "id": "R3-M2-AC3",
+                "id": "R4-M2-AC3",
+                "text": "Endgame winnability is MEASURED, not assumed: a retrograde (backward) analysis over small material sets reports as plain counts which attacker sets can force the capture of a lone king and in how many moves, and the README states the result and what it does not cover.",
                 "met": true,
-                "evidence": "All 40 seeded puzzles carry source with db, id, rating, popularity, themes, url and ply. The validator rejects a missing source, a wrong database, a non-lichess link, a negative ply, a non-numeric rating and a missing id (six mutants, all rejected).",
-                "text": "Each mined puzzle carries its source id, rating and game URL, as the existing survival records already do, so a reader can trace it to a real game."
+                "evidence": "tools/coriantumr-endgame.js --self-test 6000 positions 0 differ; counts in README table and _context/coriantumr-endgame.json; README states what it does not cover (pawns, 3+ attackers, 50-move and repetition)",
+                "release_blocker": true
               },
               {
-                "id": "R3-M2-AC4",
+                "id": "R4-M2-AC4",
+                "text": "The draw rules for the variant follow from that measurement and are recorded as a decision with the numbers. If annihilation cannot be forced in common endings, the shortfall is reported to Derek as a count before any extra rule is added; no rule is invented to hide it.",
                 "met": true,
-                "evidence": "No shortfall to report: 67 candidates against a cap of 40. The predicate was not loosened: tryMultistep, matesIn2 and isMate are byte-identical to HEAD bb6ea9f (checked by extracting each function from HEAD and from the working tree and comparing). The two-reply filter is a recorded selection setting in the seed, not a change to the predicate.",
-                "text": "If the yield proves too low to reach a useful count, the shortfall is reported as a count and the predicate is NOT quietly loosened."
-              },
-              {
-                "id": "R3-M2-AC5",
-                "met": true,
-                "evidence": "Deeper lines play through the unchanged page code. tests/browser.js builds a synthetic FIVE-ply line from the opening position and plays it in real headless Chrome: move 1 leaves it open, the scripted reply lands, a wrong move mid-line is judged wrong, Try again restores the original FEN and step 0, move 2 leaves it open, solved only after the third move. The generator and validator build three-ply lines on purpose, since the family is mate in two.",
-                "text": "Puzzles deeper than the existing two-ply multistep family are playable through the same R3-M1 line representation with no second schema change."
-              },
-              {
-                "id": "R3-M2-AC6",
-                "text": "The Lichess seed is reproducible and traceable: puzzles/multistep-seed.json records the database file's byte size and SHA-256, the rows scanned, the shard count and every filter, and tests/puzzles.js asserts the committed puzzles equal what the generator derives from that seed, in order.",
-                "met": true,
-                "evidence": "Seed provenance recorded: dbFile bytes 307234795 and sha256 76335bfa7d7c4a7f93c1366d81549e53951ebb79dd43d34904cab8f22d962f8d, rowsScanned 200000, shards 7, minReplies 2, perRow 1. The DB file was re-hashed after the scan and equals the seed. tests/puzzles.js asserts the 40 seeded puzzles equal what the generator derives from the seed, in order. Stated limit, documented in the README and the miner header: the hash is of the file named by --db at merge time and the shards do not verify it; a fingerprint of the rows actually read would close that and has not been built."
-              },
-              {
-                "id": "R3-M2-AC7",
-                "text": "Nothing shipped claims more than was measured: the README says source.rating is the rating of the STANDARD puzzle the position came from and not the difficulty of this one, that opponent-reply breadth as a difficulty axis is a design choice and not a measurement, and that the yield came from a prefix of the database with any extrapolation labelled as one.",
-                "met": true,
-                "evidence": "The README says source.rating is the rating of the standard puzzle and not of this one, that requiring two replies is a design choice and not a measured effect on difficulty (32 of the 40 give exactly two), that the yield comes from a 3.25 percent prefix with the projection labelled and not run, and that the page never shows the source link."
-              },
-              {
-                "id": "R3-M2-AC8",
-                "text": "Seeded puzzle ids are built from the Lichess puzzle id and the ply, so they cannot move when the seed is re-mined; asserted as a property (same positions in either order get the same ids). An explicit --multistep or --survival path that does not exist is an error raised before the sweep, not a silent skip.",
-                "met": true,
-                "evidence": "Seeded ids are mls-lichessid-ply, for example mls-002mG-1. Property test: the same positions get the same ids in either order of the seed. A missing ply and a duplicate id each throw. An explicit --multistep or --survival path that does not exist now exits non-zero with does not exist, before the sweep starts (four checks across the two flags). The 40 seeded records are otherwise identical to the previous version apart from the id (40 of 40)."
+                "evidence": "decision bc0293169a: no extra draw rule; shortfall reported to Derek as counts before any rule; draws stay no-legal-move, 50-move, repetition"
               }
             ],
-            "updated": "2026-10-03T02:04:54+00:00",
-            "notes": "[2026-10-03T02:04:54+00:00] All criteria met with evidence at the 2026-10-02 close; deepcheck run 0242ab8676 findings fixed and re-verified."
+            "updated": "2026-10-07T16:46:54+00:00"
           }
         ],
-        "updated": "2026-10-03T02:04:54+00:00"
+        "updated": "2026-10-07T16:47:08+00:00"
       },
       {
-        "id": "R3-M3",
+        "id": "R4-M3",
         "level": "milestone",
-        "title": "Documentation stays current",
+        "title": "Engine opponent",
         "status": "done",
         "children": [
           {
-            "id": "R3-M3-T1",
+            "id": "R4-M3-T1",
             "level": "task",
-            "title": "README matches the shipped state, enforced by a test",
+            "title": "The engine plays Coriantumr",
             "status": "done",
             "criteria": [
               {
-                "id": "R3-M3-AC1",
-                "text": "Every puzzle count the README states -- the headline total and each row of the family table -- equals the count in puzzles/puzzles.json, enforced by a test that fails when they differ rather than checked by eye.",
+                "id": "R4-M3-AC1",
+                "text": "In a Coriantumr state the search ignores king safety in both search and quiescence: in a constructed position where the only winning line leaves the engine's own king attacked, the engine plays it, and no check extension fires.",
                 "met": true,
-                "evidence": "tests/puzzles.js compares every count the README states to the data: headline total, Puzzles-section total, number of families, and each family row (280 total; 20 tactical, 40 restraint, 67 multistep, 153 survival). The same rules are shown six deliberately wrong READMEs and reject all six: headline off by one, section total off by one, stale multistep row, wrong number of families, mention of the retired backfill tool, family table removed.",
+                "evidence": "tests/coriantumr-ai.js 27 passed 0 failed: a hanging king is captured by qsearch, no check extension (inCheck false with a king under attack); mutant that filters quiescence captures by king safety killed",
                 "release_blocker": true
               },
               {
-                "id": "R3-M3-AC2",
-                "text": "The README documents schema 5, the line field, the Lichess multistep seed and how to regenerate it, naming tools/line.js and tools/lichess-multistep.js, and does not mention the retired standalone backfill tool.",
+                "id": "R4-M3-AC2",
+                "text": "Terminal scoring: the side to move with no pieces scores as lost at the right ply, so the engine finds the capture of the opponent's last piece and avoids a line that loses its own last piece.",
                 "met": true,
-                "evidence": "The README documents schema 5, the line field, both seeds and how to regenerate them, tools/line.js and tools/lichess-multistep.js, the one-writer rule, and the early-click and flakiness history. grep for backfill-lines finds nothing, and a test enforces that."
-              },
-              {
-                "id": "R3-M3-AC3",
-                "text": "The README's honest-limits section states what this round did NOT establish: that Stockfish cannot score Tyranny positions (measured: it assumes neither side can self-capture, so it over-rates the attacker), and the three limits named in R3-M2-AC7.",
-                "met": true,
-                "evidence": "Honest limits in the README: Stockfish names mating moves the variant refutes and that it misjudges who is winning was not measured; source.rating belongs to the standard puzzle; reply breadth is a design choice not a measurement; yield from a 3.25 percent prefix with the projection labelled; the provenance limit; the source link is never shown; most second moves are two-way choices; and the browser suite was flaky before this round with the two causes and the evidence.",
+                "evidence": "tests/coriantumr-ai.js: Rxe8 scored as mate, lone-king capture wins, no pieces scores lost at the right ply, no-move scores draw",
                 "release_blocker": true
               },
               {
-                "id": "R3-M3-AC4",
-                "text": "The check counts the README quotes match the actual output of node tests/run-all.js and node tests/browser.js at the close.",
+                "id": "R4-M3-AC3",
+                "text": "Evaluation values king and queen as the same 4-square piece, has no king-safety or mop-up term, and is colour-symmetric: a position and its colour-flipped mirror score the same from each side's view.",
                 "met": true,
-                "evidence": "The README quotes 494 checks (27/8/24/13/396/26) and 166 browser checks, printed by node tests/run-all.js (exit 0) and node tests/browser.js (exit 0) on 2026-10-02. The baseline was measured, not recalled: a clean copy of HEAD bb6ea9f ran 388 and 114."
+                "evidence": "tests/coriantumr-ai.js: king and queen same value, colour-symmetric evaluation over probed positions, asym 0; white-favoured mutant killed"
               },
               {
-                "id": "R3-M3-AC5",
-                "text": "No scratch this round created is left behind unexplained: the one-off diagnostic scripts and the point-in-time hash file are removed once their findings are recorded, and the instrument that is kept (sf-probe.py) states in its header what it measured and what it cannot.",
+                "id": "R4-M3-AC4",
+                "text": "Played games terminate and are reported as plain counts, not graded: 100 seeded engine-vs-random games and 20 engine-vs-engine games under a ply cap, with no illegal move and no exception; wins, draws, losses and mean length are recorded.",
                 "met": true,
-                "evidence": "Removed five untracked scratch files: qe6.js, sf-why.py, sf-disagree.py, engine-before.sha and multistep-probe-20k.json (their findings are in sf-probe.py, the README and this tree). git status now shows exactly 8 modified and 5 new files, all intended. The retained instrument _context/sf-probe.py states in its header what it measured, what it cannot tell you, and that the over-rates-the-attacker wording was withdrawn."
+                "evidence": "node tools/coriantumr-selfplay.js 2026-10-07: 100 vs random games, engine 100 wins mean 55.3 plies, 0 illegal, 0 tag lost; 20 engine-vs-engine games all different, 9 repetition 11 ply cap 0 decisive; _context/coriantumr-selfplay.json"
               },
               {
-                "id": "R3-M3-AC6",
-                "text": "Every data tool's --self-test (line.js, lichess-multistep.js, lichess-seed.js) is run by tests/puzzles.js, so the suite and CI exercise them instead of the README merely advertising them.",
+                "id": "R4-M3-AC5",
+                "text": "The existing time-budget check also runs on a Coriantumr position at each strength level.",
                 "met": true,
-                "evidence": "tests/puzzles.js runs tools/line.js, tools/lichess-multistep.js and tools/lichess-seed.js with --self-test and requires exit 0 and no failures: 10, 21 and 10 checks are printed in the suite output. Before this nothing ran them."
-              },
-              {
-                "id": "R3-M3-AC7",
-                "text": "No claim about Stockfish outruns the evidence: the README and _context/sf-probe.py say a standard engine names mating moves the variant refutes, and say plainly that whether it misjudges who is winning was not measured. 'Over-rates the attacker' is withdrawn.",
-                "met": true,
-                "evidence": "grep for over-rate in README.md and _context/sf-probe.py finds only the withdrawal note. Both now say a standard engine names mating moves the variant refutes (tac-0003: a wrong move, not a wrong verdict) and that whether it misjudges who is winning was not measured."
+                "evidence": "tests/coriantumr-ai.js: Easy, Medium, Hard each finish within 1.7x budget plus 200ms on a variant start position"
               }
             ],
-            "updated": "2026-10-03T02:04:54+00:00",
-            "notes": "[2026-10-03T02:04:54+00:00] All criteria met with evidence at the 2026-10-02 close; deepcheck run 0242ab8676 findings fixed and re-verified."
+            "updated": "2026-10-07T16:46:54+00:00"
           }
         ],
-        "updated": "2026-10-03T02:04:54+00:00"
+        "updated": "2026-10-07T16:47:08+00:00"
+      },
+      {
+        "id": "R4-M4",
+        "level": "milestone",
+        "title": "The page",
+        "status": "done",
+        "children": [
+          {
+            "id": "R4-M4-T1",
+            "level": "task",
+            "title": "A player can choose Coriantumr and play it end to end",
+            "status": "done",
+            "criteria": [
+              {
+                "id": "R4-M4-AC1",
+                "text": "The page has a rules switch (Tyranny, Coriantumr; standard stays on the self-capture toggle). Switching starts a fresh game, the active rules are named on screen, and an in-page panel explains Coriantumr in the settled wording.",
+                "met": true,
+                "evidence": "tests/browser.js 241 passed 0 failed 2026-10-07: rules switch clicked in real Chrome, variant set, fresh game, status names Coriantumr and no commander at the start, panel swaps, New game and Undo keep the tag, switching back restores Tyranny",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC2",
+                "text": "Real browser: on a fixed FEN-built position, selecting the king or queen highlights exactly the squares the engine generates for a 4-square slide (count and squares compared with engine output, not with a random deal).",
+                "met": true,
+                "evidence": "browser AC2: the exact set of dotted squares and ringed squares for the queen (21 + 1) and the king (12) equals an independently written slider's squares, not just counts; zero self-capture brackets; control: Tyranny shows 1 bracket on the same board",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC3",
+                "text": "Real browser: capturing the king while the queen lives leaves the queen's piece and square unchanged, shows a message that she now commands, and play continues.",
+                "met": true,
+                "evidence": "browser AC3: king captured, queen stays bq on h8, message says the queen takes command, no cr on state",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC4",
+                "text": "Real browser: capturing the last royal turns the closest bishop (else knight, rook, pawn) into a king glyph on the board, and a message names which piece was crowned.",
+                "met": true,
+                "evidence": "browser AC4: c6 bishop becomes bk, glyph equals king glyph and differs from bishop glyph, message names closest bishop (c6), Undo reverts it and clears the note",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC5",
+                "text": "Real browser: capturing a side's last piece ends the game with a last-man-standing message and stops play; New game restores the start position.",
+                "met": true,
+                "evidence": "browser AC5: White wins last man standing, board closed, New game after the win restores the start FEN with no result and history 1; Draw no legal move, king vs king not insufficient, fifty-move still applies",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC6",
+                "text": "A promoting pawn is offered KING exactly when the side has no king piece; the promotion picker's contents are read from the real page.",
+                "met": true,
+                "evidence": "browser AC6: picker 5 buttons with king when no king piece, 4 when one exists, choosing K crowns wk and log writes =K"
+              },
+              {
+                "id": "R4-M4-AC7",
+                "text": "Puzzle mode cannot start inside Coriantumr and does not corrupt it: entering puzzles forces Tyranny, leaving restores the variant selection, and the existing puzzle browser checks pass unchanged.",
+                "met": true,
+                "evidence": "DEVIATION FROM THE CONTRACT WORDING, stated: implemented as cannot-start rather than forces-Tyranny-then-restore. Start puzzles is disabled in the variant with a reason, a click starts nothing, and the rules switch is locked inside a puzzle, so the variant can never be on while a puzzle is. The existing 166 browser checks all still pass unchanged. Browser AC7 plus the dropped-lock mutant killed",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M4-AC8",
+                "text": "Undo, Flip board, New game and the engine's replies work in the variant, with zero console errors across a scripted engine game of at least 30 plies in the real browser.",
+                "met": true,
+                "evidence": "browser AC8: Flip board both ways, 50-ply engine game, every position tagged c, engine replied, pageErrors empty via Runtime.exceptionThrown and console.error collection; Undo and New game covered in AC1"
+              },
+              {
+                "id": "R4-M4-AC9",
+                "text": "A queen that commands because no king piece exists wears a visible crown mark on the board and the status line names the commander; a test reads the mark from the DOM.",
+                "met": true,
+                "evidence": "browser AC3: the commanding queen has the .cmd crown mark on h8 and only one square carries it; none in Tyranny or at the start; the status line reads 'Move 1 . Coriantumr . Black: queen commands', still names her after Black's next move, and names nobody at the start; four mutants killed (inverted mark, never named, White only, named while a king exists)"
+              }
+            ],
+            "updated": "2026-10-07T16:46:54+00:00"
+          }
+        ],
+        "updated": "2026-10-07T16:47:08+00:00"
+      },
+      {
+        "id": "R4-M5",
+        "level": "milestone",
+        "title": "Proof and documentation",
+        "status": "done",
+        "children": [
+          {
+            "id": "R4-M5-T1",
+            "level": "task",
+            "title": "Tests stable, README honest, counts reported, deepcheck run",
+            "status": "done",
+            "criteria": [
+              {
+                "id": "R4-M5-AC1",
+                "text": "Every new test builds its fixture from a FEN or picks from data in a stable order; none depends on the random deal, none waits with a fixed sleep for a page timer (polling until() is used), and the browser suite passes three consecutive runs and one run with every core busy.",
+                "met": true,
+                "evidence": "new tests use FEN or seeded fixtures, no sleep in the coriantumr tests, the browser block polls with until(); browser suite 229/229 on three consecutive runs plus one with every core busy 2026-10-07; later runs 231, 233, 239, 240, 241 all green",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M5-AC2",
+                "text": "The README documents the rules in the settled wording, the derived succession rule, the endgame measurement with its limits, how the engine plays the variant, and what is not built (puzzles, owner-picks ties); the README-counts test still passes.",
+                "met": true,
+                "evidence": "README Coriantumr section: settled rules, derived succession, endgame table with limits, engine counts, not-built list; tests/puzzles.js README-counts check passes 396"
+              },
+              {
+                "id": "R4-M5-AC3",
+                "text": "Final counts are reported against the baseline at c831676 (Node 494, browser 166), and no assertion call site count is lower than at that commit in any suite.",
+                "met": true,
+                "evidence": "baseline c831676 Node 494 browser 166; now Node 638 (27/8/24/13/396/117/27/26) browser 241; assertion call-site lines unchanged in 5 existing suites (git diff HEAD empty), browser.js only added",
+                "release_blocker": true
+              },
+              {
+                "id": "R4-M5-AC4",
+                "text": "A deepcheck is run on the finished branch; every shipped finding is fixed or stated, and its ledger id is recorded.",
+                "met": true,
+                "evidence": "deepcheck ledger close id 8515391b6e (finding c3a7f1ac3e: stale demo hint, fixed and mutation-killed; 2 cuts e89109e2cd 12df393603)"
+              }
+            ],
+            "updated": "2026-10-07T16:46:55+00:00"
+          }
+        ],
+        "updated": "2026-10-07T16:47:09+00:00"
       }
-    ],
-    "updated": "2026-10-03T02:04:55+00:00"
+    ]
   }
 }
