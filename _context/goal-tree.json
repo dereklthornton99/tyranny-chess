@@ -3,13 +3,13 @@
   "scale": "project",
   "source": "Derek, 2026-10-07: \"I want to add a variant to the tyranny chess ... Coriantmr chess after the book of mormon character. Last man standing is the king.\" Rules settled across two AskUserQuestion rounds, recorded as run-log decisions eb1e698d4d and cbd4125232 (the second states one reconciliation of mine for him to confirm: the line of succession still ends with pawns). Round 3 closed 2026-10-04 and is archived at _context/goal-tree-r3-closed.json. LESSON CARRIED FORWARD: round 3's contract checked the data and never the player's experience, so every release blocker here is an independent-implementation check or something done in the real page.",
   "created_at": "2026-10-07T11:40:00-04:00",
-  "updated_at": "2026-10-08T03:28:20+00:00",
+  "updated_at": "2026-10-08T14:32:07+00:00",
   "root": {
     "id": "TC-R4",
     "level": "project",
     "title": "Tyranny Chess round 4: Coriantumr, a last-man-standing rule set beside Tyranny and standard",
-    "status": "in-progress",
-    "notes": "Rules in one paragraph: king and queen slide up to 4 squares in any direction; every other piece moves as in chess; no check, checkmate, castling or self-capture; capturing a king is an ordinary capture; after any capture a side that still has pieces but no king and no queen has its closest bishop (else knight, rook, pawn) become a king; far-rank promotion also offers a king when the side has none; you win when the opponent has no pieces. Work happens on branch coriantumr; main and the live site are untouched until Derek says otherwise.",
+    "status": "done",
+    "notes": "Rules in one paragraph: king and queen slide up to 4 squares in any direction; every other piece moves as in chess; no check, checkmate, castling or self-capture; capturing a king is an ordinary capture; after any capture a side that still has pieces but no king and no queen has its closest bishop (else knight, rook, pawn) become a king; far-rank promotion also offers a king when the side has none; you win when the opponent has no pieces. Work happened on branch coriantumr; Derek authorized the merge to main on 2026-10-08.\n[2026-10-08T14:32:07+00:00] Round 4 complete: every milestone done and every criterion met with evidence. Merge to main authorized by Derek 2026-10-08 (merge it to main) and carried out by fast-forward in the same push as this commit.",
     "non_goals": [
       "Puzzles for Coriantumr. Puzzle mode stays Tyranny-only and is locked out of the variant.",
       "An owner-picks pop-up for tied successors; Derek chose the fixed rule (queenside first) for now.",
@@ -445,6 +445,6 @@
         "updated": "2026-10-08T03:28:20+00:00"
       }
     ],
-    "updated": "2026-10-08T01:57:45+00:00"
+    "updated": "2026-10-08T14:32:07+00:00"
   }
 }
