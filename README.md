@@ -85,66 +85,152 @@ self-capture toggle, the Tyranny demos and puzzle mode are locked while it is on
   queen**, its closest bishop becomes a king. No bishop: the closest knight, then rook, then
   pawn. *Closest* means the smallest straight-line distance (squared) to the square where
   the capture happened; a tie goes to the lower file, then the lower rank. A queen that is
-  alive when the king falls takes command **without changing**; a queen captured while the
-  king lives changes nothing.
-- A pawn reaching the far rank may become a queen, rook, bishop or knight, and also a
-  **king** when its side has no king piece.
-- **You win when the opponent has no pieces.** No legal move while you still have pieces is a
-  draw; so are the fifty-move rule and threefold repetition. There is no insufficient-material
-  draw.
+  alive when the king falls takes command **without changing**, and with several queens
+  none of them changes: once a queen, always a queen. A queen captured while the king
+  lives changes nothing.
+- **One king at most.** A pawn reaching the far rank may become a queen, rook, bishop or
+  knight, and also a **king** whenever its side has no king, even if queens are on the board.
+- **You win when the opponent has no pieces.**
+- **There are no draws.** No stalemate, no fifty-move rule, no repetition draw, no
+  insufficient-material draw.
+- **Repetition is refused, not drawn.** Chess calls a draw when a position occurs a third
+  time. Here a position may occur twice, and the move that would make it occur a third time
+  is **not allowed**. A position is the pieces, the side to move and the en passant square.
+  Retreating is never refused for any other reason. If every move is refused, the royal
+  piece sacrifices, as in the boxed-in case below.
+- **Boxed in.** A side that has pieces but no legal move must **sacrifice its royal
+  piece**: the king, else the queen on the lowest file and then the lowest rank. Succession
+  then applies from the sacrificed square exactly as if that piece had been captured, and
+  the turn passes. On the page it is a move like any other: click the piece twice.
+- **The showdown.** When exactly two pieces remain, one each, a square that **either piece
+  has touched** since the showdown began (both starting squares included) cannot be landed on
+  again. A capture is exempt, and a slide may pass over a touched square. A piece with no
+  untouched square to land on and no capture has no ordinary move, so it must sacrifice
+  itself, which leaves its side with no pieces: it loses. Touched squares are shaded.
 
 **Decisions that are the owner's** (2026-10-07): a surviving queen takes command rather than
-a bishop being promoted; a queen's death needs no replacement queen; ties are settled by a
-fixed rule, not a pop-up; a promoting pawn gets the king as a fifth choice; the first
-release is two players plus the engine, with puzzles staying Tyranny-only.
+a bishop being promoted; a queen's death needs no replacement queen and several queens never
+change; ties are settled by a fixed rule, not a pop-up; a promoting pawn gets the king as a
+fifth choice whenever there is no king; no draw rules of any kind, and repetition refused at
+the third occurrence as chess would draw it (his wording: "refuse the repeated move", and he
+does not want a retreat discouraged "just for the sake of a rule"); a boxed-in side sacrifices
+its royal piece (he allowed a pass only "in the infinitesimally small probability" and asked
+for the sacrifice); the showdown. The first release is two players plus the engine, with
+puzzles staying Tyranny-only. **My reading of the showdown wording**, not his: one shared
+set of touched squares, and only the square a piece stops on counts. The other reading, each
+piece avoiding only its own squares, was tested and rejected (below).
 
 **Succession is derived, not remembered.** The engine stores no "the king was lost" flag.
 It applies the rule after every capture from the board alone, so a position carries all the
 history it needs, undo needs no extra state, and a side whose king returns (a crowned
 piece, or a pawn promoted to king) simply has a king again. The rule set rides on the board
 state as `S.v === "c"`; it is absent, not false, for Tyranny and standard play, so no
-existing function signature changed.
+existing function signature changed. **The touched squares are the one thing a position
+cannot recompute**, so a showdown carries them as `S.sd`, set when the second-to-last piece
+leaves and extended by every move after it.
 
 **How it was checked**
 
 - An independent reference, `tools/coriantumr-ref.py`, written in Python with a different
   board representation and a global "after a capture" succession check. `tests/coriantumr-golden.json`
-  holds 15 hand-made positions (ties, distance-versus-class, queen-alive cases, promotion
-  with and without a king piece, en passant) and 300 sampled ones with a digest of every
-  move and resulting board; the JS engine matches all of them.
+  holds 22 hand-made positions (ties, distance-versus-class, queen-alive cases, several
+  queens, boxed-in kings and queens, promotion with and without a king piece, en passant),
+  5 showdown positions that carry a touched set, 4 positions that carry a table of earlier
+  occurrences (a third repeat refused, a second allowed, every move refused so the royal
+  sacrifices, a pawn move and a capture never refused), and 300 sampled ones, each with a
+  digest of every move and resulting board; the JS engine matches all of them, including perft at
+  depths 1 to 3.
 - Perft from the start position under the variant: **20 / 400 / 9,122 / 207,622** at depths
   1 to 4. Depth 3 was also derived by hand (8,902 plus 20 × 11); the Python reference
-  agrees at every depth. Tyranny and standard perft are unchanged.
-- Mutation testing: the engine tests carry 19 deliberate breaks of the engine source and the
-  engine-opponent tests 7 more (a wrong succession order, a flipped tie-break, a dropped
-  variant tag); each must be caught or the suite fails. The page checks were also run once
-  against nine deliberate breaks of the page and caught every one; that was a one-off run,
-  not a standing test.
+  agrees at every depth. Tyranny and standard perft are unchanged, and the Tyranny puzzles
+  regenerate byte for byte.
+- An exact solver for the showdown, `tools/coriantumr-showdown.js`, which shares no code with
+  the engine. On **250 late showdowns on the real board** (a mix of positions the side to move
+  wins and loses, some begun by a capture) the engine's search names the same winner in every
+  one, and the touched set the engine carries equals one the tool tracked separately.
+  (`--free 22` raises the squares left from 18 to 22: 250 of 250 again, about 15 seconds.)
+- Mutation testing: the engine tests carry 38 deliberate breaks of the engine source and the
+  engine-opponent tests 16 more (a wrong succession order, a flipped tie-break, a dropped
+  variant tag, a showdown that never begins, a sacrifice that never happens, a repetition
+  refused a move too early or too late); each must be
+  caught or the suite fails. The solver check kills five of six engine breaks on its own; the
+  sixth is pinned by the engine-opponent tests. The page checks were run against 22
+  deliberate breaks of the page and caught every one; that was a one-off run, not a
+  standing test.
 - Real-browser checks click the rules button and board squares and read the live DOM: the
   switch, move highlights against an independently written slider, the queen taking command,
-  the crowning drawn as a king, the win, the draws, the promotion picker, the puzzle lock,
-  and a 50-ply game against the engine with the variant tag intact in every position and no
-  page errors.
+  the crowning drawn as a king, the win, the promotion picker, the puzzle lock, a fifty-move
+  position that does **not** end the game and a shuffle in which the second repeat is allowed
+  and the third is not offered, with the page saying why (the same clicks under Tyranny
+  rules, where a repeat is still a draw, are the control), a boxed-in king sacrificing by
+  two clicks, the
+  showdown's shaded squares, the engine playing a showdown and sacrificing when boxed in, and
+  a 50-ply game against the engine with the variant tag intact in every position and no page
+  errors.
 
 **The engine plays it, but only as well as its value guess.** It uses the same search with
-the variant's terminal rules (no pieces is a loss, no move with pieces is a draw, no
-insufficient-material shortcut). The values are the ordinary ones with king and queen both
-set to 800, **an estimate that has not been tuned or measured**. Nothing here claims its
-strength. `node tools/coriantumr-selfplay.js` reports plain counts at a pinned depth of 3
-and a 150-ply cap (2026-10-07): **100 games against a seeded random mover**, 100 won by the
-engine (mean 55.3 plies), 0 illegal moves, rule-set tag on every position; **20
-engine-versus-engine games** (each opened with 6 seeded random plies so they differ, and all
-20 are different games), 0 decisive: 9 ended by repetition and 11 reached the cap. That
-matches the endgame table below: the engine wins against a random mover, and two engines
-do not finish each other off.
+the variant's terminal rules: no pieces is a loss, a third repetition is not allowed in the
+search or at the root, and the showdown is evaluated by the number of free squares each piece
+has left. The piece values
+are the ordinary ones with king and queen both set to 800, **an estimate that has not been
+tuned or measured**. Nothing here claims its strength. `node tools/coriantumr-selfplay.js`
+reports plain counts at a pinned depth of 3 and a 150-ply cap (2026-10-07):
+
+- **100 games against a seeded random mover**: all 100 won by the engine (mean 55.2 plies),
+  0 illegal moves, the rule-set tag on every position.
+- **100 showdowns, engine against engine**, from seeded two-king starts where neither can
+  capture: all 100 finished (22 by capture, 78 by sacrifice, mean 57.3 plies, longest 61),
+  and the side to move won 51 and lost 49. Equal engines do not let the move decide it.
+- **20 whole games, engine against engine** (each opened with 6 seeded random plies, all 20
+  different), with and without the repetition rule:
+
+  | Rule | Cap | Finished | Still going, and where |
+  |---|---|---|---|
+  | none (no draws, no repetition rule) | 150 plies | 2 | 12 balanced fights, 5 a lone piece against two or more, 1 a showdown |
+  | none | 400 plies | 3 | 12 balanced, 5 a lone piece against two or more |
+  | third repeat refused | 150 plies | 4 | 4 balanced, 6 a lone piece against two or more, 6 a showdown |
+  | third repeat refused | 400 plies | 13 | 7 a lone piece against two or more |
+
+  The rule removes the balanced-fight stalls (4 at 150 plies, none at 400) and the showdowns
+  run to their end; **a lone piece against two or more is the stall that remains**.
+
+### What the showdown does, and what it leaves open
+
+The showdown is a finite game with no draw: every landing touches a new square, so at most 62
+quiet moves can be made and the next move must be a capture or a sacrifice, and one side has
+a forced win from every start. Whether that is a fair game
+is only answerable by solving it, and the full board is too big (20 million nodes did not
+finish a single start), so `tools/coriantumr-showdown.js --small` solves **every start on
+smaller boards** instead:
+
+| Board | Starts | Side to move wins | Side to move loses |
+|---|---|---|---|
+| 3×3 | 16 | 0 | 16 |
+| 4×4 | 88 | 48 | 40 |
+| 5×5 | 280 | 264 | 16 |
+
+The reading where each piece avoids only its **own** squares is decided by parity: the side
+to move loses all 16 starts on 3×3 and **all 88 on 4×4**, so the second player always wins.
+That is why it was not built. The shared reading is not trivially decided on 4×4, but on 5×5
+the side to move wins most starts, so **the full board's balance is not known**: only the
+engine's 51–49 over 100 depth-3 games speaks to it, and that is evidence for depth-3 play,
+not a proof.
+
+**What it leaves open, measured.** The showdown starts only at exactly two pieces, and the
+repetition rule only stops a position from occurring a third time. A lone piece against two
+or more can keep finding new positions, and that is the 7 of 20 capped engine games at 400
+plies above. It is also what the retrograde table below says about a lone king: one extra
+piece cannot force its capture, so a lone piece against two is not an ending either.
+Whether to add a rule for that is the owner's call and has not been made.
 
 ### Can a lone king be hunted down? Measured, and the answer is mostly no
 
 Because a king or queen that has been left alone slides four squares in any direction, the
 question is whether "last man standing" can be forced. `tools/coriantumr-endgame.js` solves
 the small endings by retrograde analysis (working backwards from captures) over every
-distinct position, and checks 6,000 of them against the real engine (0 differ; 1,357
-crownings and 1,334 last-piece captures all agree).
+distinct position, **without** the showdown or the sacrifice rule, and checks 6,000 of them
+against the real engine's move generation (0 differ; 1,357 crownings and 1,334 last-piece
+captures all agree).
 
 | Material | Positions per side to move | Bigger side to move: forced win | Lone side to move: bigger side still wins |
 |---|---|---|---|
@@ -156,13 +242,12 @@ crownings and 1,334 last-piece captures all agree).
 
 **What it means.** One extra piece cannot force the capture of a lone four-square slider:
 every win is a capture that is already available, so a lone king is lost only to a blunder.
-Two sliders trap one only from eight cornered positions. Best-play endings will therefore
-usually end by the fifty-move rule or repetition, not by annihilation. **Not covered:**
-pawns, three or more attackers, and the fifty-move and repetition rules. Whether to add a
-rule so these endings can finish is the owner's call and has not been made.
+Two sliders trap one only from eight cornered positions. This table is why the two-piece
+showdown exists, and why a lone piece against two is still open. **Not covered:** pawns,
+and three or more attackers.
 
-**Not built:** puzzles in the variant, a pick-your-own-tie step, and any rule patch for
-the undrawable endings above.
+**Not built:** puzzles in the variant, a pick-your-own-tie step, a rule for the
+lone-piece-against-two stall above, and a solved 8×8 showdown.
 
 ## Puzzles
 
@@ -404,7 +489,8 @@ tools/ai-selfcapture.js what the engine does with self-captures, and whether it 
 tools/coriantumr-ref.py independent Python reference for the Coriantumr rules; --check verifies the fixture
 tools/coriantumr-endgame.js retrograde solver for the small Coriantumr endings; --self-test checks it against the engine
 tools/coriantumr-selfplay.js plain counts for engine games under the Coriantumr rules
-tests/                  eight Node suites, run against src/ not the built page
+tools/coriantumr-showdown.js exact solver for the two-piece showdown; checks the engine against it
+tests/                  nine Node suites, run against src/ not the built page
 tests/browser.js        SEPARATE runner: real DOM checks in headless Chrome, zero deps
 _context/               goal tree, run log, and the two measurement records
 ```
@@ -493,14 +579,14 @@ The page has a **Run tests** button that executes 48 rule checks in the browser.
 suites, plus the puzzle validator, run under Node:
 
 ```
-node tests/run-all.js     638 checks, eight files  27 / 8 / 24 / 13 / 396 / 117 / 27 / 26
-node tests/browser.js     241 checks in headless Chrome, against the real DOM
+node tests/run-all.js     782 checks, nine files   27 / 8 / 24 / 13 / 396 / 223 / 52 / 13 / 26
+node tests/browser.js     288 checks in headless Chrome, against the real DOM
 ```
 
 Both numbers were printed by those two commands on **2026-10-07**, and the in-page 48 was
 read off the page by clicking the button rather than inferred from the source. Before the
 Coriantumr work they were 494 and 166; the Tyranny and standard suites are unchanged and
-the rest are additions (`coriantumr.js` 117, `coriantumr-ai.js` 27, 75 more browser checks).
+the rest are additions (`coriantumr.js` 223, `coriantumr-ai.js` 52, `coriantumr-showdown.js` 13, 122 more browser checks).
 
 **CI runs both, and that is new.** It used to run only the Node suites — which meant the
 marker toggle, the puzzle-mode marker suppression and the Try again reset could all have
@@ -562,6 +648,12 @@ and a multistep that is really a one-mover.
 
 ## Honest limits
 
+- **Coriantumr can still stall.** It has no draw rules, a position may occur only twice, and
+  the showdown starts only at exactly two pieces. In 20 engine-against-engine games (depth
+  3, a 400-ply cap) 13 finished and 7 were still going, all of them a lone piece against two
+  or more. One extra piece cannot force the capture of a lone king, so neither a person nor
+  the engine is guaranteed an ending there. The showdown itself always ends after at most 62
+  quiet moves, but its balance on the full board is not solved.
 - The search runs on the main thread, so at **Hard** the page is briefly unresponsive
   (up to ~2s) while it thinks.
 - There is **no networked multiplayer**. Two people play on one screen, or each plays

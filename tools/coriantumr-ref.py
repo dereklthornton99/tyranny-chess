@@ -20,6 +20,19 @@ THE RULES (settled with Derek, 2026-10-07; run-log decisions eb1e698d4d and cbd4
     distance to the capture square; ties go to the lower file, then the lower rank. If a queen is alive when the
     king falls, nothing changes at all.
   * You win when the opponent has no pieces, so such a side has no moves.
+  * NO DRAWS: no fifty-move rule, no repetition draw, no stalemate, no dead position.   (owner, 2026-10-07)
+  * REPETITION IS REFUSED, NOT DRAWN. Chess calls a draw when a position occurs a third time. Here a position may
+    occur twice, and the move that would make it occur a third time is not allowed. A position is the piece
+    placement, the side to move and the en-passant square. Only a move that is neither a capture nor a pawn move
+    can recreate an earlier position. If that leaves a side with no ordinary move it sacrifices its royal piece.
+    Retreating is never refused for any other reason.   (owner, 2026-10-07)
+  * NO LEGAL MOVE -> SACRIFICE. A side that has pieces but no ordinary legal move must move its royal piece off the
+    board: its king, else its queen on the lowest file and then the lowest rank. Succession then applies from
+    the sacrificed square exactly as if that piece had been captured, and the turn passes.
+  * SHOWDOWN. When exactly two pieces remain, one per side, a square touched by either piece since the showdown
+    began (both starting squares included) may not be landed on again. A capture is exempt; a slide may pass over
+    a touched square. A piece with no untouched landing square and no capture has no ordinary move, so it must
+    sacrifice itself, which leaves its side with no pieces: it loses.
 
 USAGE
   python tools/coriantumr-ref.py perft "<fen>" <depth>      count positions
@@ -87,15 +100,53 @@ def to_fen(pos):
 
 
 def position_key(pos):
+    key = placement(pos["board"]) + " " + pos["side"] + " " + (sq_name(pos["ep"]) if pos["ep"] else "-")
+    if pos.get("touched"):
+        key += " T" + ",".join(sorted(sq_name(q) for q in pos["touched"]))
+    return key
+
+
+def repetition_key(pos):
+    """Names a position for the repetition rule: placement, side to move, en-passant square. No castling (it does
+    not exist here) and no touched set (a showdown position can never recur)."""
     return placement(pos["board"]) + " " + pos["side"] + " " + (sq_name(pos["ep"]) if pos["ep"] else "-")
+
+
+def seen_count(seen, key):
+    """How many times a position has occurred so far. The special key "*" stands for every position not listed."""
+    return seen.get(key, seen.get("*", 0))
+
+
+def touched_of(pos):
+    """The squares a showdown has used up: the carried set, or, for a freshly parsed position holding exactly two
+    pieces (one per side), both starting squares. None when no showdown is on."""
+    if pos.get("touched"):
+        return pos["touched"]
+    board = pos["board"]
+    if len(board) == 2 and len({p.isupper() for p in board.values()}) == 2:
+        return frozenset(board.keys())
+    return None
+
+
+def sacrifice_royal(pos):
+    """The piece that sacrifices itself when its side cannot move: the king, else the queen on the lowest file,
+    then the lowest rank. None when the side has no royal piece."""
+    white = pos["side"] == "w"
+    mine = {sq: p for sq, p in pos["board"].items() if p.isupper() == white}
+    for sq, p in mine.items():
+        if p.upper() == "K":
+            return sq
+    queens = [sq for sq, p in mine.items() if p.upper() == "Q"]
+    return min(queens, key=lambda q: (q[0], q[1])) if queens else None
 
 
 def on_board(sq):
     return 0 <= sq[0] < 8 and 0 <= sq[1] < 8
 
 
-def moves(pos):
-    """All legal moves: (from, to, promo, is_en_passant, is_double_step)."""
+def moves(pos, seen=None):
+    """All legal moves: (from, to, promo, is_en_passant, is_double_step). With `seen` (a dict from repetition keys to
+    how often each position has occurred), a move that would be the THIRD occurrence of a position is refused."""
     board, white = pos["board"], pos["side"] == "w"
     own_king = "K" if white else "k"
     has_king = any(p == own_king for p in board.values())
@@ -150,6 +201,21 @@ def moves(pos):
                     pawn_to(to, True)
                 elif occupant is None and pos["ep"] == to:
                     out.append((frm, to, None, True, False))
+    touched = touched_of(pos)
+    if touched:
+        # a capture (an occupied target, or en passant) is exempt; a quiet landing on a touched square is not allowed
+        out = [m for m in out if m[3] or m[1] in board or m[1] not in touched]
+    if seen is not None and out:
+        kept = []
+        for m in out:
+            irreversible = m[3] or m[1] in board or board[m[0]].upper() == "P"
+            if irreversible or seen_count(seen, repetition_key(make(pos, m))) < 2:
+                kept.append(m)
+        out = kept
+    if not out:
+        royal = sacrifice_royal(pos)
+        if royal is not None:
+            return [(royal, royal, None, False, False)]       # (from, from): the royal piece leaves the board
     return out
 
 
@@ -171,17 +237,24 @@ def crown_if_needed(board, lost_white, at):
 def make(pos, mv):
     frm, to, promo, is_ep, is_double = mv
     board = dict(pos["board"])
+    before = touched_of(pos)
     piece = board.pop(frm)
     white = piece.isupper()
-    captured = board.pop((to[0], frm[1])) if is_ep else board.get(to)
-    if promo:
-        piece = promo.upper() if white else promo.lower()
-    board[to] = piece
     crowned = False
-    if captured is not None:
-        crowned = crown_if_needed(board, captured.isupper(), to)
+    if frm == to:                                   # the royal piece sacrifices itself: succession from its square
+        crowned = crown_if_needed(board, white, frm)
+    else:
+        captured = board.pop((to[0], frm[1])) if is_ep else board.get(to)
+        if promo:
+            piece = promo.upper() if white else promo.lower()
+        board[to] = piece
+        if captured is not None:
+            crowned = crown_if_needed(board, captured.isupper(), to)
     ep = (frm[0], (frm[1] + to[1]) // 2) if is_double else None
-    return {"board": board, "side": "b" if pos["side"] == "w" else "w", "ep": ep, "crowned": crowned}
+    child = {"board": board, "side": "b" if pos["side"] == "w" else "w", "ep": ep, "crowned": crowned}
+    if len(board) == 2 and len({p.isupper() for p in board.values()}) == 2:        # a showdown is on
+        child["touched"] = (frozenset(before) | {to}) if before else frozenset(board.keys())
+    return child
 
 
 def uci(mv):
@@ -195,8 +268,8 @@ def perft(pos, depth):
     return sum(perft(make(pos, m), depth - 1) for m in ms)
 
 
-def children_digest(pos):
-    items = sorted(uci(m) + "=" + position_key(make(pos, m)) for m in moves(pos))
+def children_digest(pos, seen=None):
+    items = sorted(uci(m) + "=" + position_key(make(pos, m)) for m in moves(pos, seen))
     return len(items), hashlib.sha1("\n".join(items).encode()).hexdigest()
 
 
@@ -234,7 +307,75 @@ HANDMADE = [
     ("pawn about to promote WITH a king piece: no king choice",
      "4k3/8/8/8/8/8/p7/1Q2K3 b - - 0 1", 3),
     ("en passant with royals en prise", "4k3/8/8/3pP3/8/8/8/3QK3 w - d6 0 1", 3),
+    ("boxed in: the king on a8 cannot move and nor can pawns a7, b7, b8, so it sacrifices itself and the closest "
+     "pawn (a7 and b8 tie, the lower file wins) is crowned", "KP6/PP6/8/8/8/8/8/7k w - - 0 1", 3),
+    ("boxed in with a queen as the only royal: the queen sacrifices itself and a pawn is crowned",
+     "QP6/PP6/8/8/8/8/8/7k w - - 0 1", 3),
+    ("never offered when an ordinary move exists: the king is boxed in but the queen can move",
+     "KP6/PP6/8/8/8/8/8/Q6k w - - 0 1", 3),
+    ("several queens and no king left: nothing changes and every queen stays a queen",
+     "R3k3/8/8/8/8/8/3qq3/4K3 w - - 0 1", 3),
+    ("a boxed-in king beside a boxed-in queen: the king sacrifices itself, the queen takes command, no pawn is crowned",
+     "KQP5/PPP5/8/8/8/8/8/7k w - - 0 1", 3),
+    ("two boxed-in queens and no king: the queen on the lowest file (a8) sacrifices itself, the other stays a queen",
+     "QQP5/PPP5/8/8/8/8/8/7k w - - 0 1", 3),
+    ("two boxed-in queens on the same file and no king: the lower rank (a7) sacrifices itself, the queen on a8 stays",
+     "QP6/QP6/PP6/8/8/8/8/7k w - - 0 1", 3),
 ]
+
+D4_REACH = ["c4", "b4", "a4", "e4", "f4", "g4", "h4", "d5", "d6", "d7", "d8", "d3", "d2", "d1", "e5", "f6", "g7", "h8",
+            "c5", "b6", "a7", "e3", "f2", "g1", "c3", "b2", "a1"]     # the 27 squares a 4-square slider reaches from d4
+
+# Showdown positions carry an explicit touched set (squares as names); None means "derive it from the position".
+SHOWDOWN = [
+    # name, fen, touched, deepest perft
+    ("a showdown that has just begun: only the two starting squares are touched",
+     "8/7k/8/8/3K4/8/8/8 w - - 0 1", None, 3),
+    ("a slide may pass over a touched square (b2) but not land on it; the corner king still reaches c3",
+     "8/7k/8/8/8/8/8/K7 w - - 0 1", ["a1", "h7", "b2"], 3),
+    ("a capture is exempt: the enemy queen stands on a touched square and the king may still take it",
+     "8/8/5q2/8/3K4/8/8/8 w - - 0 1", None, 2),
+    ("every one of the 27 squares the king on d4 could reach is touched: it has no ordinary move, so it "
+     "sacrifices itself and loses",
+     "8/7k/8/8/3K4/8/8/8 w - - 0 1", D4_REACH + ["d4", "h7"], 2),
+    ("a late showdown: three untouched squares (f6, b2, a1) are all the king has left",
+     "8/7k/8/8/3K4/8/8/8 w - - 0 1", [q for q in D4_REACH if q not in ("f6", "b2", "a1")] + ["d4", "h7"], 3),
+]
+
+
+# Positions with a table of earlier occurrences. Each spec is (move, times seen) for the position AFTER that move,
+# or ("*", n) for every position. The fixture stores the resulting keys, so the JavaScript side needs no spec language.
+REPEAT = [
+    ("the second occurrence is allowed, the third is refused: Kb1-b2 would be the third time, Kb1-a1 only the second",
+     "8/7k/8/8/8/8/P7/1K6 w - - 0 1", [("b1b2", 2), ("b1a1", 1)]),
+    ("every ordinary move would be a third occurrence and there is no pawn move or capture to fall back on, so the "
+     "royal sacrifices", "8/7k/8/8/8/8/8/KR6 w - - 0 1", [("*", 2)]),
+    ("a pawn move and a capture are never refused however often the position has been seen; the king's quiet moves are",
+     "8/7k/8/8/8/1p6/P1K5/8 w - - 0 1", [("*", 2)]),
+    ("nothing seen yet: the list is exactly the ordinary legal moves", "8/7k/8/8/8/8/P7/1K6 w - - 0 1", []),
+]
+
+
+def seen_table(pos, spec):
+    seen = {}
+    ms = {uci(m): m for m in moves(pos)}
+    for key, times in spec:
+        if key == "*":
+            seen["*"] = times
+        else:
+            seen[repetition_key(make(pos, ms[key]))] = times
+    return seen
+
+
+def parse_square(name):
+    return (FILES.index(name[0]), int(name[1]) - 1)
+
+
+def showdown_position(fen, touched):
+    pos = parse_fen(fen)
+    if touched is not None:
+        pos["touched"] = frozenset(parse_square(n) for n in touched)
+    return pos
 
 
 def selfplay_snapshots(rng, games):
@@ -276,6 +417,19 @@ def build(seed=20261007, games=160):
         pos = parse_fen(fen)
         perft_rows.append({"name": name, "fen": fen,
                            "perft": {str(d): perft(pos, d) for d in range(1, depth + 1)}})
+    repeat_rows = []
+    for name, fen, spec in REPEAT:
+        pos = parse_fen(fen)
+        table = seen_table(pos, spec)
+        count, digest = children_digest(pos, table)
+        repeat_rows.append({"name": name, "fen": fen, "seen": table, "moves": count, "sha1": digest,
+                            "allowed": sorted(uci(m) for m in moves(pos, table))})
+    showdown_rows = []
+    for name, fen, touched, depth in SHOWDOWN:
+        pos = showdown_position(fen, touched)
+        count, digest = children_digest(pos)
+        showdown_rows.append({"name": name, "fen": fen, "touched": touched, "moves": count, "sha1": digest,
+                              "perft": {str(d): perft(pos, d) for d in range(1, depth + 1)}})
     for fen, n in chosen:
         pos = parse_fen(fen)
         count, digest = children_digest(pos)
@@ -289,6 +443,8 @@ def build(seed=20261007, games=160):
         "counts": {"snapshots": len(snaps), "unique": len(seen), "crowned": len(by_tag["crowned"]),
                    "royalCapturable": len(by_tag["royal"]), "kept": len(chosen)},
         "perft": perft_rows,
+        "showdown": showdown_rows,
+        "repeat": repeat_rows,
         "children": child_rows,
     }
 
@@ -303,6 +459,21 @@ def check(path):
             if got != want:
                 bad += 1
                 print("PERFT DRIFT", row["name"][:50], "depth", d, "fixture", want, "reference", got)
+    for row in fixture.get("showdown", []):
+        pos = showdown_position(row["fen"], row["touched"])
+        if children_digest(pos) != (row["moves"], row["sha1"]):
+            bad += 1
+            print("SHOWDOWN CHILDREN DRIFT", row["name"][:50])
+        for d, want in row["perft"].items():
+            if perft(pos, int(d)) != want:
+                bad += 1
+                print("SHOWDOWN PERFT DRIFT", row["name"][:50], "depth", d)
+    for row in fixture.get("repeat", []):
+        pos = parse_fen(row["fen"])
+        if children_digest(pos, row["seen"]) != (row["moves"], row["sha1"]) or \
+                sorted(uci(m) for m in moves(pos, row["seen"])) != row["allowed"]:
+            bad += 1
+            print("REPEAT DRIFT", row["name"][:50])
     for row in fixture["children"]:
         pos = parse_fen(row["fen"])
         count, digest = children_digest(pos)
@@ -315,8 +486,9 @@ def check(path):
         if row["perft3"] is not None and perft(pos, 3) != row["perft3"]:
             bad += 1
             print("PERFT3 DRIFT", row["fen"])
-    print("checked %d handmade positions and %d sampled positions: %s"
-          % (len(fixture["perft"]), len(fixture["children"]), "NO DRIFT" if not bad else "%d DRIFTS" % bad))
+    print("checked %d handmade positions, %d showdown positions, %d repetition positions and %d sampled positions: %s"
+          % (len(fixture["perft"]), len(fixture.get("showdown", [])), len(fixture.get("repeat", [])), len(fixture["children"]),
+             "NO DRIFT" if not bad else "%d DRIFTS" % bad))
     return 1 if bad else 0
 
 
@@ -330,7 +502,8 @@ def main(argv):
         pos = parse_fen(argv[1])
         for m in sorted(moves(pos), key=uci):
             child = make(pos, m)
-            print(uci(m).ljust(7), position_key(child), "(crowned)" if child["crowned"] else "")
+            print(uci(m).ljust(7), position_key(child), "(crowned)" if child["crowned"] else "",
+                  "(sacrifice)" if m[0] == m[1] else "")
         return 0
     if argv and argv[0] == "build":
         path = argv[1] if len(argv) > 1 else DEFAULT_FIXTURE

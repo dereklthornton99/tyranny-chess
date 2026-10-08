@@ -5,7 +5,8 @@
  *   * there is no check, so the search must not filter captures by king safety (quiescence used to skip EVERY
  *     capture for a side with no king piece, which a queen-only side now is) and must not extend on "check";
  *   * a side with no pieces has lost, so capturing the last piece scores as a mate and losing your own last
- *     piece scores as a loss; no legal move with pieces left is a draw;
+ *     piece scores as a loss (a royal-less side with no move is still scored a draw, but a boxed-in royal now
+ *     sacrifices itself instead, and there is no repetition or fifty-move draw in the variant);
  *   * a lone king can still capture a lone king, so there is no insufficient-material draw;
  *   * king and queen are one 4-square piece, so they get one value, and the evaluation is colour-symmetric.
  *
@@ -41,6 +42,7 @@ function battery(E, opts) {
   const reset = () => {
     E.ai.gameKeys = new Set(); E.ai.path = []; E.ai.killers = []; E.ai.hist = {};
     E.ai.depthDone = 1; E.ai.deadline = Infinity; E.ai.aborted = false; E.ai.selfCap = true; E.ai.cp = E.CPC;
+    E.ai.rep = null; E.ai.gameCount = new Map();
   };
   const pieceCount = (S, side) => S.b.filter((p) => p && p[0] === side).length;
 
@@ -85,6 +87,82 @@ function battery(E, opts) {
     E.search(E.apply(last, E.legal(last, true).find((m) => m.cap === 'bk')), 3, -Infinity, Infinity, 1) <= -E.MATE + 50, true);
 
   // ---- R4-M3-AC3: evaluation ---------------------------------------------------------------------------------
+  // ---- the owner's ending rules (2026-10-07) in the search -----------------------------------------------------------------
+  const sqIdx = (n) => (8 - Number(n[1])) * 8 + 'abcdefgh'.indexOf(n[0]);
+  const stuckRow = GOLDEN.showdown.find((r) => /sacrifices itself/.test(r.name));
+  const sdStuck = C(stuckRow.fen); sdStuck.sd = stuckRow.touched.map(sqIdx);
+  reset();
+  const stuckRes = E.think(sdStuck, { ms: 300, maxDepth: 3, history: [sdStuck] });
+  t('a boxed-in lone royal plays its only move, the sacrifice', !!stuckRes && stuckRes.move.sac === true, true);
+  t('...and scores it as a lost game (its side is left with no pieces)', stuckRes.score <= -E.MATE + 50, true);
+  const afterStuck = E.apply(sdStuck, stuckRes.move);
+  reset();
+  t('a position where the OTHER side has no pieces is already a win for the side to move, with no further move needed',
+    E.search(afterStuck, 0, -Infinity, Infinity, 0) >= E.MATE - 50, true);
+  reset();
+  const repP = C('7k/8/8/8/8/8/8/K6R w - - 0 1');
+  E.ai.gameKeys = new Set(E.legal(repP, true).map((m) => E.zkey(E.apply(repP, m))));
+  t('a repeated position is not a draw in Coriantumr (White is still seen a rook up)',
+    E.search(repP, 1, -Infinity, Infinity, 0) > 300, true);
+  reset();
+  const sdFresh = C('8/7k/8/8/3K4/8/8/8 w - - 0 1');
+  const sdSqueezed = C('8/7k/8/8/3K4/8/8/8 w - - 0 1');
+  sdSqueezed.sd = GOLDEN.showdown.find((r) => /late showdown/.test(r.name)).touched.map(sqIdx);
+  t('the showdown is evaluated by free squares: a squeezed side scores worse than the same position fresh',
+    E.evaluate(sdSqueezed) < E.evaluate(sdFresh), true);
+  t('CONTROL: the fresh showdown is not scored as a dead draw', E.evaluate(sdFresh) !== 0, true);
+
+  // ---- repetition is refused in the search as well (2026-10-07) ----------------------------------------------------------
+  const uciOf = (m) => E.sqName(m.from) + E.sqName(m.to) + (m.promo || '');
+  const repFen = '8/7k/8/8/8/8/P7/1K6 w - - 0 1';
+  let RS = C(repFen);
+  const rstates = [RS];
+  for (const u of ['b1b2', 'h7h8', 'b2b1', 'h8h7', 'b1b2', 'h7h8', 'b2b1']) {
+    RS = E.apply(RS, E.legal(RS, true).find((x) => uciOf(x) === u));
+    rstates.push(RS);
+  }
+  reset();
+  const refusedRes = E.think(RS, { ms: 1e9, maxDepth: 3, history: rstates });
+  t('the engine does not play the move that would be a third occurrence (Kh8-h7)', uciOf(refusedRes.move) !== 'h8h7', true);
+  t('CONTROL: that move is an ordinary legal move, so only the repetition rule keeps the engine from it',
+    E.legal(RS, true).some((m) => uciOf(m) === 'h8h7'), true);
+  // the engine playing both sides of a position where shuffling is easy: no position may ever occur three times
+  {
+    reset();
+    let G = C(repFen);
+    const hist2 = [G], tally = {};
+    const tick = (T) => { const k = E.repKey(T); tally[k] = (tally[k] || 0) + 1; return tally[k]; };
+    tick(G);
+    let worst = 1, plies = 0;
+    for (; plies < 120; plies++) {
+      const res = E.think(G, { ms: 1e9, maxDepth: 2, history: hist2 });
+      G = E.apply(G, res.move); hist2.push(G);
+      worst = Math.max(worst, tick(G));
+      if (!E.hasPieces(G, 'w') || !E.hasPieces(G, 'b')) break;
+    }
+    t('the engine playing both sides never lets a position occur a third time (most seen: ' + worst + ', over ' + plies + ' plies)', worst <= 2, true);
+  }
+  const flipTurn = Object.assign({}, RS, { turn: RS.turn === 'w' ? 'b' : 'w' });
+  t('the engine names a position by placement AND side to move: the same pieces with the other side to move differ', E.repKey(RS) !== E.repKey(flipTurn), true);
+  // every ordinary move refused: the engine sacrifices
+  reset();
+  const lone = C('8/7k/8/8/8/8/8/KR6 w - - 0 1');
+  const kids = E.legal(lone, true).map((m) => E.apply(lone, m));
+  const allRefused = E.think(lone, { ms: 1e9, maxDepth: 2, history: [lone].concat(kids, kids) });
+  t('when every ordinary move would be a third occurrence the engine sacrifices its royal piece', allRefused.move.sac === true, true);
+  // the search itself applies the rule inside its lines: with every position "seen twice" a lone king has only the sacrifice
+  reset();
+  E.think(C(repFen), { ms: 50, maxDepth: 1, history: [C(repFen)] });                  // builds the closure the search uses
+  E.ai.rep = { keyOf: E.repKey, seen: () => 2 };
+  const loneBlack = C('k7/8/8/8/8/8/8/KR6 b - - 0 1');
+  t('inside a line, a side whose every move is a third occurrence loses its last piece (scored as lost)',
+    E.search(loneBlack, 1, -Infinity, Infinity, 0) <= -E.MATE + 50, true);
+  reset();
+  E.think(C(repFen), { ms: 50, maxDepth: 1, history: [C(repFen)] });
+  E.ai.gameCount = new Map([[777, 1]]); E.ai.path = [777, 777];
+  t('the search counts the line it is searching as well as the game so far (1 + 2 = 3)', E.ai.rep.seen(777), 3);
+  reset();
+
   const withQueen = C('3r3k/8/8/8/3Q4/8/8/8 w - - 0 1');
   const withKing = C('3r3k/8/8/8/3K4/8/8/8 w - - 0 1');
   t('king and queen on the same square are worth the same', E.evaluate(withKing), E.evaluate(withQueen));
@@ -159,6 +237,45 @@ function battery(E, opts) {
     t('the rule-set tag survives engine play', stats.tagLost, 0);
     t('every game either ended or hit the ply cap (none hung or threw)', stats.ended + stats.capped, stats.games);
   }
+  // ---- seeded engine-versus-engine showdowns: every one ends, by capture or sacrifice, inside the 62-move bound ----------
+  if (opts.showdowns) {
+    const st = { games: 0, ended: 0, byCapture: 0, bySacrifice: 0, longest: 0, sideToMoveWins: 0, illegal: 0, bad: 0 };
+    for (let g = 0; g < opts.showdowns; g++) {
+      const rnd = mulberry32(3000 + g);
+      let S = null;
+      while (!S) {
+        const a = (rnd() * 64) | 0, b2 = (rnd() * 64) | 0;
+        if (a === b2) continue;
+        const bd = new Array(64).fill(null);
+        bd[a] = 'wk'; bd[b2] = 'bk';
+        const cand = { b: bd, turn: 'w', cast: { K: false, Q: false, k: false, q: false }, ep: -1, half: 0, full: 1, v: 'c' };
+        if (!E.legal(cand, true).some((m) => m.cap)) S = cand;
+      }
+      const hist = [S];
+      let n = 0;
+      while (n < 100) {
+        const res = E.think(S, { ms: 1e9, maxDepth: opts.showdownDepth || 2, history: hist });
+        const ms = E.legal(S, true);
+        if (!ms.some((x) => x.from === res.move.from && x.to === res.move.to && x.promo === res.move.promo)) st.illegal++;
+        const T = E.apply(S, res.move);
+        n++;
+        if (!E.hasPieces(T, 'w') || !E.hasPieces(T, 'b')) {
+          st.ended++;
+          res.move.sac ? st.bySacrifice++ : st.byCapture++;
+          if (E.hasPieces(T, 'w')) st.sideToMoveWins++;
+          break;
+        }
+        if (!T.sd || T.sd.length !== 2 + n) st.bad++;
+        S = T; hist.push(S);
+      }
+      st.games++; st.longest = Math.max(st.longest, n);
+    }
+    out.showdowns = st;
+    t('every engine move in ' + st.games + ' showdowns is legal', st.illegal, 0);
+    t('the touched set is carried correctly through every engine showdown move', st.bad, 0);
+    t('every engine showdown ended by capture or sacrifice within the 63-ply bound (longest ' + st.longest + ')',
+      st.ended === st.games && st.longest <= 63, true);
+  }
   return out;
 }
 
@@ -175,9 +292,11 @@ function report(list) {
 
 hd('Coriantumr engine opponent');
 const REAL = loadEngine(ENGINE_TEXT);
-const results = battery(REAL, { games: 6 });
+const results = battery(REAL, { games: 6, showdowns: 60 });
 report(results);
 const s = results.stats;
+const sd = results.showdowns;
+console.log('      ' + sd.games + ' engine showdowns: ' + sd.byCapture + ' ended by capture, ' + sd.bySacrifice + ' by sacrifice, the side to move won ' + sd.sideToMoveWins + ', longest ' + sd.longest + ' plies');
 console.log('      ' + results.length + ' checks; ' + s.games + ' short games (' + s.plies + ' plies): ' + s.ended +
   ' ended (' + s.engineWins + ' engine wins, ' + s.randomWins + ' random wins, ' + s.draws + ' draws), ' + s.capped + ' reached the ply cap');
 
@@ -191,6 +310,15 @@ const MUTANTS = [
   ['the king is worth nothing in the variant', 'var CPC = {p:100, n:320, b:330, r:500, q:800, k:800};', 'var CPC = {p:100, n:320, b:330, r:500, q:800, k:0};'],
   ['the variant uses the standard evaluation', 'if(S.v === "c") return evaluateC(S);', ''],
   ['white is favoured by the variant evaluation', 'else             score -= CPC[t] + tbl[mirror(i)];', 'else             score -= CPC[t] + tbl[mirror(i)] + 7;'],
+  ['a side emptied by a sacrifice is not scored as won', 'if(S.v === "c" && !hasPieces(S, S.turn === "w" ? "b" : "w")) return MATE - ply;', ''],
+  ['a repeated position is a draw in the variant', 'if(S.v !== "c" && ply>0 && (ai.gameKeys', 'if(ply>0 && (ai.gameKeys'],
+  ['the showdown has no evaluation of its own', 'if(td) return showdownEval(S, td);', ''],
+  ['the showdown evaluation counts the wrong side', 'return 10 * (freeMoves(S, me, td) - freeMoves(', 'return 10 * (freeMoves(S, them, td) - freeMoves('],
+  ['the search ignores the line it is searching', 'for(var q=0;q<ai.path.length;q++) if(ai.path[q] === k) n++;', ''],
+  ['the repetition key ignores whose move it is', 'if(S.turn === "b") h ^= Z.side;\n  if(S.ep >= 0) h ^= Z.ep[cOf(S.ep)];', 'if(S.ep >= 0) h ^= Z.ep[cOf(S.ep)];'],
+  ['the search ignores the game so far', 'var n = ai.gameCount.get(k) || 0;', 'var n = 0;'],
+  ['the root move ignores the repetition rule', 'if(S.v === "c"){ ms = legalC(S, pseudo(S, S.turn, false), ai.rep); if(!ms.length) return null; }', ''],
+  ['the search lines ignore the repetition rule', '(S.v === "c") ? legalC(S, pseudo(S, side, false), ai.rep) : legal(S, ai.selfCap)', 'legal(S, ai.selfCap)'],
 ];
 
 hd('Mutation: the checks above must be able to fail (' + MUTANTS.length + ' deliberate breaks of the engine source)');

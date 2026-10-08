@@ -164,6 +164,8 @@ body{
 }
 
 [hidden]{display:none !important}
+/* a square already touched in the two-piece showdown: it cannot be landed on again */
+.sq.touched{background-image:repeating-linear-gradient(135deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px)}
 /* a queen commanding a side that has no king piece */
 .sq.cmd::before{
   content:'\265B'; position:absolute; top:3%; right:7%; z-index:3; line-height:1;
@@ -439,11 +441,12 @@ h3{
       <dl class="notes">
         <div class="note"><dt>King and queen</dt><dd>Each slides <b>up to four squares</b> in any of the eight directions. A piece in the way blocks it, an enemy on the last square can be captured, and a friend can never be. The two move identically.</dd></div>
         <div class="note"><dt>Everything else</dt><dd>Moves as in chess: pawns double-step, capture en passant and promote. There is <b>no check, no checkmate and no castling</b>, and no self-capture. Any move is legal even if it leaves your king where it can be taken.</dd></div>
-        <div class="note"><dt>A king falls</dt><dd>Capturing a king is an ordinary capture and does not end the game. If its queen is still alive she takes command <b>without changing</b>.</dd></div>
+        <div class="note"><dt>A king falls</dt><dd>Capturing a king is an ordinary capture and does not end the game. If its queen is still alive she takes command <b>without changing</b>. With several queens none of them changes: once a queen, always a queen.</dd></div>
         <div class="note"><dt>Succession</dt><dd>When a capture leaves a side with pieces but <b>no king and no queen</b>, its closest bishop becomes a king. If it has no bishop, the closest knight; then rook; then pawn. Closest means the shortest straight-line distance to the square where the capture happened; a tie goes to the lower file, then the lower rank. A queen captured while the king lives changes nothing.</dd></div>
-        <div class="note"><dt>Promotion</dt><dd>A pawn reaching the far rank may become a queen, rook, bishop or knight, and also a <b>king</b> when its side has no king on the board.</dd></div>
+        <div class="note"><dt>Promotion</dt><dd>A pawn reaching the far rank may become a queen, rook, bishop or knight, and also a <b>king</b> when its side has no king, even if queens are on the board. A side never has two kings.</dd></div>
         <div class="note"><dt>Winning</dt><dd>You win when the opponent has <b>no pieces left</b>. The last piece of a side is always a king or a queen.</dd></div>
-        <div class="note"><dt>Draws</dt><dd>No legal move while you still have pieces, the fifty-move rule, and threefold repetition. There is no insufficient-material draw.</dd></div>
+        <div class="note"><dt>No draws</dt><dd>There is no stalemate, no fifty-move rule and no repetition draw. A position may occur twice; the move that would make it occur a third time is <b>refused</b> instead of drawn, and retreating is never refused for any other reason. A side that has pieces but <b>cannot move</b> must <b>sacrifice its royal piece</b> (the king, else a queen): succession then applies as if that piece had been captured.</dd></div>
+        <div class="note"><dt>Showdown</dt><dd>When <b>exactly two pieces</b> remain, one each, a square that either piece has touched cannot be entered again (shaded on the board). Captures are exempt and a slide may pass over a touched square. A piece with no untouched square to land on and no capture must sacrifice itself, and so loses.</dd></div>
       </dl>
     </section>
   </div>
@@ -692,12 +695,59 @@ function hasPieces(S, side){
   return false;
 }
 
+/* The two-piece showdown. When exactly two pieces remain, one per side, a square touched by either piece since
+   the showdown began (both starting squares included) may not be landed on again; captures are exempt and a slide
+   may pass over a touched square. The touched list rides on the board state as S.sd, so it survives apply(),
+   Undo and the engine's search. A position loaded from a FEN with two pieces treats both squares as touched. */
+function touched(S){
+  if(S.sd) return S.sd;
+  var n = 0, ws = -1, bs = -1;
+  for(var i=0;i<64;i++){ var p = S.b[i]; if(p){ n++; if(p[0] === "w") ws = i; else bs = i; } }
+  return (n === 2 && ws >= 0 && bs >= 0) ? [ws, bs] : null;
+}
+/* The royal piece that sacrifices itself when its side cannot move: the king, else the queen on the lowest file
+   and then the lowest rank (the same tie order the succession rule uses). -1 when the side has none. */
+function sacOf(S, side){
+  var k = S.b.indexOf(side + "k");
+  if(k >= 0) return k;
+  var best = -1, bf = 9, br = 9;
+  for(var i=0;i<64;i++){
+    if(S.b[i] === side + "q"){ var f = cOf(i), rk = 8 - rOf(i); if(f < bf || (f === bf && rk < br)){ best = i; bf = f; br = rk; } }
+  }
+  return best;
+}
+/* Coriantumr legality: every pseudo-legal move is legal, minus landings on touched squares during the showdown.
+   If that leaves nothing, the royal piece must sacrifice itself: it is the one legal move, it removes the piece
+   and succession then applies exactly as if the piece had been captured. */
+function legalC(S, ms, rep){
+  var td = touched(S), out = ms, i;
+  if(td){
+    out = [];
+    for(i=0;i<ms.length;i++){ if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]); }
+  }
+  /* Repetition is REFUSED, not drawn. Where chess would call a draw because a position has occurred a third time,
+     the move that would create that third occurrence is simply not allowed; the second occurrence is. Only a move
+     that is neither a capture nor a pawn move can recreate an earlier position, so only those are looked up.
+     rep = {keyOf(T) -> a key naming a position, seen(key) -> how many times it has occurred in the game so far}. */
+  if(rep && out.length){
+    var kept = [];
+    for(i=0;i<out.length;i++){
+      var mv = out[i];
+      if(mv.cap || mv.piece[1] === "p" || rep.seen(rep.keyOf(apply(S, mv))) < 2) kept.push(mv);
+    }
+    out = kept;
+  }
+  if(out.length) return out;
+  var r = sacOf(S, S.turn);
+  return r < 0 ? [] : [mk(r, r, S.b[r], S.b[r], "self", {sac:true})];
+}
+
 function apply(S, m){
   var b = S.b.slice();
   var side = m.piece[0], opp = (side === "w") ? "b" : "w";
   b[m.from] = null;
   if(m.ep) b[idx(rOf(m.from), cOf(m.to))] = null;
-  b[m.to] = m.promo ? side + m.promo : m.piece;
+  if(!m.sac) b[m.to] = m.promo ? side + m.promo : m.piece;     // a sacrifice removes the piece and lands nowhere
   if(m.castle){
     var rf = {K:63,Q:56,k:7,q:0}[m.castle];
     var rt = {K:61,Q:59,k:5,q:3}[m.castle];
@@ -726,6 +776,11 @@ function apply(S, m){
       var cr = crown(b, m.cap[0], m.to);        // a royal just fell: does that side still have one?
       if(cr) T.cr = cr;                         // [square, former piece code], read by the page for its message
     }
+    if(S.v === "c"){                            // two pieces left, one per side: the showdown has begun or goes on
+      var td = touched(S), n = 0, ws = -1, bs = -1;
+      for(var q=0;q<64;q++){ var pp = b[q]; if(pp){ n++; if(pp[0] === "w") ws = q; else bs = q; } }
+      if(n === 2 && ws >= 0 && bs >= 0) T.sd = td ? td.concat([m.to]) : [ws, bs];
+    }
   }
   return T;
 }
@@ -739,13 +794,20 @@ function inCheck(S, side){
 function legal(S, selfCap){
   var side = S.turn, opp = (side === "w") ? "b" : "w", out = [];
   var ms = pseudo(S, side, selfCap);
-  if(S.v === "c") return ms;                    // leaving your king capturable is legal: it is only a piece
+  if(S.v === "c") return legalC(S, ms);         // leaving your king capturable is legal; the showdown and the sacrifice live in legalC
   for(var i=0;i<ms.length;i++){
     var T = apply(S, ms[i]);
     var k = kingSq(T, side);
     if(k >= 0 && !attacked(T, k, opp)) out.push(ms[i]);
   }
   return out;
+}
+
+/* The moves a player may actually make in a game: legal() plus, in Coriantumr, the refusal of a third repetition.
+   Outside the variant it is legal() unchanged, because there repetition is still a draw. */
+function legalGame(S, selfCap, rep){
+  if(S.v !== "c") return legal(S, selfCap);
+  return legalC(S, pseudo(S, S.turn, selfCap), rep);
 }
 
 function san(S, m, selfCap){
@@ -789,7 +851,8 @@ function insufficient(b){
 }
 function posKey(S){
   return S.b.map(function(p){ return p || "."; }).join("") + "|" + S.turn + "|" +
-         (S.cast.K?"K":"") + (S.cast.Q?"Q":"") + (S.cast.k?"k":"") + (S.cast.q?"q":"") + "|" + S.ep + (S.v ? "|" + S.v : "");
+         (S.cast.K?"K":"") + (S.cast.Q?"Q":"") + (S.cast.k?"k":"") + (S.cast.q?"q":"") + "|" + S.ep + (S.v ? "|" + S.v : "") +
+         (S.sd ? "|" + S.sd.slice().sort(function(a,b){ return a-b; }).join(",") : "");
 }
 function perft(S, d, selfCap){
   var ms = legal(S, selfCap);
@@ -853,6 +916,16 @@ function zkey(S){
   return h;
 }
 
+/* Names a position for the repetition rule: where the pieces are, who is to move, and the en-passant square.
+   Castling rights are left out on purpose; the variant has no castling, so they can never matter. */
+function repKey(S){
+  var h = 0;
+  for(var i=0;i<64;i++){ var p = S.b[i]; if(p) h ^= Z.pieces[p][i]; }
+  if(S.turn === "b") h ^= Z.side;
+  if(S.ep >= 0) h ^= Z.ep[cOf(S.ep)];
+  return h;
+}
+
 function mopUp(ourK, theirK){                 // drive a bare king to the corner, bring ours close
   var tr=rOf(theirK), tc=cOf(theirK);
   var cmd = Math.max(3-tr, tr-4) + Math.max(3-tc, tc-4);
@@ -883,6 +956,8 @@ function evaluate(S){
 /* Coriantumr static evaluation: material plus placement, from the side to move. The king is an active
    queen-like piece, so it uses the queen's table and there is no king-safety or bare-king term. */
 function evaluateC(S){
+  var td = touched(S);
+  if(td) return showdownEval(S, td);
   var score = 0, i, p, t, tbl;
   for(i=0;i<64;i++){
     p = S.b[i]; if(!p) continue; t = p[1];
@@ -891,6 +966,18 @@ function evaluateC(S){
     else             score -= CPC[t] + tbl[mirror(i)];
   }
   return S.turn === "w" ? score : -score;
+}
+
+/* In the showdown material is equal and a capture ends the game, so what matters is how many untouched squares each
+   piece can still land on. From the side to move; the search sees the captures. */
+function freeMoves(S, side, td){
+  var ms = pseudo(S, side, false), n = 0;
+  for(var i=0;i<ms.length;i++) if(!ms[i].cap && td.indexOf(ms[i].to) < 0) n++;
+  return n;
+}
+function showdownEval(S, td){
+  var me = S.turn, them = (me === "w") ? "b" : "w";
+  return 10 * (freeMoves(S, me, td) - freeMoves({b:S.b, turn:them, cast:S.cast, ep:-1, v:"c"}, them, td));
 }
 
 var ai = {nodes:0, deadline:0, aborted:false, selfCap:true, killers:[], hist:{}, gameKeys:null, path:[], depthDone:0, cp:CP};
@@ -938,18 +1025,21 @@ function search(S, depth, alpha, beta, ply){
   ai.nodes++;
   if(timeUp()) return 0;
   var key = zkey(S);
-  if(ply>0 && (ai.gameKeys.has(key) || ai.path.indexOf(key)>=0)) return 0;   // any repetition = draw
+  /* Coriantumr has no draws. A side whose opponent has no pieces left has won (a sacrifice can empty the other
+     side while it is still this side's turn), and a repeated position is not a draw. */
+  if(S.v === "c" && !hasPieces(S, S.turn === "w" ? "b" : "w")) return MATE - ply;
+  if(S.v !== "c" && ply>0 && (ai.gameKeys.has(key) || ai.path.indexOf(key)>=0)) return 0;   // any repetition = draw
   if(S.v !== "c" && insufficient(S.b)) return 0;      // a lone king can still capture a lone king here
   var side=S.turn, chk=inCheck(S,side);
   if(chk) depth++;                                                            // check extension
   if(depth<=0) return qsearch(S,alpha,beta,ply);
-  var ms = legal(S, ai.selfCap);
+  var ms = (S.v === "c") ? legalC(S, pseudo(S, side, false), ai.rep) : legal(S, ai.selfCap);
   if(ms.length===0){
     if(S.v === "c") return hasPieces(S, side) ? 0 : -MATE+ply;              // no legal move: draw; no pieces: lost
     return chk ? -MATE+ply : 0;                                              // mate / stalemate
   }
   orderMoves(ms, ply);
-  ai.path.push(key);
+  ai.path.push(S.v === "c" ? repKey(S) : key);       // in the variant the path holds repetition keys
   var best=-Infinity;
   for(var i=0;i<ms.length;i++){
     var m=ms[i];
@@ -981,6 +1071,14 @@ function think(S, opts){
   ai.nodes=0; ai.aborted=false; ai.selfCap=useSelf; ai.cp = (S.v === "c") ? CPC : CP;
   ai.killers=[]; ai.hist={}; ai.path=[]; ai.depthDone=0;
   ai.gameKeys = new Set((opts.history||[]).map(zkey));
+  ai.gameCount = new Map();
+  (opts.history||[]).forEach(function(h){ var k = repKey(h); ai.gameCount.set(k, (ai.gameCount.get(k) || 0) + 1); });
+  ai.rep = { keyOf: repKey, seen: function(k){
+    var n = ai.gameCount.get(k) || 0;
+    for(var q=0;q<ai.path.length;q++) if(ai.path[q] === k) n++;
+    return n;
+  } };
+  if(S.v === "c"){ ms = legalC(S, pseudo(S, S.turn, false), ai.rep); if(!ms.length) return null; }   // the repetition rule binds the root move as well
   var t0=now(); ai.deadline = t0 + (opts.ms||600);
   var maxD = opts.maxDepth || 8;
   var best=ms[0], bestScore=0;
@@ -1085,6 +1183,17 @@ function layout(){
   }
 }
 
+/* Repetition in Coriantumr is refused, not drawn: a move that would make a position occur a third time is not
+   offered. The game so far is the history stack, so Undo takes the count back with it. Outside the variant
+   legalGame is legal() unchanged, because there repetition is still a draw. */
+function repStr(S){ return S.b.map(function(p){ return p || "."; }).join("") + S.turn + S.ep; }
+function gameRep(){
+  var counts = {};
+  hist.forEach(function(h){ var k = repStr(h); counts[k] = (counts[k] || 0) + 1; });
+  return { keyOf: repStr, seen: function(k){ return counts[k] || 0; } };
+}
+function legalNow(S){ return legalGame(S, selfCap, variant ? gameRep() : null); }
+
 function onSquare(e){
   if(pending || overTxt || thinking) return;
   if(aiSide() === cur().turn) return;                 // never move for the engine
@@ -1099,7 +1208,7 @@ function onSquare(e){
   var p = S.b[s];
   if(p && p[0] === S.turn){
     sel = s;
-    targets = legal(S, selfCap).filter(function(m){ return m.from === s; });
+    targets = legalNow(S).filter(function(m){ return m.from === s; });
   } else {
     sel = -1; targets = [];
   }
@@ -1128,9 +1237,13 @@ var PNAME = {p:"pawn", n:"knight", b:"bishop", r:"rook", q:"queen", k:"king"};
 function succNote(S, m, N){
   if(!m.cap || (m.cap[1] !== "k" && m.cap[1] !== "q")) return "";
   var side = m.cap[0], who = side === "w" ? "White" : "Black";
-  if(N.cr) return who + " has no king or queen left \u2014 the closest " + PNAME[N.cr[1][1]] + " (" + sqName(N.cr[0]) + ") is crowned king.";
-  if(m.cap[1] === "k" && N.b.indexOf(side + "q") >= 0) return who + "\u2019s king fell \u2014 the queen takes command.";
-  return "";
+  var lead = m.sac ? who + "\u2019s " + PNAME[m.cap[1]] + " sacrificed itself \u2014 " : "";   // a boxed-in royal gives itself up
+  if(N.cr) return lead + (m.sac ? "the closest " : who + " has no king or queen left \u2014 the closest ") + PNAME[N.cr[1][1]] + " (" + sqName(N.cr[0]) + ") is crowned king.";
+  var queens = 0;
+  for(var qi=0;qi<64;qi++) if(N.b[qi] === side + "q") queens++;
+  var takes = queens > 1 ? "the queens take command." : "the queen takes command.";   // several queens: none of them changes
+  if(m.cap[1] === "k" && queens > 0) return m.sac ? lead + takes : who + "\u2019s king fell \u2014 " + takes;
+  return m.sac ? who + "\u2019s " + PNAME[m.cap[1]] + " sacrificed itself." : "";
 }
 
 /* " · White: queen commands" while a side has a queen and no king piece, so the commander is
@@ -1138,7 +1251,11 @@ function succNote(S, m, N){
 function commanders(S){
   var out = [];
   ["w","b"].forEach(function(sd){
-    if(S.b.indexOf(sd + "k") < 0 && S.b.indexOf(sd + "q") >= 0) out.push((sd === "w" ? "White" : "Black") + ": queen commands");
+    if(S.b.indexOf(sd + "k") < 0){
+      var nq = 0;
+      for(var i=0;i<64;i++) if(S.b[i] === sd + "q") nq++;
+      if(nq) out.push((sd === "w" ? "White" : "Black") + ": " + (nq > 1 ? "queens command" : "queen commands"));
+    }
   });
   return out.length ? " \u00b7 " + out.join(", ") : "";
 }
@@ -1146,9 +1263,14 @@ function commanders(S){
 function outcome(){
   var S = cur();
   var ms = legal(S, selfCap);
-  if(variant && !hasPieces(S, S.turn)) return (S.turn === "w" ? "Black" : "White") + " wins \u2014 last man standing";
+  if(variant){
+    /* Coriantumr has no draws: no stalemate, no fifty-move rule, no repetition. The only result is a side with no
+       pieces left, which is checked for BOTH sides because a sacrifice empties the side that has just moved. */
+    var wp = hasPieces(S, "w"), bp = hasPieces(S, "b");
+    if(!wp || !bp) return (wp ? "White" : "Black") + " wins \u2014 last man standing";
+    return null;
+  }
   if(ms.length === 0){
-    if(variant) return "Draw \u2014 no legal move";
     if(inCheck(S, S.turn)) return (S.turn === "w" ? "Black" : "White") + " wins by checkmate";
     return "Draw — stalemate";
   }
@@ -1165,6 +1287,7 @@ function render(){
   overTxt = outcome();
   var kSq = kingSq(S, S.turn);
   var checked = !overTxt && inCheck(S, S.turn);
+  var td = variant ? touched(S) : null;        // the showdown's used-up squares, if one is on
 
   for(var i=0;i<64;i++){
     var el = squares[i], p = S.b[i];
@@ -1175,6 +1298,7 @@ function render(){
     if(t && marksVisible()) cls += (t.kind === "self") ? " hl-self" : (t.kind === "enemy" ? " hl-take" : " hl-move");
     if((checked || (overTxt && overTxt.indexOf("checkmate") >= 0)) && i === kSq) cls += " chk";
     if(variant && p && p[1] === "q" && S.b.indexOf(p[0] + "k") < 0) cls += " cmd";
+    if(td && td.indexOf(i) >= 0) cls += " touched";
     el.className = cls;
     el.innerHTML = p ? pieceSVG(p) : "";
     el.setAttribute("aria-label", sqName(i) + (p ? " " + (p[0] === "w" ? "white" : "black") + " " + p[1] : " empty"));
@@ -1195,7 +1319,7 @@ function render(){
   }
   else if(overTxt){ st.textContent = overTxt; st.className = "state over"; }
   else if(checked){ st.textContent = "Check"; st.className = "state warn"; }
-  else { st.textContent = "Move " + S.full + (variant ? " · Coriantumr" + commanders(S) : (selfCap ? "" : " · standard rules")); st.className = "state"; }
+  else { st.textContent = "Move " + S.full + (variant ? " · Coriantumr" + commanders(S) + (td ? " \u00b7 Showdown, " + td.length + " squares touched" : "") : (selfCap ? "" : " · standard rules")); st.className = "state"; }
 
   // tallies — a side's losses, brass where they did it to themselves
   ["w","b"].forEach(function(side){
@@ -1234,7 +1358,26 @@ function render(){
 
   document.getElementById("undoBtn").disabled = puz ? true : (hist.length < 2);
   document.getElementById("aiLine").innerHTML = aiInfo ? aiLineText(aiInfo) : "";
-  document.getElementById("varLine").textContent = (variant && played.length) ? (played[played.length - 1].note || "") : "";
+  var vtxt = "";
+  if(variant && !overTxt){
+    var plainMoves = legal(S, selfCap), msV = legalNow(S);
+    if(msV.length === 1 && msV[0].sac){
+      var allRefused = !(plainMoves.length === 1 && plainMoves[0].sac);        // moves exist, but every one would be a third repeat
+      vtxt = (S.turn === "w" ? "White" : "Black") + (allRefused ? " has no allowed move: each would repeat a position a third time, so its " : " has no legal move: its ") +
+             PNAME[msV[0].piece[1]] + " must sacrifice itself. Click it twice.";
+    } else if(played.length && played[played.length - 1].note){
+      vtxt = played[played.length - 1].note;
+    } else if(td){
+      vtxt = "Showdown: a shaded square cannot be entered again, and a piece with no move sacrifices itself.";
+    }
+    var refusedN = (msV.length === 1 && msV[0].sac) ? 0 : plainMoves.length - msV.length;
+    if(refusedN > 0){
+      vtxt += (vtxt ? " " : "") + refusedN + (refusedN === 1 ? " move is" : " moves are") + " not allowed here: it would repeat this position a third time.";
+    }
+  } else if(variant && played.length){
+    vtxt = played[played.length - 1].note || "";
+  }
+  document.getElementById("varLine").textContent = vtxt;
 
   if(puz){
     puzRenderPanel();

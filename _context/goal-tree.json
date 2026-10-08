@@ -3,7 +3,7 @@
   "scale": "project",
   "source": "Derek, 2026-10-07: \"I want to add a variant to the tyranny chess ... Coriantmr chess after the book of mormon character. Last man standing is the king.\" Rules settled across two AskUserQuestion rounds, recorded as run-log decisions eb1e698d4d and cbd4125232 (the second states one reconciliation of mine for him to confirm: the line of succession still ends with pawns). Round 3 closed 2026-10-04 and is archived at _context/goal-tree-r3-closed.json. LESSON CARRIED FORWARD: round 3's contract checked the data and never the player's experience, so every release blocker here is an independent-implementation check or something done in the real page.",
   "created_at": "2026-10-07T11:40:00-04:00",
-  "updated_at": "2026-10-07T16:47:09+00:00",
+  "updated_at": "2026-10-08T01:51:09+00:00",
   "root": {
     "id": "TC-R4",
     "level": "project",
@@ -27,7 +27,12 @@
       "State or imply that endgames are winnable, or are drawn, before the retrograde measurement exists.",
       "Add a new banner comment before the GAME / UI banner in src/tyranny.html or put DOM code inside tests/extract.js's slices; both silently shrink or break the extracted engine.",
       "Wait for a page timer with a fixed sleep, or pick a test fixture from the random deal or as 'the first match'. Round 3 found two flaky browser checks caused exactly that way.",
-      "Let the page's self-capture toggle reach Coriantumr rules: no self-capture, whatever the toggle says."
+      "Let the page's self-capture toggle reach Coriantumr rules: no self-capture, whatever the toggle says.",
+      "Ship any draw rule inside Coriantumr: the owner removed fifty-move, repetition and no-legal-move draws (his words: 'Remove them').",
+      "Treat the touched squares as page state: they must live in the board state, or a position reached by undo or by the engine's search would forget them.",
+      "Read 'the royal piece has to sacrifice itself' as a pass: he said 'I guess you can build that the turn passes' only for the impossible case, and asked for the sacrifice.",
+      "Claim the showdown is solved or fair on the full board: only 3x3 to 5x5 were solved exactly; say so.",
+      "Ban retreating or re-landing on a square in ordinary play to stop repetition: the owner said he does not want to discourage a retreat 'just for the sake of a rule'. The only repetition rule is the refused third occurrence."
     ],
     "children": [
       {
@@ -332,7 +337,106 @@
           }
         ],
         "updated": "2026-10-07T16:47:09+00:00"
+      },
+      {
+        "id": "R4-M6",
+        "level": "milestone",
+        "title": "Ending rules from the owner, 2026-10-07",
+        "status": "done",
+        "children": [
+          {
+            "id": "R4-M6-T1",
+            "level": "task",
+            "title": "No draws, forced sacrifice and the two-piece showdown",
+            "status": "done",
+            "criteria": [
+              {
+                "id": "R4-M6-AC1",
+                "text": "No draws in Coriantumr: with the variant tag, outcome() reports neither the fifty-move rule nor threefold repetition nor a no-legal-move draw, and the engine search does not score a repeated position as a draw. Tyranny and standard keep every draw rule and their suites pass unchanged. Checked in the engine tests and in the real page on a position with the half-move clock past 100 and on a threefold-repeated position.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/browser.js 286 passed 0 failed (four runs, one with every core busy), 2026-10-07: a position with the half-move clock at 100 leaves overTxt null in Coriantumr, and a shuffle stops one move short of a third occurrence (the start position stands at two, game not drawn) while the same clicks under Tyranny end 'Draw - threefold repetition' and a fifty-move position ends 'Draw - fifty-move rule' (controls); tests/coriantumr-ai.js: a repeated position is not scored as a draw; page mutant that restores the draws killed"
+              },
+              {
+                "id": "R4-M6-AC2",
+                "text": "Sacrifice: when the side to move has no ordinary legal move and owns a royal piece, legal() returns exactly one move, the sacrifice of its king (else its queen on the lowest file, then the lowest rank). It removes that piece, applies the succession rule from the sacrificed square (a queen alive means nobody changes; none left means the closest bishop, knight, rook, pawn is crowned), and passes the turn. It is never offered when an ordinary move exists. Agreed by the independent Python reference's per-move digests and perft on constructed boxed-in positions, and by hand-derived cases.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/coriantumr.js 198 passed: boxed-in king, queen-only royal, king plus queen, two queens (lowest file), two queens on one file (lowest rank), never offered while a move exists; Python reference digests and perft on 22 handmade positions incl. those; browser R4-M6-AC2: notice shown, two clicks sacrifice, closest pawn a7 crowned, message, Undo restores; mutants killed (sacrifice never offered, wrong royal, wrong tie, piece left on board, succession skipped)"
+              },
+              {
+                "id": "R4-M6-AC3",
+                "text": "Showdown: when exactly two pieces remain, one per side, a square touched by either piece since the showdown began (both starting squares included) cannot be landed on again. Captures are exempt, sliding over touched squares is allowed, and the touched set is carried in the board state through every apply(), appears in the position key, and survives Undo. A piece with no untouched landing square and no capture must sacrifice itself, which leaves its side with no pieces, so it loses. The Python reference agrees on every move digest and on perft(1..4) from constructed showdown positions that carry a touched set.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/coriantumr.js: sd set when a capture leaves two pieces (both squares), grows by one per move, FEN two-piece position derives it, captures exempt, slide over touched allowed, stuck piece sacrifices and loses, 200 seeded random showdowns never repeat a square and end within 63 plies; Python reference digests and perft(1..3) on 5 showdown positions carrying a touched set; browser R4-M6-AC3; 7 showdown mutants killed"
+              },
+              {
+                "id": "R4-M6-AC4",
+                "text": "The engine's showdown search is checked against an exact solver written separately: on at least 200 late-showdown positions on the full board, small enough to solve completely, the engine at sufficient depth reports the same winner as an exhaustive forward search that shares no code with it.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/coriantumr-showdown.js 13 passed: tools/coriantumr-showdown.js solver (own board and move rule, forward search) agrees with the engine's search on 250 of 250 late 8x8 showdowns (at most 18 squares left; 250 of 250 also at 22), 91 begun by a capture, touched set equal to an independently tracked one; engine mutants killed by it: capture-on-touched forbidden, touched re-landable, set never grows, sacrifice never offered, starting squares untouched (5 of 6; the sixth is pinned by the AI tests at depth 0)"
+              },
+              {
+                "id": "R4-M6-AC5",
+                "text": "Tyranny and standard behaviour is untouched: every earlier Node suite passes with its count unchanged, the variant start perft stays 20 / 400 / 9,122 / 207,622, standard and Tyranny perft stay as before, and tools/gen-puzzles.js with the committed parameters reproduces puzzles/puzzles.json byte for byte.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "node tests/run-all.js 2026-10-07: 27 / 8 / 24 / 13 / 396 / 223 / 52 / 13 / 26 = 782 checks, all green, the five earlier suites at their old counts; variant start perft 20 / 400 / 9122 / 207622 and standard and Tyranny perft asserted unchanged in tests/coriantumr.js; node tools/gen-puzzles.js --games 500 --target 20 --seed 20260914 --now 2026-10-03T01:47:33Z leaves puzzles/puzzles.json byte-identical (sha256 prefix 64fce79d6656dcb9 before and after, git diff exit 0) with the final source"
+              },
+              {
+                "id": "R4-M6-AC6",
+                "text": "The engine plays the new endings: a lone royal that is boxed in sacrifices itself, a side with no pieces ends the search as a win for the other, and the showdown evaluation counts free landing squares. Seeded engine-versus-engine showdowns from two-piece starts all finish by capture or sacrifice within 62 plies, reported as plain counts with the split by side to move.",
+                "met": true,
+                "evidence": "tests/coriantumr-ai.js 40 passed: boxed-in royal plays the sacrifice and scores lost, emptied side is a win at depth 0, showdown evaluated by free squares, 60 seeded engine showdowns all end within 58 plies; node tools/coriantumr-selfplay.js 2026-10-07: 100 showdowns at depth 3 all finished (22 by capture, 78 by sacrifice, mean 57.3, longest 61), side to move won 51 and lost 49; browser R4-M6-AC6 engine replies in a showdown and a boxed-in engine sacrifices itself"
+              },
+              {
+                "id": "R4-M6-AC7",
+                "text": "Real browser: touched squares are drawn and cannot be clicked as targets; a boxed-in side shows the notice and one click selects the king and a second sacrifices it with the succession message; a stuck piece in the showdown ends the game as last man standing; a position past fifty moves and a threefold-repeated position do not end the game. All driven by clicks against the live DOM.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "tests/browser.js R4-M6 block, all by clicks against the live DOM: touched squares shaded and not offered, notice and two-click sacrifice, stuck piece ends the game as last man standing, fifty-move position does not end it, the shuffle's third repeat is not offered; page mutants for this block all killed (9 + 5)"
+              },
+              {
+                "id": "R4-M6-AC8",
+                "text": "The clarifications of 2026-10-07 hold and are tested: only one king per side can exist, a pawn reaching the far rank is offered KING whenever its side has no king piece even with queens on the board, and capturing the king while several queens live changes nothing: every queen stays a queen.",
+                "met": true,
+                "evidence": "tests/coriantumr.js: king captured with two queens alive changes nobody and no crown is recorded; a pawn is offered KING with two queens and no king; a side with a king is never offered a second; browser R4-M6-AC8: both queens stay queens, both carry the command mark, status line 'queens command', promotion picker shows five choices"
+              },
+              {
+                "id": "R4-M6-AC9",
+                "text": "The README states the new rules in the owner's wording, what was measured about them (the exact small-board showdown results, the showdown reading that was rejected, and that the full board is not solved), and the consequence of removing every draw rule.",
+                "met": true,
+                "evidence": "README Coriantumr section rewritten 2026-10-07: rules in the owner's wording, the readings, 3x3/4x4/5x5 exact table (3x3 0 of 16, 4x4 48 of 88, 5x5 264 of 280, from tools/coriantumr-showdown.js --small --write), the rejected own-squares reading, 18 of 20 stalled engine games, honest limits; tests/puzzles.js README-count check passes 396"
+              },
+              {
+                "id": "R4-M6-AC10",
+                "text": "A deepcheck is run on the finished work and its ledger id recorded.",
+                "met": true,
+                "release_blocker": true,
+                "evidence": "two deepchecks 2026-10-07: run tyranny-coriantumr-m6-2026-10-07 ledger close id 296d5bf0f5 (1 finding fixed: showdown tool exit, 3 cut) and run tyranny-coriantumr-repeat-2026-10-07 ledger close id b44233d103 (0 findings, 3 cut)"
+              },
+              {
+                "id": "R4-M6-AC11",
+                "release_blocker": true,
+                "met": true,
+                "text": "Repetition is refused, not drawn: in Coriantumr a move that would create the THIRD occurrence of a position (piece placement, side to move and en-passant square; castling does not exist) is not legal, the second occurrence is allowed, and a retreat to a square a piece has stood on is never refused for any other reason. If every ordinary move is refused (by this rule or the showdown) the royal sacrifices. Tyranny and standard keep their draws. Checked by engine tests, by the independent Python reference's digests on positions that carry a table of earlier occurrences, by the engine search never choosing a refused move, and by a real-browser shuffle in which the second repeat is allowed and the third is not offered.",
+                "evidence": "owner's rule 2026-10-07 (third occurrence refused): tests/coriantumr.js 223 passed: Python reference rows with a table of earlier occurrences (4 positions: digest and allowed list), second occurrence allowed and third refused, a real two-lap shuffle by counted history (laps 1 allowed, the last move of lap 2 refused although legal), pawn moves and captures never refused, sacrifice when every move is refused, outside the variant unchanged; 6 mutants killed; tests/coriantumr-ai.js 52 passed: engine never plays the refused move, engine playing both sides never lets a position occur three times over 120 plies, sacrifices when all refused, search counts the line and the game, key includes the side to move; 5 mutants killed; browser R4-M6-AC11: second repeat allowed, third not offered, no marker, page says why, another move fine; 5 page mutants killed"
+              },
+              {
+                "id": "R4-M6-AC12",
+                "met": true,
+                "text": "The effect of the repetition rule on engine-against-engine games is measured and reported as plain counts at the same depth and cap as before (20 games, depth 3, 150 and 400 plies), with how many games finish and where the rest stand, and the README states plainly whether the stalls remain.",
+                "evidence": "node tools/coriantumr-selfplay.js 2026-10-07, 20 engine games at depth 3: without a repetition rule 2 finish at a 150-ply cap and 3 at 400 (12 balanced and 5 a lone piece against two or more still going); with the third repeat refused 4 finish at 150 and 13 at 400, and at 400 all 7 still going are a lone piece against two or more; README states plainly that the lone-piece stall remains"
+              }
+            ],
+            "updated": "2026-10-08T01:51:09+00:00"
+          }
+        ],
+        "updated": "2026-10-08T01:51:09+00:00"
       }
-    ]
+    ],
+    "updated": "2026-10-08T01:25:37+00:00"
   }
 }

@@ -7,7 +7,7 @@
  *      succession choice anywhere in 300 positions changes a hash.
  *   2. HAND DERIVATIONS written out below (perft(3) = 8,902 + 20 x 11 = 9,122) and hand-built positions whose
  *      answer can be checked by eye.
- *   3. MUTATION: the engine source is deliberately broken nineteen ways and every break must be caught by a
+ *   3. MUTATION: the engine source is deliberately broken many ways (see MUTANTS) and every break must be caught by a
  *      named check. A battery that has only ever passed has not been shown able to fail.
  *
  * The battery is a function of an engine, so the unbroken engine and each mutant run exactly the same checks.
@@ -62,7 +62,8 @@ function battery(E) {
     }
     return rows.join('/');
   };
-  const keyOf = (T) => placement(T.b) + ' ' + T.turn + ' ' + (T.ep >= 0 ? E.sqName(T.ep) : '-');
+  const keyOf = (T) => placement(T.b) + ' ' + T.turn + ' ' + (T.ep >= 0 ? E.sqName(T.ep) : '-') +
+    (T.sd ? ' T' + T.sd.map((q) => E.sqName(q)).sort().join(',') : '');
   const digest = (S) => {
     const items = E.legal(S, true).map((m) => uci(m) + '=' + keyOf(E.apply(S, m))).sort();
     return { n: items.length, sha1: crypto.createHash('sha1').update(items.join('\n')).digest('hex') };
@@ -166,7 +167,7 @@ function battery(E) {
     E.legal(C('8/8/8/8/p7/P7/8/8 w - - 0 1'), true).length + '/' + E.hasPieces(C('8/8/8/8/p7/P7/8/8 w - - 0 1'), 'w'), '0/true');
 
   // ---- R4-M1-AC9: the rule set survives every move; the invariant holds ---------------------------------
-  let plies = 0, tagLost = 0, brokenInvariant = 0, longReach = 0, farRoyal = 0, games = 0;
+  let plies = 0, tagLost = 0, brokenInvariant = 0, longReach = 0, farRoyal = 0, games = 0, sdMismatch = 0;
   const royalOk = (S, side) => {
     let any = 0, royal = 0, last = null;
     for (const p of S.b) if (p && p[0] === side) { any++; last = p; if (p[1] === 'k' || p[1] === 'q') royal++; }
@@ -191,12 +192,16 @@ function battery(E) {
         plies++;
         if (S.v !== 'c') tagLost++;
         if (!royalOk(S, 'w') || !royalOk(S, 'b')) brokenInvariant++;
+        let nw = 0, nb = 0;
+        for (const p of S.b) if (p) { if (p[0] === 'w') nw++; else nb++; }
+        if (!!S.sd !== (nw === 1 && nb === 1)) sdMismatch++;
       }
       games++;
     }
   }
   t('seeded random play covers at least 5,000 plies (' + plies + ' in ' + games + ' games)', plies >= 5000, true);
   t('the variant tag survives every move', tagLost, 0);
+  t('a showdown is on exactly when two pieces, one per side, remain (all those positions)', sdMismatch, 0);
   t('every non-empty side always holds a king or queen, and a lone survivor is one', brokenInvariant, 0);
   t('no king or queen move is ever longer than 4 squares, in any of those positions', longReach, 0);
   t('CONTROL: the long royal moves (2 to 4 squares) really were exercised', farRoyal > 1000, true);
@@ -209,7 +214,7 @@ function battery(E) {
         const ms = E.legal(S, tyranny);
         if (!ms.length) break;
         S = E.apply(S, ms[(rnd() * ms.length) | 0]);
-        if ('v' in S) leaked++;
+        if ('v' in S || 'sd' in S) leaked++;
       }
     }
   }
@@ -238,6 +243,164 @@ function battery(E) {
   t('perft(2) matches the reference in all ' + GOLDEN.children.length + ' sampled positions', perft2Bad, 0);
   t('perft(3) matches the reference in ' + perft3Run + ' of them', perft3Bad, 0);
 
+  // ---- R4-M6: the owner's ending rules, 2026-10-07 ----------------------------------------------------------
+  const withSd = (f, names) => { const S = C(f); if (names) S.sd = names.map(sq); return S; };
+  const only = (S) => E.legal(S, true);
+  const sacOf = (f) => { const ms = only(C(f)); return ms.length === 1 && ms[0].sac ? ms[0] : null; };
+  const afterSac = (f) => { const m = sacOf(f); return m ? E.apply(C(f), m) : null; };
+  const toNames = (S) => only(S).map((m) => E.sqName(m.to));
+
+  // sacrifice: a side with no ordinary move gives up its royal piece, and succession then applies
+  const boxK = 'KP6/PP6/8/8/8/8/8/7k w - - 0 1';
+  const boxMoves = only(C(boxK));
+  t('a boxed-in king has exactly one legal move, the sacrifice (kind self, flagged sac)',
+    boxMoves.length + '/' + (boxMoves[0] && boxMoves[0].sac === true) + '/' + (boxMoves[0] && boxMoves[0].kind), '1/true/self');
+  const sacK = afterSac(boxK);
+  t('the sacrifice removes the king and passes the turn', !!sacK && at(sacK, 'a8') === null && sacK.turn === 'b', true);
+  t('succession runs from the sacrificed square: pawns a7 and b8 tie on distance, the lower file (a7) is crowned',
+    sacK && at(sacK, 'a7') + at(sacK, 'b7') + at(sacK, 'b8'), 'wkwpwp');
+  t('...reported as [square, former piece]', sacK && sacK.cr && sacK.cr.join(), sq('a7') + ',wp');
+  const sacQ = afterSac('QP6/PP6/8/8/8/8/8/7k w - - 0 1');
+  t('a queen that is the only royal sacrifices itself and a pawn is crowned (a7)', !!sacQ && at(sacQ, 'a8') === null && at(sacQ, 'a7') === 'wk', true);
+  const sacKQ = afterSac('KQP5/PPP5/8/8/8/8/8/7k w - - 0 1');
+  t('king and queen both boxed in: the KING sacrifices, the queen stays a queen, nobody is crowned',
+    sacKQ && at(sacKQ, 'a8') + '/' + at(sacKQ, 'b8') + '/' + String(sacKQ.cr), 'null/wq/undefined');
+  const sacQQ = afterSac('QQP5/PPP5/8/8/8/8/8/7k w - - 0 1');
+  t('two queens and no king, all boxed in: the queen on the lowest file (a8) sacrifices, the other stays a queen',
+    sacQQ && at(sacQQ, 'a8') + '/' + at(sacQQ, 'b8') + '/' + String(sacQQ.cr), 'null/wq/undefined');
+  const sacQF = afterSac('QP6/QP6/PP6/8/8/8/8/7k w - - 0 1');
+  t('two boxed-in queens on the same file and no king: the lower RANK (a7) sacrifices, the queen on a8 stays',
+    sacQF && at(sacQF, 'a7') + '/' + at(sacQF, 'a8') + '/' + String(sacQF.cr), 'null/wq/undefined');
+  t('the sacrifice is never offered while an ordinary move exists (a free queen on a1)',
+    only(C('KP6/PP6/8/8/8/8/8/Q6k w - - 0 1')).some((m) => m.sac), false);
+  t('...nor for a king in the open', only(C('k7/8/8/8/3K4/8/8/8 w - - 0 1')).some((m) => m.sac), false);
+
+  // the clarifications of 2026-10-07: one king, kings offered at promotion whatever else is on the board, queens stay queens
+  const manyQueens = play('R3k3/8/8/8/8/8/3qq3/4K3 w - - 0 1', 'a8e8');
+  t('several queens live and the king is captured: nobody changes, both queens stay queens',
+    manyQueens && at(manyQueens, 'd2') + at(manyQueens, 'e2') + String(manyQueens.cr), 'bqbqundefined');
+  t('a pawn is offered KING when its side has two queens and no king', promos('8/8/8/8/8/8/p7/1Q1qq3 b - - 0 1', 'a2a1'), 'bknqr');
+  const twoKings = E.legal(C('4k3/8/8/8/8/8/p7/1Q2K3 b - - 0 1'), true).filter((m) => m.promo === 'k').length;
+  t('a side that already has a king is never offered a second one', twoKings, 0);
+
+  // showdown: the capture that leaves two pieces begins it
+  const sdStart = play('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1', 'd4e5');
+  t('the showdown begins when a capture leaves exactly two pieces: both squares are touched',
+    sdStart && sdStart.sd && sdStart.sd.slice().sort((a, b) => a - b).join(), [sq('e5'), sq('g8')].sort((a, b) => a - b).join());
+  const moveTo = (S, from, to) => E.legal(S, true).find((m) => E.sqName(m.from) === from && E.sqName(m.to) === to);
+  const sdMid = sdStart && moveTo(sdStart, 'g8', 'g7') ? E.apply(sdStart, moveTo(sdStart, 'g8', 'g7')) : null;
+  t('the touched set grows by the square landed on', sdMid && sdMid.sd.length + ':' + sdMid.sd.includes(sq('g7')), '3:true');
+  const sdLater = sdMid && moveTo(sdMid, 'e5', 'e4') ? E.apply(sdMid, moveTo(sdMid, 'e5', 'e4')) : null;
+  const laterNames = sdLater ? toNames(sdLater) : [];
+  t('CONTROL: Black has moves in that position', laterNames.length > 0, true);
+  t('a touched square cannot be landed on again: not g8 (Black left it) and not e5 (White left it)',
+    laterNames.includes('g8') + '/' + laterNames.includes('e5'), 'false/false');
+  t('...and the position carries all four touched squares', sdLater && sdLater.sd.length, 4);
+  t('a position loaded from a FEN with two pieces counts both squares as touched',
+    E.touched(C('6k1/8/8/8/3K4/8/8/8 w - - 0 1')).length, 2);
+  t('with three pieces there is no showdown', E.touched(C('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1')), null);
+
+  const passOver = withSd('8/7k/8/8/8/8/8/K7 w - - 0 1', ['a1', 'h7', 'b2']);
+  const poNames = toNames(passOver);
+  t('a touched square (b2) cannot be landed on', poNames.includes('b2'), false);
+  t('...but a slide may pass over it (c3 is reachable)', poNames.includes('c3'), true);
+  t('...and an untouched neighbour is a legal landing (a2)', poNames.includes('a2'), true);
+  t('a capture is exempt from the touched rule (the king takes the queen on f6)',
+    E.legal(C('8/8/5q2/8/3K4/8/8/8 w - - 0 1'), true).some((m) => E.sqName(m.to) === 'f6' && m.cap), true);
+  const stuckRow = GOLDEN.showdown.find((r) => /sacrifices itself/.test(r.name));
+  const stuckS = withSd(stuckRow.fen, stuckRow.touched);
+  const stuckMoves = only(stuckS);
+  t('a piece with no untouched landing square and no capture has exactly one move, the sacrifice',
+    stuckMoves.length + '/' + (stuckMoves[0] && stuckMoves[0].sac), '1/true');
+  const stuckAfter = E.apply(stuckS, stuckMoves[0]);
+  t('...which leaves its side with no pieces, so it has lost', E.hasPieces(stuckAfter, 'w') + '/' + E.hasPieces(stuckAfter, 'b'), 'false/true');
+
+  // the independent reference on showdown and sacrifice positions that carry a touched set
+  for (const row of GOLDEN.showdown) {
+    const S = withSd(row.fen, row.touched);
+    const d = digest(S);
+    t('showdown reference, every move and board: ' + row.name.slice(0, 55), d.n + '/' + d.sha1, row.moves + '/' + row.sha1);
+    for (const [dd, want] of Object.entries(row.perft)) {
+      t('showdown reference perft(' + dd + '): ' + row.name.slice(0, 50), E.perft(S, Number(dd), true), want);
+    }
+  }
+
+  // seeded random showdowns: the touched set is always there, never repeats a square, and the game ends within 62 moves
+  let sdGames = 0, sdBad = 0, sdMax = 0, sdEnded = 0;
+  for (let g = 0; g < 200; g++) {
+    const rnd = mulberry32(700 + g);
+    let S = null;
+    while (!S) {
+      const a = (rnd() * 64) | 0, b2 = (rnd() * 64) | 0;
+      if (a === b2) continue;
+      const bd = new Array(64).fill(null);
+      bd[a] = 'wk'; bd[b2] = 'bk';
+      const cand = { b: bd, turn: 'w', cast: { K: false, Q: false, k: false, q: false }, ep: -1, half: 0, full: 1, v: 'c' };
+      if (!E.legal(cand, true).some((m) => m.cap)) S = cand;
+    }
+    let n = 0;
+    while (n < 100) {
+      const ms = E.legal(S, true);
+      if (!ms.length) break;
+      const T = E.apply(S, ms[(rnd() * ms.length) | 0]);
+      n++;
+      if (!E.hasPieces(T, 'w') || !E.hasPieces(T, 'b')) { sdEnded++; break; }
+      if (!T.sd || new Set(T.sd).size !== T.sd.length || T.sd.length !== 2 + n) sdBad++;
+      S = T;
+    }
+    sdGames++; sdMax = Math.max(sdMax, n);
+  }
+  t('200 seeded random showdowns: the touched set is never missing, never repeats a square, grows by one per move', sdBad, 0);
+  t('...and every one ended by capture or sacrifice within the 62-move bound (longest ' + sdMax + ' plies)',
+    sdEnded === sdGames && sdMax <= 63, true);
+
+  // ---- R4-M6-AC11: repetition is refused, not drawn ---------------------------------------------------------
+  // A position may occur twice; the move that would make it occur a third time is not allowed.
+  const repStr = (T) => placement(T.b) + ' ' + T.turn + ' ' + (T.ep >= 0 ? E.sqName(T.ep) : '-');
+  const repOf = (seen) => ({ keyOf: repStr, seen: (k) => (k in seen ? seen[k] : (seen['*'] || 0)) });
+  const gameMoves = (S, seen) => E.legalGame(S, true, repOf(seen));
+  const digestOfList = (S, list) => {
+    const items = list.map((m) => uci(m) + '=' + keyOf(E.apply(S, m))).sort();
+    return { n: items.length, sha1: crypto.createHash('sha1').update(items.join('\n')).digest('hex') };
+  };
+  for (const row of GOLDEN.repeat) {
+    const S = C(row.fen), list = gameMoves(S, row.seen), d = digestOfList(S, list);
+    t('repetition reference, every move and board: ' + row.name.slice(0, 60), d.n + '/' + d.sha1, row.moves + '/' + row.sha1);
+    t('repetition reference, the allowed moves: ' + row.name.slice(0, 55), list.map(uci).sort().join(), row.allowed.join());
+  }
+  const shuffleFen = '8/7k/8/8/8/8/P7/1K6 w - - 0 1';
+  const refRow = GOLDEN.repeat[0], refMoves = gameMoves(C(refRow.fen), refRow.seen).map(uci);
+  t('a position seen twice already: the move that would make it a third occurrence is refused (b1b2)', refMoves.includes('b1b2'), false);
+  t('...a position seen once is allowed to occur a second time (b1a1)', refMoves.includes('b1a1'), true);
+  const boxedRow = GOLDEN.repeat[1], boxedList = gameMoves(C(boxedRow.fen), boxedRow.seen);
+  t('when every ordinary move would be a third occurrence the royal sacrifices: one move, flagged sac',
+    boxedList.length + '/' + (boxedList[0] && boxedList[0].sac), '1/true');
+  const irrRow = GOLDEN.repeat[2], irrMoves = gameMoves(C(irrRow.fen), irrRow.seen).map(uci).sort().join();
+  t('a pawn move or a capture is never refused, however often the position has been seen',
+    irrMoves, ['a2a3', 'a2a4', 'a2b3', 'c2b3'].join());
+  const noneRow = GOLDEN.repeat[3];
+  t('CONTROL: with nothing seen, the game-aware list is exactly legal()',
+    gameMoves(C(noneRow.fen), {}).map(uci).sort().join(), E.legal(C(noneRow.fen), true).map(uci).sort().join());
+  t('outside the variant the game-aware list is legal() unchanged: repetition there is still a draw',
+    E.legalGame(E.startState(), true, repOf({ '*': 2 })).length, E.legal(E.startState(), true).length);
+
+  // a real shuffle, counted the way a game counts it: Kb1-b2, Kh7-h8, Kb2-b1, Kh8-h7, twice over
+  let SH = C(shuffleFen);
+  const counts = {};
+  const seenNow = (T) => { counts[repStr(T)] = (counts[repStr(T)] || 0) + 1; };
+  seenNow(SH);
+  const step = (u) => { const m = gameMoves(SH, counts).find((x) => uci(x) === u); if (m) { SH = E.apply(SH, m); seenNow(SH); } return !!m; };
+  const lap1 = ['b1b2', 'h7h8', 'b2b1', 'h8h7'].map(step);
+  t('first lap: every move is allowed, and the start position now stands at two occurrences',
+    lap1.join() + '/' + counts[repStr(C(shuffleFen))], 'true,true,true,true/2');
+  const lap2 = ['b1b2', 'h7h8', 'b2b1'].map(step);
+  t('second lap: the retreats and the repeats are still allowed up to the last move', lap2.join(), 'true,true,true');
+  t('...and then Kh8-h7, which would be the third occurrence of the start position, is refused',
+    gameMoves(SH, counts).some((m) => uci(m) === 'h8h7'), false);
+  t('...although it is an ordinary legal move, so only the repetition rule removed it',
+    E.legal(SH, true).some((m) => uci(m) === 'h8h7'), true);
+  t('...and Black still has other moves, so nobody is forced to sacrifice', gameMoves(SH, counts).some((m) => !m.sac), true);
+
   // ---- R4-M1-AC10: nothing outside the variant moved ------------------------------------------------------
   t('standard perft(1..4) is unchanged: 20 / 400 / 8,902 / 197,281',
     [1, 2, 3, 4].map((d) => E.perft(E.startState(), d, false)).join(' / '), '20 / 400 / 8902 / 197281');
@@ -263,7 +426,7 @@ const results = battery(REAL);
 report(results);
 console.log('      ' + results.length + ' checks in the battery; fixture: ' + GOLDEN.perft.length + ' handmade positions, ' +
   GOLDEN.children.length + ' sampled (' + GOLDEN.counts.crowned + ' crowned and ' + GOLDEN.counts.royalCapturable +
-  ' royal-capturable found while sampling), seed ' + GOLDEN.seed);
+  ' royal-capturable found while sampling), ' + GOLDEN.showdown.length + ' showdown positions, seed ' + GOLDEN.seed);
 
 /* Each mutant breaks one rule in the engine SOURCE. The anchor must occur exactly once (so a refactor cannot
    leave a mutant silently testing nothing), the broken engine must still load, and the battery must fail. */
@@ -276,8 +439,8 @@ const MUTANTS = [
   ['succession tries knights before bishops', 'var order = ["b","n","r","p"],', 'var order = ["n","b","r","p"],'],
   ['succession tries pawns before rooks', 'var order = ["b","n","r","p"],', 'var order = ["b","n","p","r"],'],
   ['succession measures from where the capturer started, not the capture square', 'crown(b, m.cap[0], m.to)', 'crown(b, m.cap[0], m.from)'],
-  ['a distance tie goes to the higher file', 'f < bf', 'f > bf'],
-  ['a file tie goes to the higher rank', 'rk < br', 'rk > br'],
+  ['a distance tie goes to the higher file', 'd === bd && (f < bf', 'd === bd && (f > bf'],
+  ['a file tie goes to the higher rank', 'rk < br)))){ best = i; bd = d;', 'rk > br)))){ best = i; bd = d;'],
   ['distance is king-steps instead of squared straight-line', 'd = dr*dr + dc*dc', 'd = Math.max(Math.abs(dr), Math.abs(dc))'],
   ['distance is city-block instead of squared straight-line', 'd = dr*dr + dc*dc', 'd = Math.abs(dr) + Math.abs(dc)'],
   ['a living queen does not stop the crowning', 'if(!any || royal) return null;', 'if(!any) return null;'],
@@ -285,8 +448,27 @@ const MUTANTS = [
   ['apply() drops the rule-set tag', 'T.v = S.v;', ''],
   ['promotion offers a king every time', 'var needKing = C && S.b.indexOf(side + "k") < 0;', 'var needKing = C;'],
   ['promotion never offers a king', 'var needKing = C && S.b.indexOf(side + "k") < 0;', 'var needKing = false;'],
-  ['the royal-safety filter applies in the variant', 'if(S.v === "c") return ms;', ''],
+  ['the royal-safety filter applies in the variant', 'if(S.v === "c") return legalC(S, ms);', ''],
   ['check exists in the variant', 'if(S.v === "c") return false;', ''],
+  ['the showdown never begins', 'if(n === 2 && ws >= 0 && bs >= 0) T.sd = td ? td.concat([m.to]) : [ws, bs];', ''],
+  ['the touched set never grows', 'T.sd = td ? td.concat([m.to]) : [ws, bs];', 'T.sd = td ? td : [ws, bs];'],
+  ['the starting squares are not touched', 'T.sd = td ? td.concat([m.to]) : [ws, bs];', 'T.sd = td ? td.concat([m.to]) : [];'],
+  ['a showdown starts with three pieces', 'if(n === 2 && ws >= 0 && bs >= 0) T.sd', 'if(n <= 3 && ws >= 0 && bs >= 0) T.sd'],
+  ['a FEN position with two pieces has no touched squares', 'return (n === 2 && ws >= 0 && bs >= 0) ? [ws, bs] : null;', 'return null;'],
+  ['a capture onto a touched square is forbidden', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'if(td.indexOf(ms[i].to) < 0) out.push(ms[i]);'],
+  ['touched squares may be landed on again', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'out.push(ms[i]);'],
+  ['the sacrifice is never offered', 'return r < 0 ? [] : [mk(r, r, S.b[r], S.b[r], "self", {sac:true})];', 'return [];'],
+  ['the queen sacrifices before the king', 'if(k >= 0) return k;', 'if(false) return k;'],
+  ['the queen on the higher file sacrifices', 'var f = cOf(i), rk = 8 - rOf(i); if(f < bf', 'var f = cOf(i), rk = 8 - rOf(i); if(f > bf'],
+  ['the queen on the higher rank sacrifices', '(f === bf && rk < br)){ best = i; bf = f; br = rk; }', '(f === bf && rk > br)){ best = i; bf = f; br = rk; }'],
+  ['a sacrifice leaves the piece on the board', 'if(!m.sac) b[m.to] =', 'b[m.to] ='],
+  ['repetition is refused already on the second occurrence', 'rep.seen(rep.keyOf(apply(S, mv))) < 2', 'rep.seen(rep.keyOf(apply(S, mv))) < 1'],
+  ['repetition is refused only on the fourth occurrence', 'rep.seen(rep.keyOf(apply(S, mv))) < 2', 'rep.seen(rep.keyOf(apply(S, mv))) < 3'],
+  ['a capture or pawn move can be refused as a repeat', 'if(mv.cap || mv.piece[1] === "p" || rep.seen(', 'if(rep.seen('],
+  ['a pawn move can be refused as a repeat', 'if(mv.cap || mv.piece[1] === "p" || rep.seen(', 'if(mv.cap || rep.seen('],
+  ['the refusal is ignored outside the touched-square filter', 'if(rep && out.length){', 'if(false){'],
+  ['outside the variant the game-aware list changes', 'if(S.v !== "c") return legal(S, selfCap);', 'if(S.v !== "c") return legalC(S, pseudo(S, S.turn, selfCap), rep);'],
+  ['a sacrifice skips succession', 'if(S.v === "c" && m.cap && (m.cap[1] === "k" || m.cap[1] === "q")){', 'if(S.v === "c" && m.cap && !m.sac && (m.cap[1] === "k" || m.cap[1] === "q")){'],
 ];
 
 hd('Mutation: the checks above must be able to fail (' + MUTANTS.length + ' deliberate breaks of the engine source)');

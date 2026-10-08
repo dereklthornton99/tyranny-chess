@@ -1,0 +1,34 @@
+{
+  "tool": "tools/coriantumr-showdown.js",
+  "rule": "two pieces, touched squares cannot be landed on again, captures exempt, slides may pass over touched squares, a piece with no move loses",
+  "covers": "every start where neither piece can capture the other at once, on boards of the given size; the 8x8 board is NOT solved",
+  "results": [
+    {
+      "board": "3x3",
+      "starts": 16,
+      "sideToMoveWins": 0,
+      "sideToMoveLoses": 16,
+      "unsolved": 0,
+      "maxNodes": 7,
+      "seconds": 0
+    },
+    {
+      "board": "4x4",
+      "starts": 88,
+      "sideToMoveWins": 48,
+      "sideToMoveLoses": 40,
+      "unsolved": 0,
+      "maxNodes": 1069,
+      "seconds": 0
+    },
+    {
+      "board": "5x5",
+      "starts": 280,
+      "sideToMoveWins": 264,
+      "sideToMoveLoses": 16,
+      "unsolved": 0,
+      "maxNodes": 19452883,
+      "seconds": 404
+    }
+  ]
+}
