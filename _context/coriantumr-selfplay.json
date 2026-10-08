@@ -1,17 +1,20 @@
 {
   "depth": 3,
   "cap": 150,
-  "when": "2026-10-07T16:27:15.483Z",
+  "when": "2026-10-08T03:18:37.599Z",
   "vsRandom": {
     "games": 100,
     "illegal": 0,
     "tagLost": 0,
-    "plies": 5528,
-    "meanPlies": 55.3,
+    "plies": 5536,
+    "meanPlies": 55.4,
     "distinctGames": 100,
+    "reachedShowdown": 0,
+    "sacrifices": 0,
     "endings": {
       "no pieces": 100
     },
+    "cappedWhere": {},
     "engineWins": 100,
     "randomWins": 0
   },
@@ -19,14 +22,34 @@
     "games": 20,
     "illegal": 0,
     "tagLost": 0,
-    "plies": 2571,
-    "meanPlies": 128.6,
+    "plies": 2918,
+    "meanPlies": 145.9,
     "distinctGames": 20,
+    "reachedShowdown": 9,
+    "sacrifices": 0,
     "endings": {
-      "ply cap": 11,
-      "repetition": 9
+      "no pieces": 4,
+      "ply cap": 16
     },
-    "whiteWins": 0,
-    "blackWins": 0
+    "cappedWhere": {
+      "showdown (one piece each)": 9,
+      "balanced, both sides have two or more": 4,
+      "a lone piece against two or more": 3
+    },
+    "whiteWins": 2,
+    "blackWins": 2
+  },
+  "showdowns": {
+    "depth": 3,
+    "games": 100,
+    "byCapture": 38,
+    "bySacrifice": 62,
+    "sideToMoveWins": 50,
+    "sideToMoveLoses": 50,
+    "longest": 120,
+    "plies": 10738,
+    "illegal": 0,
+    "unfinished": 0,
+    "meanPlies": 107.4
   }
 }

@@ -1,9 +1,10 @@
 {
   "tool": "tools/coriantumr-showdown.js",
-  "rule": "two pieces, touched squares cannot be landed on again, captures exempt, slides may pass over touched squares, a piece with no move loses",
+  "rule": "own: each last piece may not land on a square it has stood on since it became the last piece; captures exempt, slides may pass over used squares, the opponent's squares stay available; a piece with no move loses. shared: one list for both pieces (my earlier reading, kept for comparison)",
   "covers": "every start where neither piece can capture the other at once, on boards of the given size; the 8x8 board is NOT solved",
-  "results": [
+  "own": [
     {
+      "reading": "own",
       "board": "3x3",
       "starts": 16,
       "sideToMoveWins": 0,
@@ -13,6 +14,29 @@
       "seconds": 0
     },
     {
+      "reading": "own",
+      "board": "4x4",
+      "starts": 88,
+      "sideToMoveWins": 0,
+      "sideToMoveLoses": 88,
+      "unsolved": 0,
+      "maxNodes": 117272,
+      "seconds": 5.7
+    }
+  ],
+  "shared": [
+    {
+      "reading": "shared",
+      "board": "3x3",
+      "starts": 16,
+      "sideToMoveWins": 0,
+      "sideToMoveLoses": 16,
+      "unsolved": 0,
+      "maxNodes": 7,
+      "seconds": 0
+    },
+    {
+      "reading": "shared",
       "board": "4x4",
       "starts": 88,
       "sideToMoveWins": 48,
@@ -22,13 +46,14 @@
       "seconds": 0
     },
     {
+      "reading": "shared",
       "board": "5x5",
       "starts": 280,
       "sideToMoveWins": 264,
       "sideToMoveLoses": 16,
       "unsolved": 0,
       "maxNodes": 19452883,
-      "seconds": 404
+      "seconds": 367.6
     }
   ]
 }

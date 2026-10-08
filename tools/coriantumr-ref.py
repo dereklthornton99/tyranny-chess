@@ -29,10 +29,11 @@ THE RULES (settled with Derek, 2026-10-07; run-log decisions eb1e698d4d and cbd4
   * NO LEGAL MOVE -> SACRIFICE. A side that has pieces but no ordinary legal move must move its royal piece off the
     board: its king, else its queen on the lowest file and then the lowest rank. Succession then applies from
     the sacrificed square exactly as if that piece had been captured, and the turn passes.
-  * SHOWDOWN. When exactly two pieces remain, one per side, a square touched by either piece since the showdown
-    began (both starting squares included) may not be landed on again. A capture is exempt; a slide may pass over
-    a touched square. A piece with no untouched landing square and no capture has no ordinary move, so it must
-    sacrifice itself, which leaves its side with no pieces: it loses.
+  * THE LAST PIECE. A side down to exactly one piece may not land on a square that piece has stood on since it became
+    the last piece (the square it stands on counts). A capture is exempt, a slide may pass over a used square, and
+    the opponent's squares stay available. When both sides are down to one piece (the showdown) both lists begin
+    afresh at that moment. A last piece with no unused landing square and no capture has no ordinary move, so it
+    must sacrifice itself; if that leaves its side with no pieces, it loses.   (owner, 2026-10-07)
 
 USAGE
   python tools/coriantumr-ref.py perft "<fen>" <depth>      count positions
@@ -101,14 +102,16 @@ def to_fen(pos):
 
 def position_key(pos):
     key = placement(pos["board"]) + " " + pos["side"] + " " + (sq_name(pos["ep"]) if pos["ep"] else "-")
-    if pos.get("touched"):
-        key += " T" + ",".join(sorted(sq_name(q) for q in pos["touched"]))
+    lv = pos.get("lv") or {}
+    for side in ("w", "b"):
+        if lv.get(side):
+            key += " " + side.upper() + ",".join(sorted(sq_name(q) for q in lv[side]))
     return key
 
 
 def repetition_key(pos):
     """Names a position for the repetition rule: placement, side to move, en-passant square. No castling (it does
-    not exist here) and no touched set (a showdown position can never recur)."""
+    not exist here) and no last-piece lists (a lone side's position can never recur while it is bound by them)."""
     return placement(pos["board"]) + " " + pos["side"] + " " + (sq_name(pos["ep"]) if pos["ep"] else "-")
 
 
@@ -117,15 +120,15 @@ def seen_count(seen, key):
     return seen.get(key, seen.get("*", 0))
 
 
-def touched_of(pos):
-    """The squares a showdown has used up: the carried set, or, for a freshly parsed position holding exactly two
-    pieces (one per side), both starting squares. None when no showdown is on."""
-    if pos.get("touched"):
-        return pos["touched"]
-    board = pos["board"]
-    if len(board) == 2 and len({p.isupper() for p in board.values()}) == 2:
-        return frozenset(board.keys())
-    return None
+def used_squares(pos, white):
+    """The squares `white`'s (or Black's) last piece has stood on since it became the last piece: the carried list, or,
+    for a freshly parsed position, the single square it stands on. None when that side has more than one piece."""
+    lv = pos.get("lv") or {}
+    key = "w" if white else "b"
+    if lv.get(key):
+        return lv[key]
+    mine = [sq for sq, p in pos["board"].items() if p.isupper() == white]
+    return frozenset(mine) if len(mine) == 1 else None
 
 
 def sacrifice_royal(pos):
@@ -201,10 +204,10 @@ def moves(pos, seen=None):
                     pawn_to(to, True)
                 elif occupant is None and pos["ep"] == to:
                     out.append((frm, to, None, True, False))
-    touched = touched_of(pos)
-    if touched:
-        # a capture (an occupied target, or en passant) is exempt; a quiet landing on a touched square is not allowed
-        out = [m for m in out if m[3] or m[1] in board or m[1] not in touched]
+    used = used_squares(pos, white)
+    if used:
+        # a capture (an occupied target, or en passant) is exempt; a last piece may not land on a square it has used
+        out = [m for m in out if m[3] or m[1] in board or m[1] not in used]
     if seen is not None and out:
         kept = []
         for m in out:
@@ -237,7 +240,6 @@ def crown_if_needed(board, lost_white, at):
 def make(pos, mv):
     frm, to, promo, is_ep, is_double = mv
     board = dict(pos["board"])
-    before = touched_of(pos)
     piece = board.pop(frm)
     white = piece.isupper()
     crowned = False
@@ -252,8 +254,25 @@ def make(pos, mv):
             crowned = crown_if_needed(board, captured.isupper(), to)
     ep = (frm[0], (frm[1] + to[1]) // 2) if is_double else None
     child = {"board": board, "side": "b" if pos["side"] == "w" else "w", "ep": ep, "crowned": crowned}
-    if len(board) == 2 and len({p.isupper() for p in board.values()}) == 2:        # a showdown is on
-        child["touched"] = (frozenset(before) | {to}) if before else frozenset(board.keys())
+    def count(bd, w):
+        return sum(1 for p in bd.values() if p.isupper() == w)
+    now_w, now_b = count(board, True), count(board, False)
+    was_w, was_b = count(pos["board"], True), count(pos["board"], False)
+    fresh = now_w == 1 and now_b == 1 and not (was_w == 1 and was_b == 1)          # the showdown has just begun
+    lv = {}
+    for side_white, n, was in ((True, now_w, was_w), (False, now_b, was_b)):
+        if n != 1:
+            continue
+        at = next(sq for sq, p in board.items() if p.isupper() == side_white)
+        prev = used_squares(pos, side_white)
+        if fresh or was != 1 or not prev:
+            lv["w" if side_white else "b"] = frozenset([at])
+        elif white == side_white:
+            lv["w" if side_white else "b"] = frozenset(prev) | {to}
+        else:
+            lv["w" if side_white else "b"] = frozenset(prev)
+    if lv:
+        child["lv"] = lv
     return child
 
 
@@ -326,20 +345,27 @@ HANDMADE = [
 D4_REACH = ["c4", "b4", "a4", "e4", "f4", "g4", "h4", "d5", "d6", "d7", "d8", "d3", "d2", "d1", "e5", "f6", "g7", "h8",
             "c5", "b6", "a7", "e3", "f2", "g1", "c3", "b2", "a1"]     # the 27 squares a 4-square slider reaches from d4
 
-# Showdown positions carry an explicit touched set (squares as names); None means "derive it from the position".
-SHOWDOWN = [
-    # name, fen, touched, deepest perft
-    ("a showdown that has just begun: only the two starting squares are touched",
+# Positions with last-piece lists (squares as names). spec = {"w": [...], "b": [...]} for the sides that are down to
+# one piece; None means "derive each list from the position".
+LONE = [
+    # name, fen, spec, deepest perft
+    ("a showdown that has just begun: each piece's list holds only the square it stands on",
      "8/7k/8/8/3K4/8/8/8 w - - 0 1", None, 3),
-    ("a slide may pass over a touched square (b2) but not land on it; the corner king still reaches c3",
-     "8/7k/8/8/8/8/8/K7 w - - 0 1", ["a1", "h7", "b2"], 3),
-    ("a capture is exempt: the enemy queen stands on a touched square and the king may still take it",
-     "8/8/5q2/8/3K4/8/8/8 w - - 0 1", None, 2),
-    ("every one of the 27 squares the king on d4 could reach is touched: it has no ordinary move, so it "
-     "sacrifices itself and loses",
-     "8/7k/8/8/3K4/8/8/8 w - - 0 1", D4_REACH + ["d4", "h7"], 2),
-    ("a late showdown: three untouched squares (f6, b2, a1) are all the king has left",
-     "8/7k/8/8/3K4/8/8/8 w - - 0 1", [q for q in D4_REACH if q not in ("f6", "b2", "a1")] + ["d4", "h7"], 3),
+    ("a slide may pass over a used square (b2) but not land on it; the corner king still reaches c3",
+     "8/7k/8/8/8/8/8/K7 w - - 0 1", {"w": ["a1", "b2"], "b": ["h7"]}, 3),
+    ("the opponent's squares stay available: Black has used d4 and White's king may land on it",
+     "8/7k/8/8/8/8/8/K7 w - - 0 1", {"w": ["a1"], "b": ["h7", "d4"]}, 3),
+    ("a capture is exempt: the enemy queen stands on a square White's king has used and the king may still take it",
+     "8/8/5q2/8/3K4/8/8/8 w - - 0 1", {"w": ["d4", "f6"], "b": ["f6"]}, 2),
+    ("every one of the 27 squares the king on d4 could reach is used: it has no ordinary move, so it sacrifices "
+     "itself and loses",
+     "8/7k/8/8/3K4/8/8/8 w - - 0 1", {"w": D4_REACH + ["d4"], "b": ["h7"]}, 2),
+    ("a last piece against two pieces is bound before any showdown: Black's lone king may not land on h6 or g6",
+     "8/7k/8/8/3K4/8/8/R7 b - - 0 1", {"b": ["h7", "h6", "g6"]}, 3),
+    ("a late showdown: each side has only a few unused squares left (White f6, b2, a1; Black h8, g8)",
+     "8/7k/8/8/3K4/8/8/8 w - - 0 1",
+     {"w": [q for q in D4_REACH if q not in ("f6", "b2", "a1")] + ["d4"],
+      "b": ["h6", "h5", "h4", "h3", "g7", "f7", "e7", "d7", "g6", "f5", "e4", "d3", "h7"]}, 3),
 ]
 
 
@@ -347,12 +373,12 @@ SHOWDOWN = [
 # or ("*", n) for every position. The fixture stores the resulting keys, so the JavaScript side needs no spec language.
 REPEAT = [
     ("the second occurrence is allowed, the third is refused: Kb1-b2 would be the third time, Kb1-a1 only the second",
-     "8/7k/8/8/8/8/P7/1K6 w - - 0 1", [("b1b2", 2), ("b1a1", 1)]),
+     "8/p6k/8/8/8/8/P7/1K6 w - - 0 1", [("b1b2", 2), ("b1a1", 1)]),
     ("every ordinary move would be a third occurrence and there is no pawn move or capture to fall back on, so the "
      "royal sacrifices", "8/7k/8/8/8/8/8/KR6 w - - 0 1", [("*", 2)]),
     ("a pawn move and a capture are never refused however often the position has been seen; the king's quiet moves are",
      "8/7k/8/8/8/1p6/P1K5/8 w - - 0 1", [("*", 2)]),
-    ("nothing seen yet: the list is exactly the ordinary legal moves", "8/7k/8/8/8/8/P7/1K6 w - - 0 1", []),
+    ("nothing seen yet: the list is exactly the ordinary legal moves", "8/p6k/8/8/8/8/P7/1K6 w - - 0 1", []),
 ]
 
 
@@ -371,10 +397,10 @@ def parse_square(name):
     return (FILES.index(name[0]), int(name[1]) - 1)
 
 
-def showdown_position(fen, touched):
+def lone_position(fen, spec):
     pos = parse_fen(fen)
-    if touched is not None:
-        pos["touched"] = frozenset(parse_square(n) for n in touched)
+    if spec:
+        pos["lv"] = {k: frozenset(parse_square(n) for n in v) for k, v in spec.items()}
     return pos
 
 
@@ -424,11 +450,11 @@ def build(seed=20261007, games=160):
         count, digest = children_digest(pos, table)
         repeat_rows.append({"name": name, "fen": fen, "seen": table, "moves": count, "sha1": digest,
                             "allowed": sorted(uci(m) for m in moves(pos, table))})
-    showdown_rows = []
-    for name, fen, touched, depth in SHOWDOWN:
-        pos = showdown_position(fen, touched)
+    lone_rows = []
+    for name, fen, spec, depth in LONE:
+        pos = lone_position(fen, spec)
         count, digest = children_digest(pos)
-        showdown_rows.append({"name": name, "fen": fen, "touched": touched, "moves": count, "sha1": digest,
+        lone_rows.append({"name": name, "fen": fen, "lv": spec, "moves": count, "sha1": digest,
                               "perft": {str(d): perft(pos, d) for d in range(1, depth + 1)}})
     for fen, n in chosen:
         pos = parse_fen(fen)
@@ -443,7 +469,7 @@ def build(seed=20261007, games=160):
         "counts": {"snapshots": len(snaps), "unique": len(seen), "crowned": len(by_tag["crowned"]),
                    "royalCapturable": len(by_tag["royal"]), "kept": len(chosen)},
         "perft": perft_rows,
-        "showdown": showdown_rows,
+        "lone": lone_rows,
         "repeat": repeat_rows,
         "children": child_rows,
     }
@@ -459,15 +485,15 @@ def check(path):
             if got != want:
                 bad += 1
                 print("PERFT DRIFT", row["name"][:50], "depth", d, "fixture", want, "reference", got)
-    for row in fixture.get("showdown", []):
-        pos = showdown_position(row["fen"], row["touched"])
+    for row in fixture.get("lone", []):
+        pos = lone_position(row["fen"], row["lv"])
         if children_digest(pos) != (row["moves"], row["sha1"]):
             bad += 1
-            print("SHOWDOWN CHILDREN DRIFT", row["name"][:50])
+            print("LAST-PIECE CHILDREN DRIFT", row["name"][:50])
         for d, want in row["perft"].items():
             if perft(pos, int(d)) != want:
                 bad += 1
-                print("SHOWDOWN PERFT DRIFT", row["name"][:50], "depth", d)
+                print("LAST-PIECE PERFT DRIFT", row["name"][:50], "depth", d)
     for row in fixture.get("repeat", []):
         pos = parse_fen(row["fen"])
         if children_digest(pos, row["seen"]) != (row["moves"], row["sha1"]) or \
@@ -486,8 +512,8 @@ def check(path):
         if row["perft3"] is not None and perft(pos, 3) != row["perft3"]:
             bad += 1
             print("PERFT3 DRIFT", row["fen"])
-    print("checked %d handmade positions, %d showdown positions, %d repetition positions and %d sampled positions: %s"
-          % (len(fixture["perft"]), len(fixture.get("showdown", [])), len(fixture.get("repeat", [])), len(fixture["children"]),
+    print("checked %d handmade positions, %d last-piece positions, %d repetition positions and %d sampled positions: %s"
+          % (len(fixture["perft"]), len(fixture.get("lone", [])), len(fixture.get("repeat", [])), len(fixture["children"]),
              "NO DRIFT" if not bad else "%d DRIFTS" % bad))
     return 1 if bad else 0
 

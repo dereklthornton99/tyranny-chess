@@ -164,8 +164,10 @@ body{
 }
 
 [hidden]{display:none !important}
-/* a square already touched in the two-piece showdown: it cannot be landed on again */
-.sq.touched{background-image:repeating-linear-gradient(135deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px)}
+/* squares a last piece has already stood on: it cannot land on them again. White's in one pattern, Black's in the other. */
+.sq.tw{background-image:repeating-linear-gradient(135deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px)}
+.sq.tb{background-image:repeating-linear-gradient(45deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px)}
+.sq.tw.tb{background-image:repeating-linear-gradient(135deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px), repeating-linear-gradient(45deg, rgba(0,0,0,.22) 0 5px, transparent 5px 10px)}
 /* a queen commanding a side that has no king piece */
 .sq.cmd::before{
   content:'\265B'; position:absolute; top:3%; right:7%; z-index:3; line-height:1;
@@ -446,7 +448,7 @@ h3{
         <div class="note"><dt>Promotion</dt><dd>A pawn reaching the far rank may become a queen, rook, bishop or knight, and also a <b>king</b> when its side has no king, even if queens are on the board. A side never has two kings.</dd></div>
         <div class="note"><dt>Winning</dt><dd>You win when the opponent has <b>no pieces left</b>. The last piece of a side is always a king or a queen.</dd></div>
         <div class="note"><dt>No draws</dt><dd>There is no stalemate, no fifty-move rule and no repetition draw. A position may occur twice; the move that would make it occur a third time is <b>refused</b> instead of drawn, and retreating is never refused for any other reason. A side that has pieces but <b>cannot move</b> must <b>sacrifice its royal piece</b> (the king, else a queen): succession then applies as if that piece had been captured.</dd></div>
-        <div class="note"><dt>Showdown</dt><dd>When <b>exactly two pieces</b> remain, one each, a square that either piece has touched cannot be entered again (shaded on the board). Captures are exempt and a slide may pass over a touched square. A piece with no untouched square to land on and no capture must sacrifice itself, and so loses.</dd></div>
+        <div class="note"><dt>Last piece</dt><dd>A side down to <b>one piece</b> may not land on a square that piece has already stood on since it became the last piece (shaded on the board, each side in its own pattern). Captures are exempt, a slide may pass over a used square, and the opponent&rsquo;s squares stay available. When both sides are down to one piece the lists start afresh: the showdown. A last piece with no unused square to land on and no capture must sacrifice itself, and so loses.</dd></div>
       </dl>
     </section>
   </div>
@@ -695,15 +697,17 @@ function hasPieces(S, side){
   return false;
 }
 
-/* The two-piece showdown. When exactly two pieces remain, one per side, a square touched by either piece since
-   the showdown began (both starting squares included) may not be landed on again; captures are exempt and a slide
-   may pass over a touched square. The touched list rides on the board state as S.sd, so it survives apply(),
-   Undo and the engine's search. A position loaded from a FEN with two pieces treats both squares as touched. */
-function touched(S){
-  if(S.sd) return S.sd;
-  var n = 0, ws = -1, bs = -1;
-  for(var i=0;i<64;i++){ var p = S.b[i]; if(p){ n++; if(p[0] === "w") ws = i; else bs = i; } }
-  return (n === 2 && ws >= 0 && bs >= 0) ? [ws, bs] : null;
+/* The last-piece rule (the owner's side-specific ruling, 2026-10-07). A side down to exactly one piece may not land on
+   a square that piece has stood on since it became the last piece; the square it stands on counts. Captures are
+   exempt, a slide may pass over a used square, and the opponent's squares stay available. When both sides are down
+   to one piece (the showdown) both lists begin afresh at that moment. The lists ride on the board state as
+   S.lv = {w: [...], b: [...]} (only a side with exactly one piece has an entry), so they survive apply(), Undo and
+   the engine's search. A position loaded from a FEN treats a lone side's square as its first used square. */
+function usedSquares(S, side){
+  if(S.lv && S.lv[side]) return S.lv[side];
+  var n = 0, at = -1;
+  for(var i=0;i<64;i++){ var p = S.b[i]; if(p && p[0] === side){ n++; at = i; } }
+  return n === 1 ? [at] : null;
 }
 /* The royal piece that sacrifices itself when its side cannot move: the king, else the queen on the lowest file
    and then the lowest rank (the same tie order the succession rule uses). -1 when the side has none. */
@@ -716,11 +720,11 @@ function sacOf(S, side){
   }
   return best;
 }
-/* Coriantumr legality: every pseudo-legal move is legal, minus landings on touched squares during the showdown.
-   If that leaves nothing, the royal piece must sacrifice itself: it is the one legal move, it removes the piece
-   and succession then applies exactly as if the piece had been captured. */
+/* Coriantumr legality: every pseudo-legal move is legal, minus a last piece's landings on squares it has already
+   stood on. If that leaves nothing, the royal piece must sacrifice itself: it is the one legal move, it removes the
+   piece and succession then applies exactly as if the piece had been captured. */
 function legalC(S, ms, rep){
-  var td = touched(S), out = ms, i;
+  var td = usedSquares(S, S.turn), out = ms, i;
   if(td){
     out = [];
     for(i=0;i<ms.length;i++){ if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]); }
@@ -776,10 +780,21 @@ function apply(S, m){
       var cr = crown(b, m.cap[0], m.to);        // a royal just fell: does that side still have one?
       if(cr) T.cr = cr;                         // [square, former piece code], read by the page for its message
     }
-    if(S.v === "c"){                            // two pieces left, one per side: the showdown has begun or goes on
-      var td = touched(S), n = 0, ws = -1, bs = -1;
-      for(var q=0;q<64;q++){ var pp = b[q]; if(pp){ n++; if(pp[0] === "w") ws = q; else bs = q; } }
-      if(n === 2 && ws >= 0 && bs >= 0) T.sd = td ? td.concat([m.to]) : [ws, bs];
+    if(S.v === "c"){                            // the last-piece lists: only a side with exactly one piece has one
+      var cnt = {w:0, b:0}, at = {w:-1, b:-1}, was = {w:0, b:0};
+      for(var q=0;q<64;q++){
+        var pp = b[q], po = S.b[q];
+        if(pp){ cnt[pp[0]]++; at[pp[0]] = q; }
+        if(po) was[po[0]]++;
+      }
+      var fresh = (cnt.w === 1 && cnt.b === 1 && !(was.w === 1 && was.b === 1));     // the showdown has just begun
+      var lv = null;
+      ["w","b"].forEach(function(sd){
+        if(cnt[sd] !== 1) return;
+        var prev = usedSquares(S, sd);          // the list before this move: carried, or derived from a FEN
+        (lv || (lv = {}))[sd] = (fresh || was[sd] !== 1 || !prev) ? [at[sd]] : (m.piece[0] === sd ? (prev.indexOf(m.to) >= 0 ? prev : prev.concat([m.to])) : prev);
+      });
+      if(lv) T.lv = lv;
     }
   }
   return T;
@@ -852,7 +867,7 @@ function insufficient(b){
 function posKey(S){
   return S.b.map(function(p){ return p || "."; }).join("") + "|" + S.turn + "|" +
          (S.cast.K?"K":"") + (S.cast.Q?"Q":"") + (S.cast.k?"k":"") + (S.cast.q?"q":"") + "|" + S.ep + (S.v ? "|" + S.v : "") +
-         (S.sd ? "|" + S.sd.slice().sort(function(a,b){ return a-b; }).join(",") : "");
+         (S.lv ? "|" + ["w","b"].map(function(sd){ return S.lv[sd] ? sd + S.lv[sd].slice().sort(function(a,b){ return a-b; }).join(",") : ""; }).join("/") : "");
 }
 function perft(S, d, selfCap){
   var ms = legal(S, selfCap);
@@ -956,8 +971,8 @@ function evaluate(S){
 /* Coriantumr static evaluation: material plus placement, from the side to move. The king is an active
    queen-like piece, so it uses the queen's table and there is no king-safety or bare-king term. */
 function evaluateC(S){
-  var td = touched(S);
-  if(td) return showdownEval(S, td);
+  var uw = usedSquares(S, "w"), ub = usedSquares(S, "b");
+  if(uw && ub) return showdownEval(S, uw, ub);          // both sides down to one piece: it is all about free squares
   var score = 0, i, p, t, tbl;
   for(i=0;i<64;i++){
     p = S.b[i]; if(!p) continue; t = p[1];
@@ -965,19 +980,26 @@ function evaluateC(S){
     if(p[0] === "w") score += CPC[t] + tbl[i];
     else             score -= CPC[t] + tbl[mirror(i)];
   }
+  var lone = uw ? "w" : (ub ? "b" : null);
+  if(lone){                                             // a last piece against more: only so many squares left to land on
+    var left = freeMoves({b:S.b, turn:lone, cast:S.cast, ep:-1, v:"c"}, lone, lone === "w" ? uw : ub);
+    score += (lone === "w" ? 1 : -1) * 4 * left;
+  }
   return S.turn === "w" ? score : -score;
 }
 
-/* In the showdown material is equal and a capture ends the game, so what matters is how many untouched squares each
+/* In the showdown material is equal and a capture ends the game, so what matters is how many unused squares each
    piece can still land on. From the side to move; the search sees the captures. */
 function freeMoves(S, side, td){
   var ms = pseudo(S, side, false), n = 0;
   for(var i=0;i<ms.length;i++) if(!ms[i].cap && td.indexOf(ms[i].to) < 0) n++;
   return n;
 }
-function showdownEval(S, td){
+function showdownEval(S, uw, ub){
   var me = S.turn, them = (me === "w") ? "b" : "w";
-  return 10 * (freeMoves(S, me, td) - freeMoves({b:S.b, turn:them, cast:S.cast, ep:-1, v:"c"}, them, td));
+  var mine = (me === "w") ? uw : ub, theirs = (me === "w") ? ub : uw;
+  return 10 * (freeMoves({b:S.b, turn:me, cast:S.cast, ep:-1, v:"c"}, me, mine) -
+               freeMoves({b:S.b, turn:them, cast:S.cast, ep:-1, v:"c"}, them, theirs));
 }
 
 var ai = {nodes:0, deadline:0, aborted:false, selfCap:true, killers:[], hist:{}, gameKeys:null, path:[], depthDone:0, cp:CP};
@@ -1274,7 +1296,7 @@ function outcome(){
     if(inCheck(S, S.turn)) return (S.turn === "w" ? "Black" : "White") + " wins by checkmate";
     return "Draw — stalemate";
   }
-  if(!variant && insufficient(S.b)) return "Draw — insufficient material";
+  if(insufficient(S.b)) return "Draw — insufficient material";
   if(S.half >= 100) return "Draw — fifty-move rule";
   var key = posKey(S), n = 0;
   for(var i=0;i<hist.length;i++) if(posKey(hist[i]) === key) n++;
@@ -1282,12 +1304,20 @@ function outcome(){
   return null;
 }
 
+function lastPieceTag(uw, ub){
+  var sqs = function(n){ return n + (n === 1 ? " square" : " squares"); };
+  if(uw && ub) return " \u00b7 Showdown: White " + sqs(uw.length) + " used, Black " + sqs(ub.length) + " used";
+  if(uw) return " \u00b7 White\u2019s last piece has used " + sqs(uw.length);
+  if(ub) return " \u00b7 Black\u2019s last piece has used " + sqs(ub.length);
+  return "";
+}
+
 function render(){
   var S = cur();
   overTxt = outcome();
   var kSq = kingSq(S, S.turn);
   var checked = !overTxt && inCheck(S, S.turn);
-  var td = variant ? touched(S) : null;        // the showdown's used-up squares, if one is on
+  var uw = variant ? usedSquares(S, "w") : null, ub = variant ? usedSquares(S, "b") : null;   // a last piece's used squares
 
   for(var i=0;i<64;i++){
     var el = squares[i], p = S.b[i];
@@ -1298,7 +1328,8 @@ function render(){
     if(t && marksVisible()) cls += (t.kind === "self") ? " hl-self" : (t.kind === "enemy" ? " hl-take" : " hl-move");
     if((checked || (overTxt && overTxt.indexOf("checkmate") >= 0)) && i === kSq) cls += " chk";
     if(variant && p && p[1] === "q" && S.b.indexOf(p[0] + "k") < 0) cls += " cmd";
-    if(td && td.indexOf(i) >= 0) cls += " touched";
+    if(uw && uw.indexOf(i) >= 0) cls += " tw";
+    if(ub && ub.indexOf(i) >= 0) cls += " tb";
     el.className = cls;
     el.innerHTML = p ? pieceSVG(p) : "";
     el.setAttribute("aria-label", sqName(i) + (p ? " " + (p[0] === "w" ? "white" : "black") + " " + p[1] : " empty"));
@@ -1319,7 +1350,7 @@ function render(){
   }
   else if(overTxt){ st.textContent = overTxt; st.className = "state over"; }
   else if(checked){ st.textContent = "Check"; st.className = "state warn"; }
-  else { st.textContent = "Move " + S.full + (variant ? " · Coriantumr" + commanders(S) + (td ? " \u00b7 Showdown, " + td.length + " squares touched" : "") : (selfCap ? "" : " · standard rules")); st.className = "state"; }
+  else { st.textContent = "Move " + S.full + (variant ? " · Coriantumr" + commanders(S) + lastPieceTag(uw, ub) : (selfCap ? "" : " · standard rules")); st.className = "state"; }
 
   // tallies — a side's losses, brass where they did it to themselves
   ["w","b"].forEach(function(side){
@@ -1367,8 +1398,10 @@ function render(){
              PNAME[msV[0].piece[1]] + " must sacrifice itself. Click it twice.";
     } else if(played.length && played[played.length - 1].note){
       vtxt = played[played.length - 1].note;
-    } else if(td){
-      vtxt = "Showdown: a shaded square cannot be entered again, and a piece with no move sacrifices itself.";
+    } else if(uw || ub){
+      vtxt = (uw && ub)
+        ? "Showdown: each piece may not land again on a square it has stood on (shaded); captures are exempt, and a piece with no move sacrifices itself."
+        : "Last piece: it may not land again on a square it has stood on (shaded); captures are exempt.";
     }
     var refusedN = (msV.length === 1 && msV[0].sac) ? 0 : plainMoves.length - msV.length;
     if(refusedN > 0){

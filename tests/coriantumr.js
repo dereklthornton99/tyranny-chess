@@ -63,7 +63,8 @@ function battery(E) {
     return rows.join('/');
   };
   const keyOf = (T) => placement(T.b) + ' ' + T.turn + ' ' + (T.ep >= 0 ? E.sqName(T.ep) : '-') +
-    (T.sd ? ' T' + T.sd.map((q) => E.sqName(q)).sort().join(',') : '');
+    (T.lv && T.lv.w ? ' W' + T.lv.w.map((q) => E.sqName(q)).sort().join(',') : '') +
+    (T.lv && T.lv.b ? ' B' + T.lv.b.map((q) => E.sqName(q)).sort().join(',') : '');
   const digest = (S) => {
     const items = E.legal(S, true).map((m) => uci(m) + '=' + keyOf(E.apply(S, m))).sort();
     return { n: items.length, sha1: crypto.createHash('sha1').update(items.join('\n')).digest('hex') };
@@ -194,14 +195,14 @@ function battery(E) {
         if (!royalOk(S, 'w') || !royalOk(S, 'b')) brokenInvariant++;
         let nw = 0, nb = 0;
         for (const p of S.b) if (p) { if (p[0] === 'w') nw++; else nb++; }
-        if (!!S.sd !== (nw === 1 && nb === 1)) sdMismatch++;
+        if (!!(S.lv && S.lv.w) !== (nw === 1) || !!(S.lv && S.lv.b) !== (nb === 1)) sdMismatch++;
       }
       games++;
     }
   }
   t('seeded random play covers at least 5,000 plies (' + plies + ' in ' + games + ' games)', plies >= 5000, true);
   t('the variant tag survives every move', tagLost, 0);
-  t('a showdown is on exactly when two pieces, one per side, remain (all those positions)', sdMismatch, 0);
+  t('a last-piece list exists for exactly the sides that have one piece (all those positions)', sdMismatch, 0);
   t('every non-empty side always holds a king or queen, and a lone survivor is one', brokenInvariant, 0);
   t('no king or queen move is ever longer than 4 squares, in any of those positions', longReach, 0);
   t('CONTROL: the long royal moves (2 to 4 squares) really were exercised', farRoyal > 1000, true);
@@ -214,7 +215,7 @@ function battery(E) {
         const ms = E.legal(S, tyranny);
         if (!ms.length) break;
         S = E.apply(S, ms[(rnd() * ms.length) | 0]);
-        if ('v' in S || 'sd' in S) leaked++;
+        if ('v' in S || 'lv' in S) leaked++;
       }
     }
   }
@@ -244,7 +245,13 @@ function battery(E) {
   t('perft(3) matches the reference in ' + perft3Run + ' of them', perft3Bad, 0);
 
   // ---- R4-M6: the owner's ending rules, 2026-10-07 ----------------------------------------------------------
-  const withSd = (f, names) => { const S = C(f); if (names) S.sd = names.map(sq); return S; };
+  const withLv = (f, spec) => {
+    const S = C(f);
+    if (spec) { S.lv = {}; for (const k of Object.keys(spec)) S.lv[k] = spec[k].map(sq); }
+    return S;
+  };
+  const listOf = (S, side) => (S.lv && S.lv[side] ? S.lv[side].slice().sort((a, b) => a - b).join() : 'none');
+  const asList = (arr) => arr.map(sq).sort((a, b) => a - b).join();
   const only = (S) => E.legal(S, true);
   const sacOf = (f) => { const ms = only(C(f)); return ms.length === 1 && ms[0].sac ? ms[0] : null; };
   const afterSac = (f) => { const m = sacOf(f); return m ? E.apply(C(f), m) : null; };
@@ -283,49 +290,71 @@ function battery(E) {
   const twoKings = E.legal(C('4k3/8/8/8/8/8/p7/1Q2K3 b - - 0 1'), true).filter((m) => m.promo === 'k').length;
   t('a side that already has a king is never offered a second one', twoKings, 0);
 
-  // showdown: the capture that leaves two pieces begins it
+  // last pieces (the owner's side-specific ruling): a side down to one piece may not land again on a square that piece
+  // has stood on since it became the last piece; the opponent's squares stay available
   const sdStart = play('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1', 'd4e5');
-  t('the showdown begins when a capture leaves exactly two pieces: both squares are touched',
-    sdStart && sdStart.sd && sdStart.sd.slice().sort((a, b) => a - b).join(), [sq('e5'), sq('g8')].sort((a, b) => a - b).join());
+  t('a capture that leaves one piece each begins the showdown: each list starts with just the square its piece stands on',
+    sdStart && listOf(sdStart, 'w') + '|' + listOf(sdStart, 'b'), asList(['e5']) + '|' + asList(['g8']));
   const moveTo = (S, from, to) => E.legal(S, true).find((m) => E.sqName(m.from) === from && E.sqName(m.to) === to);
   const sdMid = sdStart && moveTo(sdStart, 'g8', 'g7') ? E.apply(sdStart, moveTo(sdStart, 'g8', 'g7')) : null;
-  t('the touched set grows by the square landed on', sdMid && sdMid.sd.length + ':' + sdMid.sd.includes(sq('g7')), '3:true');
+  t("Black moves: only Black's list grows (g8, g7) and White's stays at e5",
+    sdMid && listOf(sdMid, 'w') + '|' + listOf(sdMid, 'b'), asList(['e5']) + '|' + asList(['g8', 'g7']));
   const sdLater = sdMid && moveTo(sdMid, 'e5', 'e4') ? E.apply(sdMid, moveTo(sdMid, 'e5', 'e4')) : null;
+  t("White moves: only White's list grows (e5, e4) and Black's stays at g8, g7",
+    sdLater && listOf(sdLater, 'w') + '|' + listOf(sdLater, 'b'), asList(['e5', 'e4']) + '|' + asList(['g8', 'g7']));
   const laterNames = sdLater ? toNames(sdLater) : [];
   t('CONTROL: Black has moves in that position', laterNames.length > 0, true);
-  t('a touched square cannot be landed on again: not g8 (Black left it) and not e5 (White left it)',
-    laterNames.includes('g8') + '/' + laterNames.includes('e5'), 'false/false');
-  t('...and the position carries all four touched squares', sdLater && sdLater.sd.length, 4);
-  t('a position loaded from a FEN with two pieces counts both squares as touched',
-    E.touched(C('6k1/8/8/8/3K4/8/8/8 w - - 0 1')).length, 2);
-  t('with three pieces there is no showdown', E.touched(C('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1')), null);
+  t('Black may not land again on g8, a square its own piece has used', laterNames.includes('g8'), false);
+  t("...but it may land on e5, which White used and has left: the opponent's squares stay available", laterNames.includes('e5'), true);
 
-  const passOver = withSd('8/7k/8/8/8/8/8/K7 w - - 0 1', ['a1', 'h7', 'b2']);
+  // a side is bound from the moment it is down to one piece, whatever the other side has
+  const becomes = play('6k1/8/8/4n3/3K4/8/8/R7 w - - 0 1', 'd4e5');
+  t("a side down to one piece against two is bound from that moment: Black's list starts at g8, White (two pieces) has none",
+    becomes && listOf(becomes, 'b') + '|' + listOf(becomes, 'w'), asList(['g8']) + '|none');
+  const bm = becomes && moveTo(becomes, 'g8', 'g7') ? E.apply(becomes, moveTo(becomes, 'g8', 'g7')) : null;
+  t('...and its list grows with its own moves', bm && listOf(bm, 'b'), asList(['g8', 'g7']));
+  t('a side with two pieces is never bound', E.usedSquares(C('8/7k/8/8/3K4/8/8/R7 w - - 0 1'), 'w'), null);
+  const loneNames = toNames(withLv('8/7k/8/8/3K4/8/8/R7 b - - 0 1', { b: ['h7', 'h6', 'g6'] }));
+  t('a bound last piece may not land on its used squares (h6, g6) but may on the rest (h8)',
+    loneNames.includes('h6') + '/' + loneNames.includes('g6') + '/' + loneNames.includes('h8'), 'false/false/true');
+  const forgive = (() => {
+    const S = withLv('8/7k/8/4n3/3K4/8/8/8 w - - 0 1', { w: ['d4', 'c4'] });
+    const m = moveTo(S, 'd4', 'e5');
+    return m ? E.apply(S, m) : null;
+  })();
+  t("when the other side is also down to one piece the showdown begins: White's earlier list is forgiven, both start afresh",
+    forgive && listOf(forgive, 'w') + '|' + listOf(forgive, 'b'), asList(['e5']) + '|' + asList(['h7']));
+  const fenKings = C('6k1/8/8/8/3K4/8/8/8 w - - 0 1');
+  t("a position loaded from a FEN treats a lone side's square as its first used square",
+    E.usedSquares(fenKings, 'w').join() + '|' + E.usedSquares(fenKings, 'b').join(), String(sq('d4')) + '|' + String(sq('g8')));
+  t('a side with two pieces has no list', E.usedSquares(C('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1'), 'b'), null);
+
+  const passOver = withLv('8/7k/8/8/8/8/8/K7 w - - 0 1', { w: ['a1', 'b2'], b: ['h7'] });
   const poNames = toNames(passOver);
-  t('a touched square (b2) cannot be landed on', poNames.includes('b2'), false);
+  t('a used square (b2) cannot be landed on', poNames.includes('b2'), false);
   t('...but a slide may pass over it (c3 is reachable)', poNames.includes('c3'), true);
-  t('...and an untouched neighbour is a legal landing (a2)', poNames.includes('a2'), true);
-  t('a capture is exempt from the touched rule (the king takes the queen on f6)',
-    E.legal(C('8/8/5q2/8/3K4/8/8/8 w - - 0 1'), true).some((m) => E.sqName(m.to) === 'f6' && m.cap), true);
-  const stuckRow = GOLDEN.showdown.find((r) => /sacrifices itself/.test(r.name));
-  const stuckS = withSd(stuckRow.fen, stuckRow.touched);
+  t('...and an unused neighbour is a legal landing (a2)', poNames.includes('a2'), true);
+  t('a capture is exempt (the king takes the queen on f6, a square it has used)',
+    E.legal(withLv('8/8/5q2/8/3K4/8/8/8 w - - 0 1', { w: ['d4', 'f6'], b: ['f6'] }), true).some((m) => E.sqName(m.to) === 'f6' && m.cap), true);
+  const stuckRow = GOLDEN.lone.find((r) => /sacrifices/.test(r.name));
+  const stuckS = withLv(stuckRow.fen, stuckRow.lv);
   const stuckMoves = only(stuckS);
-  t('a piece with no untouched landing square and no capture has exactly one move, the sacrifice',
+  t('a last piece with no unused landing square and no capture has exactly one move, the sacrifice',
     stuckMoves.length + '/' + (stuckMoves[0] && stuckMoves[0].sac), '1/true');
   const stuckAfter = E.apply(stuckS, stuckMoves[0]);
   t('...which leaves its side with no pieces, so it has lost', E.hasPieces(stuckAfter, 'w') + '/' + E.hasPieces(stuckAfter, 'b'), 'false/true');
 
-  // the independent reference on showdown and sacrifice positions that carry a touched set
-  for (const row of GOLDEN.showdown) {
-    const S = withSd(row.fen, row.touched);
+  // the independent reference on positions that carry last-piece lists
+  for (const row of GOLDEN.lone) {
+    const S = withLv(row.fen, row.lv);
     const d = digest(S);
-    t('showdown reference, every move and board: ' + row.name.slice(0, 55), d.n + '/' + d.sha1, row.moves + '/' + row.sha1);
+    t('last-piece reference, every move and board: ' + row.name.slice(0, 55), d.n + '/' + d.sha1, row.moves + '/' + row.sha1);
     for (const [dd, want] of Object.entries(row.perft)) {
-      t('showdown reference perft(' + dd + '): ' + row.name.slice(0, 50), E.perft(S, Number(dd), true), want);
+      t('last-piece reference perft(' + dd + '): ' + row.name.slice(0, 50), E.perft(S, Number(dd), true), want);
     }
   }
 
-  // seeded random showdowns: the touched set is always there, never repeats a square, and the game ends within 62 moves
+  // seeded random showdowns: each list is always there, never repeats a square, and grows by one per move of its own piece
   let sdGames = 0, sdBad = 0, sdMax = 0, sdEnded = 0;
   for (let g = 0; g < 200; g++) {
     const rnd = mulberry32(700 + g);
@@ -338,21 +367,24 @@ function battery(E) {
       const cand = { b: bd, turn: 'w', cast: { K: false, Q: false, k: false, q: false }, ep: -1, half: 0, full: 1, v: 'c' };
       if (!E.legal(cand, true).some((m) => m.cap)) S = cand;
     }
+    const made = { w: 0, b: 0 };
     let n = 0;
-    while (n < 100) {
+    while (n < 200) {
       const ms = E.legal(S, true);
       if (!ms.length) break;
+      const mover = S.turn;
       const T = E.apply(S, ms[(rnd() * ms.length) | 0]);
-      n++;
+      n++; made[mover]++;
       if (!E.hasPieces(T, 'w') || !E.hasPieces(T, 'b')) { sdEnded++; break; }
-      if (!T.sd || new Set(T.sd).size !== T.sd.length || T.sd.length !== 2 + n) sdBad++;
+      const okLists = ['w', 'b'].every((side) => T.lv && T.lv[side] && new Set(T.lv[side]).size === T.lv[side].length && T.lv[side].length === 1 + made[side]);
+      if (!okLists) sdBad++;
       S = T;
     }
     sdGames++; sdMax = Math.max(sdMax, n);
   }
-  t('200 seeded random showdowns: the touched set is never missing, never repeats a square, grows by one per move', sdBad, 0);
-  t('...and every one ended by capture or sacrifice within the 62-move bound (longest ' + sdMax + ' plies)',
-    sdEnded === sdGames && sdMax <= 63, true);
+  t('200 seeded random showdowns: each list is always there, never repeats a square, grows by one per move of its own piece', sdBad, 0);
+  t('...and every one ended by capture or sacrifice within the bound of 63 landings a side (longest ' + sdMax + ' plies)',
+    sdEnded === sdGames && sdMax <= 127, true);
 
   // ---- R4-M6-AC11: repetition is refused, not drawn ---------------------------------------------------------
   // A position may occur twice; the move that would make it occur a third time is not allowed.
@@ -368,7 +400,7 @@ function battery(E) {
     t('repetition reference, every move and board: ' + row.name.slice(0, 60), d.n + '/' + d.sha1, row.moves + '/' + row.sha1);
     t('repetition reference, the allowed moves: ' + row.name.slice(0, 55), list.map(uci).sort().join(), row.allowed.join());
   }
-  const shuffleFen = '8/7k/8/8/8/8/P7/1K6 w - - 0 1';
+  const shuffleFen = '8/p6k/8/8/8/8/P7/1K6 w - - 0 1';
   const refRow = GOLDEN.repeat[0], refMoves = gameMoves(C(refRow.fen), refRow.seen).map(uci);
   t('a position seen twice already: the move that would make it a third occurrence is refused (b1b2)', refMoves.includes('b1b2'), false);
   t('...a position seen once is allowed to occur a second time (b1a1)', refMoves.includes('b1a1'), true);
@@ -426,7 +458,7 @@ const results = battery(REAL);
 report(results);
 console.log('      ' + results.length + ' checks in the battery; fixture: ' + GOLDEN.perft.length + ' handmade positions, ' +
   GOLDEN.children.length + ' sampled (' + GOLDEN.counts.crowned + ' crowned and ' + GOLDEN.counts.royalCapturable +
-  ' royal-capturable found while sampling), ' + GOLDEN.showdown.length + ' showdown positions, seed ' + GOLDEN.seed);
+  ' royal-capturable found while sampling), ' + GOLDEN.lone.length + ' last-piece positions, seed ' + GOLDEN.seed);
 
 /* Each mutant breaks one rule in the engine SOURCE. The anchor must occur exactly once (so a refactor cannot
    leave a mutant silently testing nothing), the broken engine must still load, and the battery must fail. */
@@ -450,13 +482,15 @@ const MUTANTS = [
   ['promotion never offers a king', 'var needKing = C && S.b.indexOf(side + "k") < 0;', 'var needKing = false;'],
   ['the royal-safety filter applies in the variant', 'if(S.v === "c") return legalC(S, ms);', ''],
   ['check exists in the variant', 'if(S.v === "c") return false;', ''],
-  ['the showdown never begins', 'if(n === 2 && ws >= 0 && bs >= 0) T.sd = td ? td.concat([m.to]) : [ws, bs];', ''],
-  ['the touched set never grows', 'T.sd = td ? td.concat([m.to]) : [ws, bs];', 'T.sd = td ? td : [ws, bs];'],
-  ['the starting squares are not touched', 'T.sd = td ? td.concat([m.to]) : [ws, bs];', 'T.sd = td ? td.concat([m.to]) : [];'],
-  ['a showdown starts with three pieces', 'if(n === 2 && ws >= 0 && bs >= 0) T.sd', 'if(n <= 3 && ws >= 0 && bs >= 0) T.sd'],
-  ['a FEN position with two pieces has no touched squares', 'return (n === 2 && ws >= 0 && bs >= 0) ? [ws, bs] : null;', 'return null;'],
-  ['a capture onto a touched square is forbidden', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'if(td.indexOf(ms[i].to) < 0) out.push(ms[i]);'],
-  ['touched squares may be landed on again', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'out.push(ms[i]);'],
+  ['the last-piece lists never begin', 'if(lv) T.lv = lv;', ''],
+  ['a last-piece list never grows', '(m.piece[0] === sd ? (prev.indexOf(m.to) >= 0 ? prev : prev.concat([m.to])) : prev)', 'prev'],
+  ['every move grows both lists', '(m.piece[0] === sd ? (prev.indexOf(m.to) >= 0 ? prev : prev.concat([m.to])) : prev)', '(prev.indexOf(m.to) >= 0 ? prev : prev.concat([m.to]))'],
+  ['the showdown does not start afresh', '(fresh || was[sd] !== 1 || !prev)', '(was[sd] !== 1 || !prev)'],
+  ['a FEN position has no first used square', 'return n === 1 ? [at] : null;', 'return null;'],
+  ['a side with two pieces is bound too', 'return n === 1 ? [at] : null;', 'return n >= 1 ? [at] : null;'],
+  ['a capture onto a used square is forbidden', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'if(td.indexOf(ms[i].to) < 0) out.push(ms[i]);'],
+  ['used squares may be landed on again', 'if(ms[i].cap || td.indexOf(ms[i].to) < 0) out.push(ms[i]);', 'out.push(ms[i]);'],
+  ['the opponent\'s list binds the mover', 'var td = usedSquares(S, S.turn), out = ms, i;', 'var td = usedSquares(S, S.turn === "w" ? "b" : "w"), out = ms, i;'],
   ['the sacrifice is never offered', 'return r < 0 ? [] : [mk(r, r, S.b[r], S.b[r], "self", {sac:true})];', 'return [];'],
   ['the queen sacrifices before the king', 'if(k >= 0) return k;', 'if(false) return k;'],
   ['the queen on the higher file sacrifices', 'var f = cOf(i), rk = 8 - rOf(i); if(f < bf', 'var f = cOf(i), rk = 8 - rOf(i); if(f > bf'],
@@ -466,7 +500,7 @@ const MUTANTS = [
   ['repetition is refused only on the fourth occurrence', 'rep.seen(rep.keyOf(apply(S, mv))) < 2', 'rep.seen(rep.keyOf(apply(S, mv))) < 3'],
   ['a capture or pawn move can be refused as a repeat', 'if(mv.cap || mv.piece[1] === "p" || rep.seen(', 'if(rep.seen('],
   ['a pawn move can be refused as a repeat', 'if(mv.cap || mv.piece[1] === "p" || rep.seen(', 'if(mv.cap || rep.seen('],
-  ['the refusal is ignored outside the touched-square filter', 'if(rep && out.length){', 'if(false){'],
+  ['the repetition refusal is switched off', 'if(rep && out.length){', 'if(false){'],
   ['outside the variant the game-aware list changes', 'if(S.v !== "c") return legal(S, selfCap);', 'if(S.v !== "c") return legalC(S, pseudo(S, S.turn, selfCap), rep);'],
   ['a sacrifice skips succession', 'if(S.v === "c" && m.cap && (m.cap[1] === "k" || m.cap[1] === "q")){', 'if(S.v === "c" && m.cap && !m.sac && (m.cap[1] === "k" || m.cap[1] === "q")){'],
 ];

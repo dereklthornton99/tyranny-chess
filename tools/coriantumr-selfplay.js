@@ -63,7 +63,7 @@ function play(pickWhite, pickBlack, openRnd) {
     hist.push(S);
     r.plies++;
     if (S.v !== 'c') r.tagLost++;
-    if (S.sd) r.showdown = true;
+    if (S.lv && S.lv.w && S.lv.b) r.showdown = true;       // both sides down to one piece
     if (m.sac) r.sacrifices++;
   }
   if (!r.end) r.end = { kind: 'ply cap', winner: null };
@@ -137,7 +137,7 @@ const SHOWDOWNS = arg('--showdowns', 100), SD_DEPTH = arg('--showdown-depth', 3)
     }
     const hist = [S];
     let n = 0, done = false;
-    while (n < 100) {
+    while (n < 200) {
       const res = E.think(S, { ms: NEVER, maxDepth: SD_DEPTH, history: hist });
       if (!E.legal(S, true).some((x) => x.from === res.move.from && x.to === res.move.to && x.promo === res.move.promo)) st.illegal++;
       const T = E.apply(S, res.move);

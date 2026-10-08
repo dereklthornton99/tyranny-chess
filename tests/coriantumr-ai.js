@@ -89,8 +89,13 @@ function battery(E, opts) {
   // ---- R4-M3-AC3: evaluation ---------------------------------------------------------------------------------
   // ---- the owner's ending rules (2026-10-07) in the search -----------------------------------------------------------------
   const sqIdx = (n) => (8 - Number(n[1])) * 8 + 'abcdefgh'.indexOf(n[0]);
-  const stuckRow = GOLDEN.showdown.find((r) => /sacrifices itself/.test(r.name));
-  const sdStuck = C(stuckRow.fen); sdStuck.sd = stuckRow.touched.map(sqIdx);
+  const withLv = (f, spec) => {
+    const S = C(f);
+    if (spec) { S.lv = {}; for (const k of Object.keys(spec)) S.lv[k] = spec[k].map(sqIdx); }
+    return S;
+  };
+  const stuckRow = GOLDEN.lone.find((r) => /sacrifices/.test(r.name));
+  const sdStuck = withLv(stuckRow.fen, stuckRow.lv);
   reset();
   const stuckRes = E.think(sdStuck, { ms: 300, maxDepth: 3, history: [sdStuck] });
   t('a boxed-in lone royal plays its only move, the sacrifice', !!stuckRes && stuckRes.move.sac === true, true);
@@ -106,15 +111,20 @@ function battery(E, opts) {
     E.search(repP, 1, -Infinity, Infinity, 0) > 300, true);
   reset();
   const sdFresh = C('8/7k/8/8/3K4/8/8/8 w - - 0 1');
-  const sdSqueezed = C('8/7k/8/8/3K4/8/8/8 w - - 0 1');
-  sdSqueezed.sd = GOLDEN.showdown.find((r) => /late showdown/.test(r.name)).touched.map(sqIdx);
-  t('the showdown is evaluated by free squares: a squeezed side scores worse than the same position fresh',
+  const lateRow = GOLDEN.lone.find((r) => /late showdown/.test(r.name));
+  const sdSqueezed = withLv(lateRow.fen, lateRow.lv);
+  t('the showdown is evaluated by free squares: both sides squeezed to a few squares scores far below the same position fresh',
     E.evaluate(sdSqueezed) < E.evaluate(sdFresh), true);
   t('CONTROL: the fresh showdown is not scored as a dead draw', E.evaluate(sdFresh) !== 0, true);
+  // a last piece against more is also evaluated by the squares it has left: White (two pieces) is better the fewer Black has
+  const richList = withLv('8/7k/8/8/3K4/8/8/R7 w - - 0 1', { b: ['h7'] });
+  const poorList = withLv('8/7k/8/8/3K4/8/8/R7 w - - 0 1', { b: ['h7', 'h8', 'g8', 'h6', 'h5', 'h4', 'h3', 'g7', 'f7', 'e7', 'd7', 'g6', 'f5', 'e4', 'd3'] });
+  t('a bound last piece with few squares left makes its side score worse (White to move scores better against the poorer list)',
+    E.evaluate(poorList) > E.evaluate(richList), true);
 
   // ---- repetition is refused in the search as well (2026-10-07) ----------------------------------------------------------
   const uciOf = (m) => E.sqName(m.from) + E.sqName(m.to) + (m.promo || '');
-  const repFen = '8/7k/8/8/8/8/P7/1K6 w - - 0 1';
+  const repFen = '8/p6k/8/8/8/8/P7/1K6 w - - 0 1';
   let RS = C(repFen);
   const rstates = [RS];
   for (const u of ['b1b2', 'h7h8', 'b2b1', 'h8h7', 'b1b2', 'h7h8', 'b2b1']) {
@@ -252,8 +262,9 @@ function battery(E, opts) {
         if (!E.legal(cand, true).some((m) => m.cap)) S = cand;
       }
       const hist = [S];
+      const made = { w: 0, b: 0 };
       let n = 0;
-      while (n < 100) {
+      while (n < 200) {
         const res = E.think(S, { ms: 1e9, maxDepth: opts.showdownDepth || 2, history: hist });
         const ms = E.legal(S, true);
         if (!ms.some((x) => x.from === res.move.from && x.to === res.move.to && x.promo === res.move.promo)) st.illegal++;
@@ -265,16 +276,17 @@ function battery(E, opts) {
           if (E.hasPieces(T, 'w')) st.sideToMoveWins++;
           break;
         }
-        if (!T.sd || T.sd.length !== 2 + n) st.bad++;
+        made[S.turn]++;
+        if (!T.lv || !T.lv.w || !T.lv.b || T.lv.w.length !== 1 + made.w || T.lv.b.length !== 1 + made.b) st.bad++;
         S = T; hist.push(S);
       }
       st.games++; st.longest = Math.max(st.longest, n);
     }
     out.showdowns = st;
     t('every engine move in ' + st.games + ' showdowns is legal', st.illegal, 0);
-    t('the touched set is carried correctly through every engine showdown move', st.bad, 0);
-    t('every engine showdown ended by capture or sacrifice within the 63-ply bound (longest ' + st.longest + ')',
-      st.ended === st.games && st.longest <= 63, true);
+    t('each side\'s list of used squares is carried correctly through every engine showdown move', st.bad, 0);
+    t('every engine showdown ended by capture or sacrifice within the bound of 63 landings a side (longest ' + st.longest + ' plies)',
+      st.ended === st.games && st.longest <= 127, true);
   }
   return out;
 }
@@ -312,8 +324,9 @@ const MUTANTS = [
   ['white is favoured by the variant evaluation', 'else             score -= CPC[t] + tbl[mirror(i)];', 'else             score -= CPC[t] + tbl[mirror(i)] + 7;'],
   ['a side emptied by a sacrifice is not scored as won', 'if(S.v === "c" && !hasPieces(S, S.turn === "w" ? "b" : "w")) return MATE - ply;', ''],
   ['a repeated position is a draw in the variant', 'if(S.v !== "c" && ply>0 && (ai.gameKeys', 'if(ply>0 && (ai.gameKeys'],
-  ['the showdown has no evaluation of its own', 'if(td) return showdownEval(S, td);', ''],
-  ['the showdown evaluation counts the wrong side', 'return 10 * (freeMoves(S, me, td) - freeMoves(', 'return 10 * (freeMoves(S, them, td) - freeMoves('],
+  ['the showdown has no evaluation of its own', 'if(uw && ub) return showdownEval(S, uw, ub);', ''],
+  ['the showdown evaluation counts the wrong side', 'freeMoves({b:S.b, turn:me, cast:S.cast, ep:-1, v:"c"}, me, mine)', 'freeMoves({b:S.b, turn:them, cast:S.cast, ep:-1, v:"c"}, them, theirs)'],
+  ['a bound last piece is not evaluated by its squares left', 'score += (lone === "w" ? 1 : -1) * 4 * left;', ''],
   ['the search ignores the line it is searching', 'for(var q=0;q<ai.path.length;q++) if(ai.path[q] === k) n++;', ''],
   ['the repetition key ignores whose move it is', 'if(S.turn === "b") h ^= Z.side;\n  if(S.ep >= 0) h ^= Z.ep[cOf(S.ep)];', 'if(S.ep >= 0) h ^= Z.ep[cOf(S.ep)];'],
   ['the search ignores the game so far', 'var n = ai.gameCount.get(k) || 0;', 'var n = 0;'],

@@ -1066,7 +1066,7 @@ async function main(){
       await ev('return document.querySelector(\'[data-sq="' + SQ('h8') + '"]\').classList.contains("cmd")'), true);
     chk('AC3  and nobody else does (White still has its king)', await ev(countCls('cmd')), 1);
     chk('AC3  the status line names the commander, and only Black',
-      await ev('return document.getElementById("stateTxt").textContent'), 'Move 1 \u00b7 Coriantumr \u00b7 Black: queen commands');
+      await ev('return document.getElementById("stateTxt").textContent'), 'Move 1 \u00b7 Coriantumr \u00b7 Black: queen commands \u00b7 Black\u2019s last piece has used 1 square');
     await ev(pick(SQ('h8'))); await ev(pick(SQ('h7')));          // Black's queen moves on
     chk('AC3  precondition for the next check: Black really moved (history 3, White to move)',
       await ev('return window.hist.length + "/" + window.hist[window.hist.length-1].turn'), '3/w');
@@ -1165,9 +1165,9 @@ async function main(){
 
     /* ---------------- R4-M6 : the owner's ending rules, in the real page ---------------- */
     const GOLD = require('./coriantumr-golden.json');
-    const stuckRow = GOLD.showdown.find(r => /sacrifices itself/.test(r.name));
-    const setPosSd = (f, names) => 'window.sel=-1; window.targets=[]; var S0 = fen("' + f + '"); S0.v = "c"; S0.sd = ' +
-      JSON.stringify(names) + '.map(function(n){ return (8 - Number(n[1])) * 8 + "abcdefgh".indexOf(n[0]); }); resetTo(S0); render();';
+    const stuckRow = GOLD.lone.find(r => /sacrifices/.test(r.name));
+    const setPosLv = (f, spec) => 'window.sel=-1; window.targets=[]; var S0 = fen("' + f + '"); S0.v = "c"; S0.lv = {}; var spec = ' + JSON.stringify(spec) +
+      '; Object.keys(spec).forEach(function(k){ S0.lv[k] = spec[k].map(function(n){ return (8 - Number(n[1])) * 8 + "abcdefgh".indexOf(n[0]); }); }); resetTo(S0); render();';
     const varLine = 'return document.getElementById("varLine").textContent';
     const stateLine = 'return document.getElementById("stateTxt").textContent';
     const occurrences = 'var key = posKey(window.hist[window.hist.length-1]), n = 0; window.hist.forEach(function(h){ if(posKey(h) === key) n++; }); return n;';
@@ -1180,7 +1180,7 @@ async function main(){
     chk('AC1  the half-move clock reaches 100', await ev('return window.hist[window.hist.length-1].half'), 100);
     chk('AC1  and the game goes on: no fifty-move draw in Coriantumr', await ev('return String(window.overTxt)'), 'null');
     // three occurrences of one position, made by clicking; a white pawn keeps it from becoming a two-piece showdown
-    const REP = '8/7k/8/8/8/8/P7/1K6 w - - 0 1';
+    const REP = '8/p6k/8/8/8/8/P7/1K6 w - - 0 1';
     const shuffle = async () => {
       for (let k = 0; k < 2; k++) {
         await ev(pick(SQ('b1'))); await ev(pick(SQ('b2')));
@@ -1223,34 +1223,59 @@ async function main(){
     await ev('document.getElementById("undoBtn").click();');
     chk('AC2  Undo puts the king back on a8', await ev('return window.hist[window.hist.length-1].b[' + SQ('a8') + ']'), 'wk');
 
-    head('R4-M6-AC3 the two-piece showdown');
+    head('R4-M6-AC3 the last-piece rule, side by side');
     await ev(setPos('6k1/8/8/4q3/3K4/8/8/8 w - - 0 1'));
-    chk('AC3  with three pieces there is no showdown yet', await ev(countCls('touched')), 0);
+    chk('AC3  White is down to one piece against two: the status line says its last piece has used one square',
+      await ev(stateLine), 'Move 1 \u00b7 Coriantumr \u00b7 White\u2019s last piece has used 1 square');
+    chk('AC3  one square is shaded, in White\u2019s pattern, and none in Black\u2019s', await ev(countCls('tw')) + '/' + await ev(countCls('tb')), '1/0');
+    chk('AC3  the page explains the last-piece rule', await ev(varLine),
+      'Last piece: it may not land again on a square it has stood on (shaded); captures are exempt.');
     await ev(pick(SQ('d4'))); await ev(pick(SQ('e5')));
-    chk('AC3  capturing down to two pieces begins it, and the status line says so',
-      await ev(stateLine), 'Move 1 · Coriantumr · Showdown, 2 squares touched');
-    chk('AC3  exactly two squares are shaded: e5 and g8',
-      await ev('return Array.prototype.map.call(document.querySelectorAll(".sq.touched"), function(e){ return +e.dataset.sq; }).sort(function(a,b){ return a-b; }).join()'),
-      [SQ('e5'), SQ('g8')].sort((a, b) => a - b).join());
-    chk('AC3  the page explains the rule', await ev(varLine),
-      'Showdown: a shaded square cannot be entered again, and a piece with no move sacrifices itself.');
+    chk('AC3  capturing down to one piece each begins the showdown, and the status line says so',
+      await ev(stateLine), 'Move 1 \u00b7 Coriantumr \u00b7 Showdown: White 1 square used, Black 1 square used');
+    chk('AC3  White\u2019s list is e5 and Black\u2019s is g8, each in its own pattern',
+      await ev('return Array.prototype.map.call(document.querySelectorAll(".sq.tw"), function(e){ return +e.dataset.sq; }).join() + "|" + Array.prototype.map.call(document.querySelectorAll(".sq.tb"), function(e){ return +e.dataset.sq; }).join()'),
+      SQ('e5') + '|' + SQ('g8'));
+    chk('AC3  the page explains the showdown', await ev(varLine),
+      'Showdown: each piece may not land again on a square it has stood on (shaded); captures are exempt, and a piece with no move sacrifices itself.');
+    await ev('document.getElementById("undoBtn").click();');
+    chk('AC3  Undo takes the capture back: White is a last piece against two again and Black has no list',
+      /last piece has used 1 square$/.test(await ev(stateLine)) + ' ' + await ev(countCls('tw')) + '/' + await ev(countCls('tb')), 'true 1/0');
+    await ev(pick(SQ('d4'))); await ev(pick(SQ('e5')));
+    chk('AC3  playing the capture again starts the showdown again, one square each',
+      await ev(countCls('tw')) + '/' + await ev(countCls('tb')), '1/1');
     await ev(pick(SQ('g8'))); await ev(pick(SQ('g7')));
-    chk('AC3  a move shades the square it lands on (3 touched)', await ev(countCls('touched')), 3);
+    chk('AC3  Black moves: only Black\u2019s list grows', await ev(countCls('tw')) + '/' + await ev(countCls('tb')), '1/2');
     await ev(pick(SQ('e5'))); await ev(pick(SQ('e4')));
-    chk('AC3  four squares are shaded now', await ev(countCls('touched')), 4);
+    chk('AC3  White moves: only White\u2019s list grows', await ev(countCls('tw')) + '/' + await ev(countCls('tb')), '2/2');
+    await ev('document.getElementById("undoBtn").click();');
+    chk("AC3  Undo takes White's move back together with its list entry",
+      await ev(countCls('tw')) + '/' + await ev(countCls('tb')) + ' ' + await ev('var L = window.hist[window.hist.length-1].lv; return L.w.length + "/" + L.b.length;'), '1/2 1/2');
+    await ev(pick(SQ('e5'))); await ev(pick(SQ('e4')));
+    chk('AC3  playing the move again puts the entry back', await ev(countCls('tw')) + '/' + await ev(countCls('tb')), '2/2');
     await ev(pick(SQ('g7')));
-    chk('AC3  CONTROL: Black’s king, selected, has moves to choose from', await ev('return window.targets.length > 0'), true);
-    chk('AC3  the shaded squares g8 and e5 are not offered as targets, though both are in its reach',
-      await ev('return window.targets.some(function(m){ return m.to === ' + SQ('g8') + ' || m.to === ' + SQ('e5') + '; })'), false);
-    chk('AC3  and no move marker is drawn on either',
-      await ev('return [' + SQ('g8') + ',' + SQ('e5') + '].some(function(i){ return /hl-/.test(document.querySelector(\'[data-sq="\' + i + \'"]\').className); })'), false);
+    chk('AC3  CONTROL: Black\u2019s king, selected, has moves to choose from', await ev('return window.targets.length > 0'), true);
+    chk('AC3  g8, which Black\u2019s own piece has used, is not offered as a target though it is in reach',
+      await ev('return window.targets.some(function(m){ return m.to === ' + SQ('g8') + '; })'), false);
+    chk('AC3  e5, which only White used and has left, IS offered: the opponent\u2019s squares stay available',
+      await ev('return window.targets.some(function(m){ return m.to === ' + SQ('e5') + '; })'), true);
+    chk('AC3  and no move marker is drawn on g8 while one is drawn on e5',
+      await ev('var cl = function(i){ return /hl-/.test(document.querySelector(\'[data-sq="\' + i + \'"]\').className); }; return cl(' + SQ('g8') + ') + "/" + cl(' + SQ('e5') + ');'), 'false/true');
     await ev('window.sel=-1; window.targets=[]; render();');
-    await ev(setPosSd(stuckRow.fen, stuckRow.touched));
-    chk('AC3  with every reachable square touched the notice says the king must sacrifice itself',
+    // a side with two pieces is not bound; its lone opponent is, before any showdown
+    await ev(setPosLv('8/7k/8/8/3K4/8/8/R7 b - - 0 1', { b: ['h7', 'h6', 'g6'] }));
+    chk('AC3  Black, down to one piece against two, is named as bound; White (two pieces) is not',
+      await ev(stateLine), 'Move 1 \u00b7 Coriantumr \u00b7 Black\u2019s last piece has used 3 squares');
+    await ev(pick(SQ('h7')));
+    chk('AC3  a bound Black king is offered h8 but not h6 or g6',
+      await ev('var t = window.targets.map(function(m){ return m.to; }); return t.indexOf(' + SQ('h8') + ') >= 0 && t.indexOf(' + SQ('h6') + ') < 0 && t.indexOf(' + SQ('g6') + ') < 0'), true);
+    await ev('window.sel=-1; window.targets=[]; render();');
+    await ev(setPosLv(stuckRow.fen, stuckRow.lv));
+    chk('AC3  with every reachable square used the notice says the king must sacrifice itself',
       await ev(varLine), 'White has no legal move: its king must sacrifice itself. Click it twice.');
     await ev(pick(SQ('d4'))); await ev(pick(SQ('d4')));
     chk('AC3  the sacrifice leaves White with no pieces: Black wins as last man standing',
-      await ev(stateLine), 'Black wins — last man standing');
+      await ev(stateLine), 'Black wins \u2014 last man standing');
     chk('AC3  the board is closed after that', await ev('return String(window.sel)'), '-1');
 
     head('R4-M6-AC6 the engine plays the showdown');
@@ -1258,10 +1283,10 @@ async function main(){
     await ev(setPos('8/7k/8/8/3K4/8/8/8 w - - 0 1'));
     await ev(pick(SQ('d4'))); await ev(pick(SQ('c4')));
     chk('AC6  the engine replied with a legal showdown move', await until('window.hist.length === 2 + 1 || !!window.overTxt'), true);
-    chk('AC6  four squares are touched: both starts, White’s landing and the engine’s',
-      await ev('return window.hist[window.hist.length-1].sd.length'), 4);
+    chk('AC6  each list holds two squares: White’s start and landing, Black’s start and the engine’s landing',
+      await ev('var L = window.hist[window.hist.length-1].lv; return L.w.length + "/" + L.b.length;'), '2/2');
     chk('AC6  and the game is still on', await ev('return String(window.overTxt)'), 'null');
-    await ev(setPosSd('8/7K/8/8/3k4/8/8/8 b - - 0 1', stuckRow.touched));      // the engine is Black, boxed in
+    await ev(setPosLv('8/7K/8/8/3k4/8/8/8 b - - 0 1', { b: stuckRow.lv.w, w: stuckRow.lv.b }));      // the engine is Black, boxed in
     chk('AC6  a boxed-in engine sacrifices its royal piece by itself, and White wins',
       await until('!!window.overTxt'), true);
     chk('AC6  ...with the last-man-standing result', await ev(stateLine), 'White wins — last man standing');
