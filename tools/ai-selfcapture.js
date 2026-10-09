@@ -37,9 +37,9 @@ const { toFen } = require('./fen-write.js');
 const NEVER = 1e9;                 // a deadline think() cannot reach, so depth binds
 const CP = { p: 100, n: 320, b: 330, r: 500, q: 900, k: 0 };
 
-/* The page's own three strengths, copied from src/tyranny.html so the probe
-   table reports what a player actually faces rather than a stand-in. */
-const LEVELS = { easy: { ms: 150, depth: 2 }, medium: { ms: 600, depth: 6 }, hard: { ms: 1800, depth: 9 } };
+/* The page's own three strengths, READ from src/tyranny.html (a copy went stale when the tiers were retuned 2026-10-08) so the
+   probe table reports what a player actually faces rather than a stand-in. */
+const LEVELS = (new Function('return (' + fs.readFileSync(path.join(__dirname, '..', 'src', 'tyranny.html'), 'utf8').match(/var LEVELS\s*=\s*(\{[^;]*\});/)[1] + ')'))();
 
 function isMate(T) { return legal(T, true).length === 0 && inCheck(T, T.turn); }
 function forcesMateIn2(S, m) {
@@ -338,9 +338,9 @@ function probes(list) {
     ['easy', 'medium', 'hard'].forEach(function (lv) {
       const L = LEVELS[lv];
       // as shipped: TIME-bounded, so this column is not reproducible and says so
-      const asShipped = think(S, { ms: L.ms, maxDepth: L.depth, selfCap: true, history: [S] });
+      const asShipped = think(S, { ms: L.ms, maxDepth: L.depth, selfCap: true, history: [S], temp: L.temp, mop: L.mop });   // Easy and Medium also draw at random now
       // depth-pinned twin: the same nominal strength with the clock taken out
-      const pinned = think(S, { ms: NEVER, maxDepth: L.depth, selfCap: true, history: [S] });
+      const pinned = think(S, { ms: NEVER, maxDepth: L.depth, selfCap: true, history: [S], mop: L.mop });                  // no temp: this column stays reproducible
       row.engine[lv] = {
         asShipped: {
           move: san(S, asShipped.move, true),

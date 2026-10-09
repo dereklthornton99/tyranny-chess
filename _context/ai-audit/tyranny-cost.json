@@ -1,0 +1,14 @@
+{
+ "medium": {
+  "n": 60,
+  "mean_depth_standard": 4.766666666666667,
+  "mean_depth_tyranny": 4.25,
+  "same_move": 0.9666666666666667
+ },
+ "hard": {
+  "n": 60,
+  "mean_depth_standard": 5.333333333333333,
+  "mean_depth_tyranny": 4.966666666666667,
+  "same_move": 0.9166666666666666
+ }
+}

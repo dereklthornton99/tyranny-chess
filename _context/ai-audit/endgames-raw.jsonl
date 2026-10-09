@@ -1,0 +1,180 @@
+{"tier": "easy", "kind": "KQK", "idx": 0, "fen": "8/5Q2/8/4k3/8/5K2/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 1, "fen": "8/8/8/8/6Q1/7K/8/k7 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 2, "fen": "8/8/8/8/5k2/2Q5/K7/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 3, "fen": "8/7k/8/8/5K2/8/8/5Q2 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 4, "fen": "Q7/4K3/8/8/8/8/8/4k3 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 5, "fen": "7Q/8/2K5/8/8/8/6k1/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 48, "mated": true}
+{"tier": "easy", "kind": "KQK", "idx": 6, "fen": "8/8/7K/8/8/3k4/8/2Q5 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 7, "fen": "2K5/8/3k4/8/8/4Q3/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 8, "fen": "6Q1/3K4/8/8/8/3k4/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 9, "fen": "1k6/8/6Q1/5K2/8/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 10, "fen": "6k1/1K6/Q7/8/8/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 11, "fen": "8/1K6/8/2Q5/8/8/8/3k4 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 12, "fen": "7k/8/8/8/8/4Q3/3K4/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 13, "fen": "8/8/Q7/8/4K3/8/6k1/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 14, "fen": "8/8/4k3/8/8/5Q1K/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 15, "fen": "8/8/2K1Q3/7k/8/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 16, "fen": "8/K7/8/8/7Q/4k3/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 17, "fen": "Q7/4k3/8/8/8/8/K7/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 18, "fen": "5K2/8/8/4k3/8/8/8/7Q w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 19, "fen": "8/5Q2/8/8/7k/8/8/4K3 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 20, "fen": "8/2Q5/8/8/8/5K2/k7/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 21, "fen": "5K2/8/8/k7/8/8/8/6Q1 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 22, "fen": "5Q2/8/8/8/8/1K6/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "easy", "kind": "KQK", "idx": 23, "fen": "5K2/8/8/7Q/8/1k6/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 24, "fen": "8/K7/8/8/8/Q7/8/3k4 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 25, "fen": "8/8/1Q6/1K6/7k/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 26, "fen": "8/3k1K2/8/Q7/8/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 27, "fen": "8/8/8/8/8/1KQ5/4k3/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KQK", "idx": 28, "fen": "8/2K5/8/8/8/7k/4Q3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 21, "mated": true}
+{"tier": "easy", "kind": "KQK", "idx": 29, "fen": "1Q6/8/8/8/8/2k5/8/3K4 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "medium", "kind": "KQK", "idx": 0, "fen": "8/5Q2/8/4k3/8/5K2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 1, "fen": "8/8/8/8/6Q1/7K/8/k7 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 2, "fen": "8/8/8/8/5k2/2Q5/K7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 3, "fen": "8/7k/8/8/5K2/8/8/5Q2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 4, "fen": "Q7/4K3/8/8/8/8/8/4k3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 5, "fen": "7Q/8/2K5/8/8/8/6k1/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 6, "fen": "8/8/7K/8/8/3k4/8/2Q5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 7, "fen": "2K5/8/3k4/8/8/4Q3/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 8, "fen": "6Q1/3K4/8/8/8/3k4/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 9, "fen": "1k6/8/6Q1/5K2/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 10, "fen": "6k1/1K6/Q7/8/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 11, "fen": "8/1K6/8/2Q5/8/8/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 12, "fen": "7k/8/8/8/8/4Q3/3K4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 13, "fen": "8/8/Q7/8/4K3/8/6k1/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 14, "fen": "8/8/4k3/8/8/5Q1K/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 15, "fen": "8/8/2K1Q3/7k/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 16, "fen": "8/K7/8/8/7Q/4k3/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 17, "fen": "Q7/4k3/8/8/8/8/K7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 18, "fen": "5K2/8/8/4k3/8/8/8/7Q w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 19, "fen": "8/5Q2/8/8/7k/8/8/4K3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 20, "fen": "8/2Q5/8/8/8/5K2/k7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 21, "fen": "5K2/8/8/k7/8/8/8/6Q1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 22, "fen": "5Q2/8/8/8/8/1K6/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 23, "fen": "5K2/8/8/7Q/8/1k6/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 24, "fen": "8/K7/8/8/8/Q7/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 25, "fen": "8/8/1Q6/1K6/7k/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 26, "fen": "8/3k1K2/8/Q7/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 3, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 27, "fen": "8/8/8/8/8/1KQ5/4k3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 28, "fen": "8/2K5/8/8/8/7k/4Q3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KQK", "idx": 29, "fen": "1Q6/8/8/8/8/2k5/8/3K4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 0, "fen": "8/5Q2/8/4k3/8/5K2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 1, "fen": "8/8/8/8/6Q1/7K/8/k7 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 2, "fen": "8/8/8/8/5k2/2Q5/K7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 3, "fen": "8/7k/8/8/5K2/8/8/5Q2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 4, "fen": "Q7/4K3/8/8/8/8/8/4k3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 5, "fen": "7Q/8/2K5/8/8/8/6k1/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 6, "fen": "8/8/7K/8/8/3k4/8/2Q5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 7, "fen": "2K5/8/3k4/8/8/4Q3/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 8, "fen": "6Q1/3K4/8/8/8/3k4/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 9, "fen": "1k6/8/6Q1/5K2/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 10, "fen": "6k1/1K6/Q7/8/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 11, "fen": "8/1K6/8/2Q5/8/8/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 12, "fen": "7k/8/8/8/8/4Q3/3K4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 13, "fen": "8/8/Q7/8/4K3/8/6k1/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 14, "fen": "8/8/4k3/8/8/5Q1K/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 15, "fen": "8/8/2K1Q3/7k/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 16, "fen": "8/K7/8/8/7Q/4k3/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 17, "fen": "Q7/4k3/8/8/8/8/K7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 18, "fen": "5K2/8/8/4k3/8/8/8/7Q w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 19, "fen": "8/5Q2/8/8/7k/8/8/4K3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 20, "fen": "8/2Q5/8/8/8/5K2/k7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 21, "fen": "5K2/8/8/k7/8/8/8/6Q1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 22, "fen": "5Q2/8/8/8/8/1K6/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 23, "fen": "5K2/8/8/7Q/8/1k6/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 24, "fen": "8/K7/8/8/8/Q7/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 25, "fen": "8/8/1Q6/1K6/7k/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 26, "fen": "8/3k1K2/8/Q7/8/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 3, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 27, "fen": "8/8/8/8/8/1KQ5/4k3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 28, "fen": "8/2K5/8/8/8/7k/4Q3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KQK", "idx": 29, "fen": "1Q6/8/8/8/8/2k5/8/3K4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 0, "fen": "8/8/8/8/7R/1K6/8/3k4 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 1, "fen": "8/8/4K3/8/5k2/8/2R5/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 2, "fen": "8/8/k7/2K5/8/8/8/6R1 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 3, "fen": "8/7R/8/8/8/6K1/8/6k1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 4, "fen": "8/5K2/8/8/R7/7k/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 5, "fen": "8/8/1k6/8/8/8/6K1/7R w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 6, "fen": "8/8/2K5/1R6/8/7k/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 7, "fen": "8/2K5/8/7R/8/2k5/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 8, "fen": "8/8/8/2RK4/8/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 21, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 9, "fen": "8/7K/3k4/8/8/8/8/6R1 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 10, "fen": "8/5R2/8/k7/8/8/8/4K3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 11, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 11, "fen": "8/2K5/8/6k1/8/8/8/3R4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 12, "fen": "8/6RK/8/8/8/8/3k4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 41, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 13, "fen": "R7/8/5k2/8/8/8/3K4/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 14, "fen": "8/3K4/8/8/8/8/4k3/R7 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 15, "fen": "2K5/8/8/8/R7/5k2/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 16, "fen": "8/R7/4k3/8/8/8/8/3K4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 32, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 17, "fen": "R7/8/8/8/K7/8/8/4k3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 4, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 18, "fen": "8/8/8/8/k7/8/4K3/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 30, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 19, "fen": "8/4K3/8/8/8/2k5/7R/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 20, "fen": "2K5/8/8/8/8/8/7k/5R2 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 21, "fen": "7K/8/8/4k3/8/1R6/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 22, "fen": "4K3/8/5k2/8/8/8/R7/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 23, "fen": "8/8/4k3/8/8/7R/8/2K5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 22, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 24, "fen": "8/8/3R4/8/8/8/K3k3/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 25, "fen": "8/7R/8/2k5/8/5K2/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 26, "fen": "8/8/8/8/8/6K1/1k6/5R2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 24, "mated": true}
+{"tier": "easy", "kind": "KRK", "idx": 27, "fen": "8/8/5R2/8/K7/8/7k/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 28, "fen": "6k1/8/8/R7/3K4/8/8/8 w - - 0 1", "result": "1/2-1/2", "reason": "fifty-move rule", "js_moves": 50, "mated": false}
+{"tier": "easy", "kind": "KRK", "idx": 29, "fen": "8/8/8/8/8/7R/K7/2k5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 27, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 0, "fen": "8/8/8/8/7R/1K6/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 1, "fen": "8/8/4K3/8/5k2/8/2R5/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 2, "fen": "8/8/k7/2K5/8/8/8/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 3, "fen": "8/7R/8/8/8/6K1/8/6k1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 4, "fen": "8/5K2/8/8/R7/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 5, "fen": "8/8/1k6/8/8/8/6K1/7R w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 6, "fen": "8/8/2K5/1R6/8/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 7, "fen": "8/2K5/8/7R/8/2k5/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 11, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 8, "fen": "8/8/8/2RK4/8/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 9, "fen": "8/7K/3k4/8/8/8/8/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 10, "fen": "8/5R2/8/k7/8/8/8/4K3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 11, "fen": "8/2K5/8/6k1/8/8/8/3R4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 11, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 12, "fen": "8/6RK/8/8/8/8/3k4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 11, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 13, "fen": "R7/8/5k2/8/8/8/3K4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 14, "fen": "8/3K4/8/8/8/8/4k3/R7 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 15, "fen": "2K5/8/8/8/R7/5k2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 16, "fen": "8/R7/4k3/8/8/8/8/3K4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 17, "fen": "R7/8/8/8/K7/8/8/4k3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 18, "fen": "8/8/8/8/k7/8/4K3/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 19, "fen": "8/4K3/8/8/8/2k5/7R/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 20, "fen": "2K5/8/8/8/8/8/7k/5R2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 21, "fen": "7K/8/8/4k3/8/1R6/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 22, "fen": "4K3/8/5k2/8/8/8/R7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 23, "fen": "8/8/4k3/8/8/7R/8/2K5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 24, "fen": "8/8/3R4/8/8/8/K3k3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 25, "fen": "8/7R/8/2k5/8/5K2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 26, "fen": "8/8/8/8/8/6K1/1k6/5R2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 27, "fen": "8/8/5R2/8/K7/8/7k/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 28, "fen": "6k1/8/8/R7/3K4/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "medium", "kind": "KRK", "idx": 29, "fen": "8/8/8/8/8/7R/K7/2k5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 11, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 0, "fen": "8/8/8/8/7R/1K6/8/3k4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 1, "fen": "8/8/4K3/8/5k2/8/2R5/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 2, "fen": "8/8/k7/2K5/8/8/8/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 3, "fen": "8/7R/8/8/8/6K1/8/6k1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 2, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 4, "fen": "8/5K2/8/8/R7/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 5, "fen": "8/8/1k6/8/8/8/6K1/7R w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 6, "fen": "8/8/2K5/1R6/8/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 7, "fen": "8/2K5/8/7R/8/2k5/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 8, "fen": "8/8/8/2RK4/8/7k/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 9, "fen": "8/7K/3k4/8/8/8/8/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 10, "fen": "8/5R2/8/k7/8/8/8/4K3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 6, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 11, "fen": "8/2K5/8/6k1/8/8/8/3R4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 12, "fen": "8/6RK/8/8/8/8/3k4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 13, "fen": "R7/8/5k2/8/8/8/3K4/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 14, "fen": "8/3K4/8/8/8/8/4k3/R7 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 15, "fen": "2K5/8/8/8/R7/5k2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 16, "fen": "8/R7/4k3/8/8/8/8/3K4 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 17, "fen": "R7/8/8/8/K7/8/8/4k3 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 18, "fen": "8/8/8/8/k7/8/4K3/6R1 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 19, "fen": "8/4K3/8/8/8/2k5/7R/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 14, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 20, "fen": "2K5/8/8/8/8/8/7k/5R2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 9, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 21, "fen": "7K/8/8/4k3/8/1R6/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 22, "fen": "4K3/8/5k2/8/8/8/R7/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 23, "fen": "8/8/4k3/8/8/7R/8/2K5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 13, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 24, "fen": "8/8/3R4/8/8/8/K3k3/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 14, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 25, "fen": "8/7R/8/2k5/8/5K2/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 8, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 26, "fen": "8/8/8/8/8/6K1/1k6/5R2 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 7, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 27, "fen": "8/8/5R2/8/K7/8/7k/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 12, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 28, "fen": "6k1/8/8/R7/3K4/8/8/8 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 5, "mated": true}
+{"tier": "hard", "kind": "KRK", "idx": 29, "fen": "8/8/8/8/8/7R/K7/2k5 w - - 0 1", "result": "1-0", "reason": "checkmate", "js_moves": 10, "mated": true}

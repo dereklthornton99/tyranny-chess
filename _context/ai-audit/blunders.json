@@ -1,0 +1,1120 @@
+{
+ "medium": {
+  "blunders_200": 28,
+  "lose_material_within_4_plies": 3,
+  "rows": [
+   {
+    "pos": 461,
+    "phase": "middlegame",
+    "ai_move": "e5",
+    "stockfish_move": "f6",
+    "cpl": 673,
+    "material_swing_in_4_plies": 0,
+    "line": "Qf6 Kh7 Rc1 Qb6",
+    "fen": "r2nr1k1/1p1bpp2/p2p2p1/2qP3p/4P2Q/1P3NPP/P2B1PB1/R5K1 b - - 0 19"
+   },
+   {
+    "pos": 471,
+    "phase": "middlegame",
+    "ai_move": "Be3",
+    "stockfish_move": "Ba2",
+    "cpl": 640,
+    "material_swing_in_4_plies": 0,
+    "line": "Qd8 Ba2 Rf8 Qb7",
+    "fen": "6rk/5Qbp/1B4p1/5p2/5P1q/2r5/5P1P/1B2R2K w - - 5 40"
+   },
+   {
+    "pos": 238,
+    "phase": "middlegame",
+    "ai_move": "Qxg7",
+    "stockfish_move": "Qg6+",
+    "cpl": 573,
+    "material_swing_in_4_plies": 7,
+    "line": "O-O-O Rxd7 Qxd7 Qxd7+",
+    "fen": "r3k2r/1q1n2p1/p3pp2/1pb5/8/6Q1/P1N1PP1P/R1BR2K1 w kq - 2 22"
+   },
+   {
+    "pos": 347,
+    "phase": "endgame",
+    "ai_move": "Kg1",
+    "stockfish_move": "Bb1",
+    "cpl": 501,
+    "material_swing_in_4_plies": 0,
+    "line": "Rf7 Rf1 Bf8 Re6",
+    "fen": "8/1pr4k/5Ppb/2r4p/p6P/P2B2P1/1P2R2K/3R4 w - - 1 51"
+   },
+   {
+    "pos": 449,
+    "phase": "middlegame",
+    "ai_move": "Re8",
+    "stockfish_move": "f5",
+    "cpl": 489,
+    "material_swing_in_4_plies": 0,
+    "line": "Rd1 Bc5 c4 f5",
+    "fen": "7r/1kp1qpp1/2p5/3bP3/Pb4Q1/8/1PP2PP1/R1B2RK1 b - - 0 22"
+   },
+   {
+    "pos": 175,
+    "phase": "middlegame",
+    "ai_move": "cxd4",
+    "stockfish_move": "c4",
+    "cpl": 462,
+    "material_swing_in_4_plies": -4,
+    "line": "Be7 Rxh4 Bxh4 Ba3",
+    "fen": "r4k1r/p4n1p/2pq1b2/3n1B1Q/p2p2Rp/1PP5/5PP1/R1B3K1 w - - 2 24"
+   },
+   {
+    "pos": 305,
+    "phase": "middlegame",
+    "ai_move": "gxf5",
+    "stockfish_move": "Qxd3",
+    "cpl": 427,
+    "material_swing_in_4_plies": 1,
+    "line": "Rg1 Qxd3 Nh5+ Kh8",
+    "fen": "2r1r1k1/3q1p2/2p3p1/p3pP2/P7/3PB1N1/1Q3K2/4R3 b - - 0 40"
+   },
+   {
+    "pos": 344,
+    "phase": "middlegame",
+    "ai_move": "Bh3",
+    "stockfish_move": "e3",
+    "cpl": 422,
+    "material_swing_in_4_plies": 2,
+    "line": "Rec6 Bxc8 Qxc8 Qb3",
+    "fen": "2rq2k1/1b3pp1/4rb1p/p2p4/Pp1P3P/6P1/P2RPPB1/3QK1NR w K - 3 20"
+   },
+   {
+    "pos": 163,
+    "phase": "middlegame",
+    "ai_move": "Kh7",
+    "stockfish_move": "f6",
+    "cpl": 344,
+    "material_swing_in_4_plies": 0,
+    "line": "f4 Ng4 Rc3 Ra6",
+    "fen": "rq1r4/5pk1/6p1/p2Nn3/3QB3/8/1P3P1p/2R4K b - - 1 36"
+   },
+   {
+    "pos": 319,
+    "phase": "opening",
+    "ai_move": "Qb6",
+    "stockfish_move": "d6",
+    "cpl": 323,
+    "material_swing_in_4_plies": 0,
+    "line": "c5 Qd8 Nc4 O-O",
+    "fen": "rnbqk2r/1p1pnppp/2p1p3/p7/2PPP3/P2B4/1P1N1PPP/R2QK1NR b KQkq - 2 7"
+   },
+   {
+    "pos": 292,
+    "phase": "middlegame",
+    "ai_move": "Bd4",
+    "stockfish_move": "Bc3",
+    "cpl": 314,
+    "material_swing_in_4_plies": -2,
+    "line": "Nf3+ Rxf3 Bxf3 Qd3",
+    "fen": "b4rk1/5rp1/P6p/1Q6/5P2/P2R4/2qn1N1P/B3R1K1 w - - 1 39"
+   },
+   {
+    "pos": 458,
+    "phase": "middlegame",
+    "ai_move": "Kxh4",
+    "stockfish_move": "Kf2",
+    "cpl": 296,
+    "material_swing_in_4_plies": 0,
+    "line": "Bg2 Rb7 Qe6 Qa1",
+    "fen": "r5k1/3q1p2/3r1np1/pR1p4/P2Pp2p/Q3P1Kb/1P1BB3/7R w - - 0 37"
+   },
+   {
+    "pos": 435,
+    "phase": "middlegame",
+    "ai_move": "b5",
+    "stockfish_move": "c6",
+    "cpl": 286,
+    "material_swing_in_4_plies": -2,
+    "line": "Qxa6 Qd5 Bb4 Nxb2",
+    "fen": "r3kb1r/ppp1p1p1/n4p1p/7q/Q1nP4/5NP1/PP1BPP1P/R4RK1 b kq - 1 14"
+   },
+   {
+    "pos": 450,
+    "phase": "middlegame",
+    "ai_move": "Qc6",
+    "stockfish_move": "Be4",
+    "cpl": 262,
+    "material_swing_in_4_plies": 0,
+    "line": "Ba6 Qc2 Bb7 Qe2",
+    "fen": "r1bq1rk1/3n1pp1/1p2pn1p/pN6/Pb6/3BBN1P/1PQ2PP1/R4RK1 w - - 0 15"
+   },
+   {
+    "pos": 300,
+    "phase": "middlegame",
+    "ai_move": "Qa4",
+    "stockfish_move": "Nxd5",
+    "cpl": 253,
+    "material_swing_in_4_plies": 4,
+    "line": "c5 Bh6 cxd4 Rxc8",
+    "fen": "2r2rk1/p3bp1p/nqp1p1p1/3n3b/2RP4/1QN2PPR/1P2P1B1/2B1K1N1 w - - 0 17"
+   },
+   {
+    "pos": 165,
+    "phase": "middlegame",
+    "ai_move": "f4",
+    "stockfish_move": "Nb6",
+    "cpl": 249,
+    "material_swing_in_4_plies": 0,
+    "line": "gxf3 Rxf3 Qh4 g3",
+    "fen": "r4rk1/5p2/b2p1q2/1Rp1b2p/N5p1/P3P3/2Q1BPPP/5RK1 w - - 3 24"
+   },
+   {
+    "pos": 256,
+    "phase": "opening",
+    "ai_move": "e5",
+    "stockfish_move": "h6",
+    "cpl": 248,
+    "material_swing_in_4_plies": 0,
+    "line": "dxe6 Bxe6 Bb5+ Bd7",
+    "fen": "rnbqk2r/p3ppbp/1p1p1np1/2pP4/4P3/2N1BN2/PPPQ1PPP/R3KB1R b KQkq - 1 7"
+   },
+   {
+    "pos": 191,
+    "phase": "middlegame",
+    "ai_move": "g6",
+    "stockfish_move": "Qe8",
+    "cpl": 246,
+    "material_swing_in_4_plies": 1,
+    "line": "Rxf6 Nxf6 Rxf6 Rg7",
+    "fen": "r1q3k1/1p2r1pn/2p2p1p/p1b1pR2/2P1B2P/PP2P1P1/1BQP3K/5R2 b - - 3 30"
+   },
+   {
+    "pos": 248,
+    "phase": "middlegame",
+    "ai_move": "e4",
+    "stockfish_move": "O-O",
+    "cpl": 241,
+    "material_swing_in_4_plies": 0,
+    "line": "Be6 O-O h5 Rfb1",
+    "fen": "2rqkbnr/p6p/5p2/n3pbp1/2Pp4/P4NPP/QB1NPPB1/R3K2R w KQk - 0 16"
+   },
+   {
+    "pos": 36,
+    "phase": "middlegame",
+    "ai_move": "fxg6",
+    "stockfish_move": "Qxc4",
+    "cpl": 237,
+    "material_swing_in_4_plies": 0,
+    "line": "Qf6 gxf7+ Qxf7 Ng5",
+    "fen": "r2qk2r/pppb1p1p/2nb2p1/5P2/Q1p5/2p2N2/PP2PPBP/R1BR2K1 w kq - 1 12"
+   },
+   {
+    "pos": 350,
+    "phase": "opening",
+    "ai_move": "Nxe4",
+    "stockfish_move": "e5",
+    "cpl": 233,
+    "material_swing_in_4_plies": 0,
+    "line": "O-O Nxd2 Bxd2 Qa3",
+    "fen": "r1b1kb1r/pp2pppp/n1pp1n2/8/2PPPB2/2q2N2/P2NBPPP/1R1QK2R b Kkq - 3 8"
+   },
+   {
+    "pos": 99,
+    "phase": "middlegame",
+    "ai_move": "Qxd3",
+    "stockfish_move": "Qxb4",
+    "cpl": 232,
+    "material_swing_in_4_plies": 0,
+    "line": "Rc1+ Kh2 Qd6+ Rg3",
+    "fen": "1kr5/3r4/1p3p2/p2B1P2/Pq1pP2p/1P1b3P/3Q2R1/7K w - - 4 48"
+   },
+   {
+    "pos": 282,
+    "phase": "middlegame",
+    "ai_move": "cxd4",
+    "stockfish_move": "O-O",
+    "cpl": 227,
+    "material_swing_in_4_plies": -1,
+    "line": "Rxd4 a6 e5 h5",
+    "fen": "r2qk2r/pp1nbppp/4p3/2p5/2BPP1b1/2N2N2/PP2QP2/R1BR2K1 b kq - 1 13"
+   },
+   {
+    "pos": 357,
+    "phase": "middlegame",
+    "ai_move": "Qxh6",
+    "stockfish_move": "Kg1",
+    "cpl": 226,
+    "material_swing_in_4_plies": 0,
+    "line": "Na4 Rd2 Nxc3 bxc3",
+    "fen": "r3r1k1/1p2qp2/2p3pp/p1n2b2/2P2Q2/P1N4P/1P2BPP1/3R1K1R w - - 2 23"
+   },
+   {
+    "pos": 298,
+    "phase": "middlegame",
+    "ai_move": "Bf3",
+    "stockfish_move": "Ng5",
+    "cpl": 224,
+    "material_swing_in_4_plies": 0,
+    "line": "Bxf3 Rxf3 a3 Qa1",
+    "fen": "r1q2k1r/1p1nppb1/1Pp3p1/2Pn4/p1NpNPb1/3P2P1/PQ1BP1B1/2R2RK1 w - - 1 23"
+   },
+   {
+    "pos": 391,
+    "phase": "middlegame",
+    "ai_move": "Ng6",
+    "stockfish_move": "Nf3",
+    "cpl": 219,
+    "material_swing_in_4_plies": 0,
+    "line": "Rh6 a5 Qb4 Qe4",
+    "fen": "r3k1nr/pp1b4/1q2p3/2b1P1p1/P5PN/1pNp4/3P1PB1/1RB1Q1K1 w kq - 0 24"
+   },
+   {
+    "pos": 304,
+    "phase": "middlegame",
+    "ai_move": "Qc3",
+    "stockfish_move": "Ne3",
+    "cpl": 206,
+    "material_swing_in_4_plies": 3,
+    "line": "Nb7 Be3 Bb4 Rxb4",
+    "fen": "2r1rbk1/2qb1p2/1Rpn2p1/p1B1p2p/P3P3/3P2P1/1Q3PB1/3NR1K1 w - - 6 27"
+   },
+   {
+    "pos": 299,
+    "phase": "middlegame",
+    "ai_move": "Na5",
+    "stockfish_move": "Rh1",
+    "cpl": 201,
+    "material_swing_in_4_plies": 0,
+    "line": "g5 Nxb7 gxf4+ Kf2",
+    "fen": "r3q1kr/1p1np1b1/1Pp1p1p1/2Pn4/2NpBPP1/p2P2K1/P1QBP3/2R2R2 w - - 2 31"
+   }
+  ]
+ },
+ "hard": {
+  "blunders_200": 28,
+  "lose_material_within_4_plies": 3,
+  "rows": [
+   {
+    "pos": 461,
+    "phase": "middlegame",
+    "ai_move": "e5",
+    "stockfish_move": "f6",
+    "cpl": 673,
+    "material_swing_in_4_plies": 0,
+    "line": "Qf6 Kh7 Rc1 Qb6",
+    "fen": "r2nr1k1/1p1bpp2/p2p2p1/2qP3p/4P2Q/1P3NPP/P2B1PB1/R5K1 b - - 0 19"
+   },
+   {
+    "pos": 471,
+    "phase": "middlegame",
+    "ai_move": "Be3",
+    "stockfish_move": "Ba2",
+    "cpl": 640,
+    "material_swing_in_4_plies": 0,
+    "line": "Qf6 Qxf6 Bxf6 Rd1",
+    "fen": "6rk/5Qbp/1B4p1/5p2/5P1q/2r5/5P1P/1B2R2K w - - 5 40"
+   },
+   {
+    "pos": 238,
+    "phase": "middlegame",
+    "ai_move": "Qxg7",
+    "stockfish_move": "Qg6+",
+    "cpl": 573,
+    "material_swing_in_4_plies": 7,
+    "line": "O-O-O Rxd7 Qxd7 Qxd7+",
+    "fen": "r3k2r/1q1n2p1/p3pp2/1pb5/8/6Q1/P1N1PP1P/R1BR2K1 w kq - 2 22"
+   },
+   {
+    "pos": 357,
+    "phase": "middlegame",
+    "ai_move": "Bf3",
+    "stockfish_move": "Kg1",
+    "cpl": 511,
+    "material_swing_in_4_plies": -2,
+    "line": "Bc2 g3 Bxd1 Nxd1",
+    "fen": "r3r1k1/1p2qp2/2p3pp/p1n2b2/2P2Q2/P1N4P/1P2BPP1/3R1K1R w - - 2 23"
+   },
+   {
+    "pos": 347,
+    "phase": "endgame",
+    "ai_move": "Kg1",
+    "stockfish_move": "Bb1",
+    "cpl": 501,
+    "material_swing_in_4_plies": 0,
+    "line": "Bf8 Rde1 R5c6 Re7+",
+    "fen": "8/1pr4k/5Ppb/2r4p/p6P/P2B2P1/1P2R2K/3R4 w - - 1 51"
+   },
+   {
+    "pos": 449,
+    "phase": "middlegame",
+    "ai_move": "Re8",
+    "stockfish_move": "f5",
+    "cpl": 489,
+    "material_swing_in_4_plies": 0,
+    "line": "Rd1 Bc5 c4 Be6",
+    "fen": "7r/1kp1qpp1/2p5/3bP3/Pb4Q1/8/1PP2PP1/R1B2RK1 b - - 0 22"
+   },
+   {
+    "pos": 305,
+    "phase": "middlegame",
+    "ai_move": "gxf5",
+    "stockfish_move": "Qxd3",
+    "cpl": 427,
+    "material_swing_in_4_plies": 1,
+    "line": "Rg1 Qxd3 Nh5+ Kh8",
+    "fen": "2r1r1k1/3q1p2/2p3p1/p3pP2/P7/3PB1N1/1Q3K2/4R3 b - - 0 40"
+   },
+   {
+    "pos": 344,
+    "phase": "middlegame",
+    "ai_move": "Bh3",
+    "stockfish_move": "e3",
+    "cpl": 422,
+    "material_swing_in_4_plies": 2,
+    "line": "Rec6 Bxc8 Qxc8 Qb3",
+    "fen": "2rq2k1/1b3pp1/4rb1p/p2p4/Pp1P3P/6P1/P2RPPB1/3QK1NR w K - 3 20"
+   },
+   {
+    "pos": 163,
+    "phase": "middlegame",
+    "ai_move": "Kh7",
+    "stockfish_move": "f6",
+    "cpl": 344,
+    "material_swing_in_4_plies": 0,
+    "line": "Rc3 Kg7 f4 Ra6",
+    "fen": "rq1r4/5pk1/6p1/p2Nn3/3QB3/8/1P3P1p/2R4K b - - 1 36"
+   },
+   {
+    "pos": 319,
+    "phase": "opening",
+    "ai_move": "Qb6",
+    "stockfish_move": "d6",
+    "cpl": 323,
+    "material_swing_in_4_plies": 0,
+    "line": "c5 Qd8 Nc4 O-O",
+    "fen": "rnbqk2r/1p1pnppp/2p1p3/p7/2PPP3/P2B4/1P1N1PPP/R2QK1NR b KQkq - 2 7"
+   },
+   {
+    "pos": 292,
+    "phase": "middlegame",
+    "ai_move": "Bd4",
+    "stockfish_move": "Qb2",
+    "cpl": 314,
+    "material_swing_in_4_plies": -1,
+    "line": "Rxf4 Qe5 R4f7 Qe2",
+    "fen": "b4rk1/5rp1/P6p/1Q6/5P2/P2R4/2qn1N1P/B3R1K1 w - - 1 39"
+   },
+   {
+    "pos": 458,
+    "phase": "middlegame",
+    "ai_move": "Kxh4",
+    "stockfish_move": "Kf2",
+    "cpl": 296,
+    "material_swing_in_4_plies": 0,
+    "line": "Bg2 Rb7 Qd8 Kg3",
+    "fen": "r5k1/3q1p2/3r1np1/pR1p4/P2Pp2p/Q3P1Kb/1P1BB3/7R w - - 0 37"
+   },
+   {
+    "pos": 435,
+    "phase": "middlegame",
+    "ai_move": "b5",
+    "stockfish_move": "c6",
+    "cpl": 286,
+    "material_swing_in_4_plies": -3,
+    "line": "Qxa6 Qd5 Rac1 e6",
+    "fen": "r3kb1r/ppp1p1p1/n4p1p/7q/Q1nP4/5NP1/PP1BPP1P/R4RK1 b kq - 1 14"
+   },
+   {
+    "pos": 235,
+    "phase": "endgame",
+    "ai_move": "Rxg7",
+    "stockfish_move": "Rh1",
+    "cpl": 276,
+    "material_swing_in_4_plies": -5,
+    "line": "Re1+ Kc2 Kxg7 Kd2",
+    "fen": "4r2k/1p4r1/p1p2p2/7p/3P3N/P1PB4/1P3P2/1K4R1 w - - 4 35"
+   },
+   {
+    "pos": 450,
+    "phase": "middlegame",
+    "ai_move": "Qc6",
+    "stockfish_move": "Be4",
+    "cpl": 262,
+    "material_swing_in_4_plies": 0,
+    "line": "Ba6 Qc2 Bb7 Qe2",
+    "fen": "r1bq1rk1/3n1pp1/1p2pn1p/pN6/Pb6/3BBN1P/1PQ2PP1/R4RK1 w - - 0 15"
+   },
+   {
+    "pos": 300,
+    "phase": "middlegame",
+    "ai_move": "Qa4",
+    "stockfish_move": "Nxd5",
+    "cpl": 253,
+    "material_swing_in_4_plies": 4,
+    "line": "c5 Bh6 cxd4 Rxc8",
+    "fen": "2r2rk1/p3bp1p/nqp1p1p1/3n3b/2RP4/1QN2PPR/1P2P1B1/2B1K1N1 w - - 0 17"
+   },
+   {
+    "pos": 165,
+    "phase": "middlegame",
+    "ai_move": "f4",
+    "stockfish_move": "Nb6",
+    "cpl": 249,
+    "material_swing_in_4_plies": 0,
+    "line": "gxf3 Rxf3 Qh4 g3",
+    "fen": "r4rk1/5p2/b2p1q2/1Rp1b2p/N5p1/P3P3/2Q1BPPP/5RK1 w - - 3 24"
+   },
+   {
+    "pos": 256,
+    "phase": "opening",
+    "ai_move": "e5",
+    "stockfish_move": "h6",
+    "cpl": 248,
+    "material_swing_in_4_plies": 0,
+    "line": "dxe6 Bxe6 Bb5+ Bd7",
+    "fen": "rnbqk2r/p3ppbp/1p1p1np1/2pP4/4P3/2N1BN2/PPPQ1PPP/R3KB1R b KQkq - 1 7"
+   },
+   {
+    "pos": 191,
+    "phase": "middlegame",
+    "ai_move": "g6",
+    "stockfish_move": "Qe8",
+    "cpl": 246,
+    "material_swing_in_4_plies": 1,
+    "line": "Rxf6 Nxf6 Rxf6 Rg7",
+    "fen": "r1q3k1/1p2r1pn/2p2p1p/p1b1pR2/2P1B2P/PP2P1P1/1BQP3K/5R2 b - - 3 30"
+   },
+   {
+    "pos": 248,
+    "phase": "middlegame",
+    "ai_move": "e4",
+    "stockfish_move": "O-O",
+    "cpl": 241,
+    "material_swing_in_4_plies": 0,
+    "line": "Be6 O-O h5 Rfb1",
+    "fen": "2rqkbnr/p6p/5p2/n3pbp1/2Pp4/P4NPP/QB1NPPB1/R3K2R w KQk - 0 16"
+   },
+   {
+    "pos": 36,
+    "phase": "middlegame",
+    "ai_move": "fxg6",
+    "stockfish_move": "Qxc4",
+    "cpl": 237,
+    "material_swing_in_4_plies": 0,
+    "line": "Qf6 gxf7+ Qxf7 Ng5",
+    "fen": "r2qk2r/pppb1p1p/2nb2p1/5P2/Q1p5/2p2N2/PP2PPBP/R1BR2K1 w kq - 1 12"
+   },
+   {
+    "pos": 350,
+    "phase": "opening",
+    "ai_move": "Nxe4",
+    "stockfish_move": "e5",
+    "cpl": 233,
+    "material_swing_in_4_plies": 0,
+    "line": "O-O Nxd2 Bxd2 Qa3",
+    "fen": "r1b1kb1r/pp2pppp/n1pp1n2/8/2PPPB2/2q2N2/P2NBPPP/1R1QK2R b Kkq - 3 8"
+   },
+   {
+    "pos": 99,
+    "phase": "middlegame",
+    "ai_move": "Qxd3",
+    "stockfish_move": "Qxb4",
+    "cpl": 232,
+    "material_swing_in_4_plies": 0,
+    "line": "Rc1+ Kh2 Qd6+ e5",
+    "fen": "1kr5/3r4/1p3p2/p2B1P2/Pq1pP2p/1P1b3P/3Q2R1/7K w - - 4 48"
+   },
+   {
+    "pos": 282,
+    "phase": "middlegame",
+    "ai_move": "cxd4",
+    "stockfish_move": "O-O",
+    "cpl": 227,
+    "material_swing_in_4_plies": -1,
+    "line": "Rxd4 a6 e5 h5",
+    "fen": "r2qk2r/pp1nbppp/4p3/2p5/2BPP1b1/2N2N2/PP2QP2/R1BR2K1 b kq - 1 13"
+   },
+   {
+    "pos": 298,
+    "phase": "middlegame",
+    "ai_move": "Bf3",
+    "stockfish_move": "Ng5",
+    "cpl": 224,
+    "material_swing_in_4_plies": 0,
+    "line": "Bxf3 exf3 N7f6 Ng5",
+    "fen": "r1q2k1r/1p1nppb1/1Pp3p1/2Pn4/p1NpNPb1/3P2P1/PQ1BP1B1/2R2RK1 w - - 1 23"
+   },
+   {
+    "pos": 391,
+    "phase": "middlegame",
+    "ai_move": "Ng6",
+    "stockfish_move": "Nf3",
+    "cpl": 219,
+    "material_swing_in_4_plies": -1,
+    "line": "Rh6 a5 Qxa5 Qe4",
+    "fen": "r3k1nr/pp1b4/1q2p3/2b1P1p1/P5PN/1pNp4/3P1PB1/1RB1Q1K1 w kq - 0 24"
+   },
+   {
+    "pos": 310,
+    "phase": "opening",
+    "ai_move": "Nc6",
+    "stockfish_move": "Nxg2+",
+    "cpl": 214,
+    "material_swing_in_4_plies": 1,
+    "line": "d5 Nxg2+ Kf1 Na5",
+    "fen": "rnbq1rk1/ppppbppp/8/4p2P/P1BPPn2/5N2/1PP2PP1/RNBQK2R b KQ - 0 8"
+   },
+   {
+    "pos": 304,
+    "phase": "middlegame",
+    "ai_move": "Qc3",
+    "stockfish_move": "Ne3",
+    "cpl": 206,
+    "material_swing_in_4_plies": 3,
+    "line": "Nb7 Be3 Bb4 Rxb4",
+    "fen": "2r1rbk1/2qb1p2/1Rpn2p1/p1B1p2p/P3P3/3P2P1/1Q3PB1/3NR1K1 w - - 6 27"
+   }
+  ]
+ },
+ "easy": {
+  "blunders_200": 54,
+  "lose_material_within_4_plies": 12,
+  "rows": [
+   {
+    "pos": 66,
+    "phase": "middlegame",
+    "ai_move": "a8=Q",
+    "stockfish_move": "Kh2",
+    "cpl": 1761,
+    "material_swing_in_4_plies": -1,
+    "line": "Rxg3+ Kh2 Rg2+ Kh1",
+    "fen": "3b2qr/P3k3/6r1/1N1p3p/1PP1p2P/4PbP1/3Q1P2/R4RK1 w - - 1 33"
+   },
+   {
+    "pos": 464,
+    "phase": "middlegame",
+    "ai_move": "O-O",
+    "stockfish_move": "Rxh5",
+    "cpl": 1183,
+    "material_swing_in_4_plies": 3,
+    "line": "Bf3 Nxf3 Qg4#",
+    "fen": "1r1k4/p1pqbpp1/1pn5/3p3r/B2P2b1/P2QB3/1P1N1P2/R3K2R w KQ - 0 24"
+   },
+   {
+    "pos": 461,
+    "phase": "middlegame",
+    "ai_move": "e5",
+    "stockfish_move": "f6",
+    "cpl": 673,
+    "material_swing_in_4_plies": -4,
+    "line": "Qf6 Re6 dxe6 Nxe6",
+    "fen": "r2nr1k1/1p1bpp2/p2p2p1/2qP3p/4P2Q/1P3NPP/P2B1PB1/R5K1 b - - 0 19"
+   },
+   {
+    "pos": 392,
+    "phase": "middlegame",
+    "ai_move": "Nd7",
+    "stockfish_move": "c6",
+    "cpl": 645,
+    "material_swing_in_4_plies": -2,
+    "line": "e6 Ne5 dxe5 Bxe6",
+    "fen": "Bnbqnrk1/2p1ppbp/p2p2p1/4P1N1/3P4/6PP/PBP1QP2/R3K2R b KQ - 0 12"
+   },
+   {
+    "pos": 471,
+    "phase": "middlegame",
+    "ai_move": "Be3",
+    "stockfish_move": "Ba2",
+    "cpl": 640,
+    "material_swing_in_4_plies": -4,
+    "line": "Rxe3 Rg1 Qxf2 Qb7",
+    "fen": "6rk/5Qbp/1B4p1/5p2/5P1q/2r5/5P1P/1B2R2K w - - 5 40"
+   },
+   {
+    "pos": 115,
+    "phase": "middlegame",
+    "ai_move": "Bxe5",
+    "stockfish_move": "h3",
+    "cpl": 602,
+    "material_swing_in_4_plies": 2,
+    "line": "Qxe5 Qc2 Nb6 Rxd6",
+    "fen": "2n1q1k1/3r1ppp/p2r4/1p1Rp3/1P6/PQ2P3/1B3PPP/3R2K1 w - - 4 24"
+   },
+   {
+    "pos": 238,
+    "phase": "middlegame",
+    "ai_move": "Qxg7",
+    "stockfish_move": "Qg6+",
+    "cpl": 573,
+    "material_swing_in_4_plies": 7,
+    "line": "O-O-O Rxd7 Qxd7 Qxd7+",
+    "fen": "r3k2r/1q1n2p1/p3pp2/1pb5/8/6Q1/P1N1PP1P/R1BR2K1 w kq - 2 22"
+   },
+   {
+    "pos": 165,
+    "phase": "middlegame",
+    "ai_move": "e4",
+    "stockfish_move": "Nb6",
+    "cpl": 565,
+    "material_swing_in_4_plies": -2,
+    "line": "Bxb5 Bxb5 Rfb8 Bc4",
+    "fen": "r4rk1/5p2/b2p1q2/1Rp1b2p/N5p1/P3P3/2Q1BPPP/5RK1 w - - 3 24"
+   },
+   {
+    "pos": 76,
+    "phase": "middlegame",
+    "ai_move": "a3",
+    "stockfish_move": "c3",
+    "cpl": 559,
+    "material_swing_in_4_plies": 2,
+    "line": "Bxd2+ Ke2 O-O-O Bxc6",
+    "fen": "r3k2r/pp3ppp/2n1p3/qB2Q3/1b6/1P3N2/P1PP1PPP/R3K2R w KQkq - 1 14"
+   },
+   {
+    "pos": 347,
+    "phase": "endgame",
+    "ai_move": "Re7+",
+    "stockfish_move": "Bb1",
+    "cpl": 547,
+    "material_swing_in_4_plies": 0,
+    "line": "Rxe7 fxe7 Re5 Bb1",
+    "fen": "8/1pr4k/5Ppb/2r4p/p6P/P2B2P1/1P2R2K/3R4 w - - 1 51"
+   },
+   {
+    "pos": 242,
+    "phase": "opening",
+    "ai_move": "Bxc5",
+    "stockfish_move": "Nbd7",
+    "cpl": 494,
+    "material_swing_in_4_plies": 0,
+    "line": "Qxd8 Rxd8 Nc7 Bd7",
+    "fen": "rnbq1rk1/pp2bppp/4pn2/1NP3B1/4p3/2P5/PP2BPPP/R2QK1NR b KQ - 0 9"
+   },
+   {
+    "pos": 299,
+    "phase": "middlegame",
+    "ai_move": "Bxd5",
+    "stockfish_move": "Rh1",
+    "cpl": 469,
+    "material_swing_in_4_plies": -3,
+    "line": "exd5 Na5 e5 f5",
+    "fen": "r3q1kr/1p1np1b1/1Pp1p1p1/2Pn4/2NpBPP1/p2P2K1/P1QBP3/2R2R2 w - - 2 31"
+   },
+   {
+    "pos": 149,
+    "phase": "middlegame",
+    "ai_move": "Bb6",
+    "stockfish_move": "Nde7",
+    "cpl": 465,
+    "material_swing_in_4_plies": -3,
+    "line": "e4 Nd4 exd5 Re8",
+    "fen": "2rq1r1k/ppb3p1/5p2/2pnpn2/2Q5/PP2PN1P/1B1PNPP1/R4RK1 b - - 3 18"
+   },
+   {
+    "pos": 175,
+    "phase": "middlegame",
+    "ai_move": "cxd4",
+    "stockfish_move": "Bh6+",
+    "cpl": 462,
+    "material_swing_in_4_plies": -4,
+    "line": "Be7 Rxh4 Bxh4 Ba3",
+    "fen": "r4k1r/p4n1p/2pq1b2/3n1B1Q/p2p2Rp/1PP5/5PP1/R1B3K1 w - - 2 24"
+   },
+   {
+    "pos": 359,
+    "phase": "middlegame",
+    "ai_move": "Nxe4",
+    "stockfish_move": "g4",
+    "cpl": 456,
+    "material_swing_in_4_plies": -3,
+    "line": "Bxe4 Bf3 Bc2 Qc1",
+    "fen": "r3r1kq/1p3p2/2p3p1/p4b2/2P1n3/P1N1Q1PP/1P2BP2/3R1K1R w - - 1 26"
+   },
+   {
+    "pos": 163,
+    "phase": "middlegame",
+    "ai_move": "f5",
+    "stockfish_move": "f6",
+    "cpl": 443,
+    "material_swing_in_4_plies": 0,
+    "line": "Bg2 Ra6 f4 Re6",
+    "fen": "rq1r4/5pk1/6p1/p2Nn3/3QB3/8/1P3P1p/2R4K b - - 1 36"
+   },
+   {
+    "pos": 344,
+    "phase": "middlegame",
+    "ai_move": "Bh3",
+    "stockfish_move": "e3",
+    "cpl": 422,
+    "material_swing_in_4_plies": 0,
+    "line": "Rec6 Qb3 Rc1+ Rd1",
+    "fen": "2rq2k1/1b3pp1/4rb1p/p2p4/Pp1P3P/6P1/P2RPPB1/3QK1NR w K - 3 20"
+   },
+   {
+    "pos": 358,
+    "phase": "middlegame",
+    "ai_move": "Bf3",
+    "stockfish_move": "g4",
+    "cpl": 395,
+    "material_swing_in_4_plies": 0,
+    "line": "Ng5 Qc5 Nxf3 gxf3",
+    "fen": "r3r1k1/1p3p2/2p3p1/p4b2/2P1n2q/P1N1Q2P/1P2BPP1/3R1K1R w - - 3 25"
+   },
+   {
+    "pos": 30,
+    "phase": "middlegame",
+    "ai_move": "Nbd7",
+    "stockfish_move": "O-O",
+    "cpl": 387,
+    "material_swing_in_4_plies": -2,
+    "line": "Nc6 Qc7 Nxa7 Qxa7",
+    "fen": "1nbqk2r/r3bppp/pp2pn2/2p1N3/5P2/1PN1PB2/PB1P2PP/R2QK2R b KQk - 3 11"
+   },
+   {
+    "pos": 55,
+    "phase": "opening",
+    "ai_move": "Qa5",
+    "stockfish_move": "a5",
+    "cpl": 373,
+    "material_swing_in_4_plies": 0,
+    "line": "c3 Be7 c4 Nb4",
+    "fen": "r1bqk2r/pp1n1ppp/2p5/3np3/1b6/1B1P1N2/PPPB1PPP/RN1Q1RK1 b kq - 1 8"
+   },
+   {
+    "pos": 227,
+    "phase": "middlegame",
+    "ai_move": "Bc5",
+    "stockfish_move": "Rxc1",
+    "cpl": 365,
+    "material_swing_in_4_plies": 0,
+    "line": "Qg4 e5 Nxc5 Rxc5",
+    "fen": "r1r1q1k1/1b2bppp/pp2p3/3n4/4N3/PP1BP3/1B2QPPP/2R2RK1 b - - 5 20"
+   },
+   {
+    "pos": 301,
+    "phase": "middlegame",
+    "ai_move": "Ree8",
+    "stockfish_move": "Rxe6",
+    "cpl": 364,
+    "material_swing_in_4_plies": 0,
+    "line": "Rd6 Ra2 Bf1 Re7",
+    "fen": "r5k1/3nr2p/4R1pB/3p1pNb/3P4/2P2PP1/4PKB1/8 b - - 0 30"
+   },
+   {
+    "pos": 180,
+    "phase": "middlegame",
+    "ai_move": "Qh4+",
+    "stockfish_move": "fxg4",
+    "cpl": 329,
+    "material_swing_in_4_plies": 1,
+    "line": "Ke2 fxg4 Bxd5 Rxd5",
+    "fen": "2kr3r/p5p1/Ppp1p3/3n1p2/3P2P1/3QPB2/1P3KPq/R1B1R3 b - - 0 28"
+   },
+   {
+    "pos": 202,
+    "phase": "middlegame",
+    "ai_move": "c5",
+    "stockfish_move": "b6",
+    "cpl": 327,
+    "material_swing_in_4_plies": 3,
+    "line": "Nb5 Bxf4 Nxc7 Bxc1",
+    "fen": "r1b2rk1/1pqn1pp1/2pbpn1p/p2p4/2PP1B2/PPN2NP1/4PPBP/R1Q1K2R b KQ - 4 13"
+   },
+   {
+    "pos": 319,
+    "phase": "opening",
+    "ai_move": "Qb6",
+    "stockfish_move": "d6",
+    "cpl": 323,
+    "material_swing_in_4_plies": 1,
+    "line": "c5 Qxb2 Ne2 b5",
+    "fen": "rnbqk2r/1p1pnppp/2p1p3/p7/2PPP3/P2B4/1P1N1PPP/R2QK1NR b KQkq - 2 7"
+   },
+   {
+    "pos": 338,
+    "phase": "middlegame",
+    "ai_move": "Nf3",
+    "stockfish_move": "Bb2",
+    "cpl": 322,
+    "material_swing_in_4_plies": 0,
+    "line": "e4 Nd4 Nxd4 exd4",
+    "fen": "r1b1rbk1/1ppp1pp1/2n2q1p/p3p3/2P4N/1P2P1P1/P2P1PBP/R1BQ1RK1 w - - 0 12"
+   },
+   {
+    "pos": 12,
+    "phase": "opening",
+    "ai_move": "Ng5",
+    "stockfish_move": "exd4",
+    "cpl": 319,
+    "material_swing_in_4_plies": -1,
+    "line": "Nxe5 Bxe5 dxe5 d6",
+    "fen": "r1bqk2r/pppp1ppn/2nb3p/4p3/2PPP3/P4NP1/1P3PBP/RNBQ1RK1 b kq - 0 8"
+   },
+   {
+    "pos": 21,
+    "phase": "middlegame",
+    "ai_move": "Qc4",
+    "stockfish_move": "Rb4",
+    "cpl": 318,
+    "material_swing_in_4_plies": -1,
+    "line": "Qxc4 dxc4 Bxc5 Kd3",
+    "fen": "r1r3k1/4bppp/p7/2Pqp3/7P/P1QPBP2/2P1KP2/1R5R w - - 4 21"
+   },
+   {
+    "pos": 279,
+    "phase": "middlegame",
+    "ai_move": "Nge2",
+    "stockfish_move": "Qg5",
+    "cpl": 312,
+    "material_swing_in_4_plies": -3,
+    "line": "Bxc3 Qxc3 Bxe2 Qd2",
+    "fen": "5rk1/1p4bp/2p3p1/p7/P1q1P1b1/2N5/3Q2PP/2R3NK w - - 10 33"
+   },
+   {
+    "pos": 458,
+    "phase": "middlegame",
+    "ai_move": "Kxh4",
+    "stockfish_move": "Kf2",
+    "cpl": 296,
+    "material_swing_in_4_plies": 0,
+    "line": "Bg2 Qa1 Bf3 Qg1",
+    "fen": "r5k1/3q1p2/3r1np1/pR1p4/P2Pp2p/Q3P1Kb/1P1BB3/7R w - - 0 37"
+   },
+   {
+    "pos": 435,
+    "phase": "middlegame",
+    "ai_move": "b5",
+    "stockfish_move": "c6",
+    "cpl": 286,
+    "material_swing_in_4_plies": -3,
+    "line": "Qxa6 Qd5 Rac1 e6",
+    "fen": "r3kb1r/ppp1p1p1/n4p1p/7q/Q1nP4/5NP1/PP1BPP1P/R4RK1 b kq - 1 14"
+   },
+   {
+    "pos": 292,
+    "phase": "middlegame",
+    "ai_move": "Qh5",
+    "stockfish_move": "Be5",
+    "cpl": 282,
+    "material_swing_in_4_plies": -1,
+    "line": "Rxf4 Rg3 R4f7 Qd1",
+    "fen": "b4rk1/5rp1/P6p/1Q6/5P2/P2R4/2qn1N1P/B3R1K1 w - - 1 39"
+   },
+   {
+    "pos": 300,
+    "phase": "middlegame",
+    "ai_move": "Qxb6",
+    "stockfish_move": "Nxd5",
+    "cpl": 279,
+    "material_swing_in_4_plies": -11,
+    "line": "Nxb6 Rc5 Nxc5 dxc5",
+    "fen": "2r2rk1/p3bp1p/nqp1p1p1/3n3b/2RP4/1QN2PPR/1P2P1B1/2B1K1N1 w - - 0 17"
+   },
+   {
+    "pos": 437,
+    "phase": "middlegame",
+    "ai_move": "Nf5",
+    "stockfish_move": "Qxb7",
+    "cpl": 266,
+    "material_swing_in_4_plies": 0,
+    "line": "Qxc6 dxc6 Kh7 Rd1",
+    "fen": "1r4k1/1qp2rb1/2Q2p1p/p1PPp3/1pR1P2N/6P1/P5KP/5R2 w - - 2 30"
+   },
+   {
+    "pos": 450,
+    "phase": "middlegame",
+    "ai_move": "Qc6",
+    "stockfish_move": "Be4",
+    "cpl": 262,
+    "material_swing_in_4_plies": 0,
+    "line": "Ba6 Qc2 Nd5 Bd4",
+    "fen": "r1bq1rk1/3n1pp1/1p2pn1p/pN6/Pb6/3BBN1P/1PQ2PP1/R4RK1 w - - 0 15"
+   },
+   {
+    "pos": 449,
+    "phase": "middlegame",
+    "ai_move": "f6",
+    "stockfish_move": "f5",
+    "cpl": 247,
+    "material_swing_in_4_plies": 0,
+    "line": "Be3 f5 Qd4 Kc8",
+    "fen": "7r/1kp1qpp1/2p5/3bP3/Pb4Q1/8/1PP2PP1/R1B2RK1 b - - 0 22"
+   },
+   {
+    "pos": 169,
+    "phase": "middlegame",
+    "ai_move": "Nf6",
+    "stockfish_move": "Be7",
+    "cpl": 246,
+    "material_swing_in_4_plies": 0,
+    "line": "O-O-O Nd5 Qf3 Be7",
+    "fen": "4rknr/p1p2ppp/1ppbq3/4P3/1P3P2/2P1Q1PP/P2B4/R3K2R b KQ - 1 18"
+   },
+   {
+    "pos": 191,
+    "phase": "middlegame",
+    "ai_move": "g6",
+    "stockfish_move": "Qe8",
+    "cpl": 246,
+    "material_swing_in_4_plies": 1,
+    "line": "Rxf6 Nxf6 Rxf6 Rg7",
+    "fen": "r1q3k1/1p2r1pn/2p2p1p/p1b1pR2/2P1B2P/PP2P1P1/1BQP3K/5R2 b - - 3 30"
+   },
+   {
+    "pos": 477,
+    "phase": "middlegame",
+    "ai_move": "Bc6",
+    "stockfish_move": "e3",
+    "cpl": 243,
+    "material_swing_in_4_plies": 0,
+    "line": "Qg3 f6 Ra7 Rf7",
+    "fen": "2q1rrk1/5pp1/3p3p/1Bpb1P1P/4pP2/Q7/1P1B4/R5K1 b - - 1 29"
+   },
+   {
+    "pos": 248,
+    "phase": "middlegame",
+    "ai_move": "e4",
+    "stockfish_move": "O-O",
+    "cpl": 241,
+    "material_swing_in_4_plies": 0,
+    "line": "Be6 O-O h5 Rad1",
+    "fen": "2rqkbnr/p6p/5p2/n3pbp1/2Pp4/P4NPP/QB1NPPB1/R3K2R w KQk - 0 16"
+   },
+   {
+    "pos": 156,
+    "phase": "opening",
+    "ai_move": "Qa4",
+    "stockfish_move": "exd5",
+    "cpl": 235,
+    "material_swing_in_4_plies": 0,
+    "line": "Ne7 Ng5 O-O Ndf3",
+    "fen": "3rk1nr/ppqn1ppp/2pbb3/3pp3/3PP3/2P2NP1/PP1N1PBP/R1BQR1K1 w k - 1 11"
+   },
+   {
+    "pos": 188,
+    "phase": "middlegame",
+    "ai_move": "Ng5",
+    "stockfish_move": "Ne5",
+    "cpl": 235,
+    "material_swing_in_4_plies": 0,
+    "line": "Nxg5 Bxg5 Nd7 a3",
+    "fen": "rnb2rk1/1q3ppp/1Pp1p3/p2p4/Nb1PnB2/1Q3NP1/PP3PBP/2R2RK1 w - - 0 16"
+   },
+   {
+    "pos": 350,
+    "phase": "opening",
+    "ai_move": "Nxe4",
+    "stockfish_move": "e5",
+    "cpl": 233,
+    "material_swing_in_4_plies": 0,
+    "line": "O-O Nxd2 Bxd2 Qa3",
+    "fen": "r1b1kb1r/pp2pppp/n1pp1n2/8/2PPPB2/2q2N2/P2NBPPP/1R1QK2R b Kkq - 3 8"
+   },
+   {
+    "pos": 99,
+    "phase": "middlegame",
+    "ai_move": "Qxd3",
+    "stockfish_move": "Qxb4",
+    "cpl": 232,
+    "material_swing_in_4_plies": 0,
+    "line": "Rc1+ Kh2 Qd6+ e5",
+    "fen": "1kr5/3r4/1p3p2/p2B1P2/Pq1pP2p/1P1b3P/3Q2R1/7K w - - 4 48"
+   },
+   {
+    "pos": 230,
+    "phase": "middlegame",
+    "ai_move": "Nc4",
+    "stockfish_move": "Bxf5",
+    "cpl": 231,
+    "material_swing_in_4_plies": 0,
+    "line": "Ng3 Bxc8 Rxc8 Rh3",
+    "fen": "r1bk1r2/pn4p1/1p1p4/5n2/1P3PBP/P1N1N3/2P3P1/2KR3R w - - 0 24"
+   },
+   {
+    "pos": 457,
+    "phase": "middlegame",
+    "ai_move": "Ne2+",
+    "stockfish_move": "Rxg2",
+    "cpl": 228,
+    "material_swing_in_4_plies": 1,
+    "line": "Kc2 Nxb2 Kxb2 Rxg2",
+    "fen": "4k1r1/p6p/2pr1p1B/1p6/n6P/2n1P3/PN3PP1/R1K4R b - - 1 26"
+   },
+   {
+    "pos": 357,
+    "phase": "middlegame",
+    "ai_move": "Qxh6",
+    "stockfish_move": "Kg1",
+    "cpl": 226,
+    "material_swing_in_4_plies": 0,
+    "line": "Na4 Rd2 Nxc3 bxc3",
+    "fen": "r3r1k1/1p2qp2/2p3pp/p1n2b2/2P2Q2/P1N4P/1P2BPP1/3R1K1R w - - 2 23"
+   },
+   {
+    "pos": 298,
+    "phase": "middlegame",
+    "ai_move": "Bf3",
+    "stockfish_move": "Ng5",
+    "cpl": 224,
+    "material_swing_in_4_plies": 0,
+    "line": "N7f6 Ng5 Bxf3 exf3",
+    "fen": "r1q2k1r/1p1nppb1/1Pp3p1/2Pn4/p1NpNPb1/3P2P1/PQ1BP1B1/2R2RK1 w - - 1 23"
+   },
+   {
+    "pos": 44,
+    "phase": "middlegame",
+    "ai_move": "Rce7",
+    "stockfish_move": "Qd5",
+    "cpl": 220,
+    "material_swing_in_4_plies": 0,
+    "line": "Qc2 Qd5 f4 a4",
+    "fen": "3q1bk1/1br2rpp/5n2/p1n1NB2/1p5P/1P4N1/PB2QPP1/4R1KR b - - 3 29"
+   },
+   {
+    "pos": 264,
+    "phase": "middlegame",
+    "ai_move": "Ne6",
+    "stockfish_move": "Bxf3",
+    "cpl": 219,
+    "material_swing_in_4_plies": 0,
+    "line": "Nh2 f5 f3 Bh5",
+    "fen": "1r1n1rk1/p3ppbp/1p4p1/2p1p3/2P1P1bP/1PN2NP1/PB3PB1/R4RK1 b - - 0 14"
+   },
+   {
+    "pos": 391,
+    "phase": "middlegame",
+    "ai_move": "Ng6",
+    "stockfish_move": "Nf3",
+    "cpl": 219,
+    "material_swing_in_4_plies": 0,
+    "line": "Rh6 a5 Qb4 Ne4",
+    "fen": "r3k1nr/pp1b4/1q2p3/2b1P1p1/P5PN/1pNp4/3P1PB1/1RB1Q1K1 w kq - 0 24"
+   },
+   {
+    "pos": 310,
+    "phase": "opening",
+    "ai_move": "Nc6",
+    "stockfish_move": "Nxg2+",
+    "cpl": 214,
+    "material_swing_in_4_plies": 1,
+    "line": "d5 Nxg2+ Kf1 Na5",
+    "fen": "rnbq1rk1/ppppbppp/8/4p2P/P1BPPn2/5N2/1PP2PP1/RNBQK2R b KQ - 0 8"
+   },
+   {
+    "pos": 418,
+    "phase": "opening",
+    "ai_move": "e5",
+    "stockfish_move": "cxd4",
+    "cpl": 211,
+    "material_swing_in_4_plies": 0,
+    "line": "dxe5 dxe5 Qxd8+ Kxd8",
+    "fen": "r1bqkb1r/pp2pp1p/2np1np1/2p5/3PP3/P1N2N2/1PP1BPPP/R1BQK2R b KQkq - 0 6"
+   },
+   {
+    "pos": 251,
+    "phase": "endgame",
+    "ai_move": "Rxh5",
+    "stockfish_move": "Rb1",
+    "cpl": 211,
+    "material_swing_in_4_plies": 2,
+    "line": "Nb3 d5 Rxd2 Rxd2",
+    "fen": "1r4k1/5pp1/1p6/n2R3p/p2P3P/3r2P1/3N1PK1/3R4 w - - 1 31"
+   }
+  ]
+ }
+}

@@ -483,6 +483,63 @@ repetition 0.
 per-move values it stores are upper bounds on inferior moves, not scores — 68 of 71 were
 wrong on one measured position. Use a full-window search per move, or a depth-free test.
 
+### The three strengths
+
+The page offers three engine strengths. **Hard** is the full time-limited search, exactly as it always was. **Easy** and
+**Medium** search a fixed shallow depth and then do two other things:
+
+- **They draw among near-best moves.** After the search they take every root move whose score is within three
+  "temperatures" of the best (the temperature is in centipawns, hundredths of a pawn) and draw one with probability
+  proportional to exp((score - best) / temperature), using a seeded random number (`sampleRoot()` in `src/tyranny.html`). A
+  move that loses a queen is practically never drawn; a move a tenth of a pawn worse often is. They never draw a
+  self-capture, never override a mate they have found, and draw nothing when there is only one legal move. It is also why
+  their games differ from one to the next, where Hard repeats itself.
+- **They can still finish a won game.** In a bare-king ending (the side to move has a rook's worth or more, the other side
+  nothing but a king and pawns) they stop drawing and play their best move, and the evaluation's "bring your king closer"
+  bonus is 30 points a square instead of 4. Without that, the old Easy mated with king and queen in 3 of 30 tries; with it
+  Easy mates in 30 of 30 king-and-queen and 29 of 30 king-and-rook endings against Stockfish defending, and Medium in 60 of 60.
+
+| Tier | Search | Temperature | King-approach weight | Rating on Stockfish's scale | 95% range | Games |
+|---|---|---|---|---|---|---|
+| Easy | 2 plies | 68 | 30 | **948** (target about 1000) | 866 to 1020 | 200 |
+| Medium | 3 plies | 12 | 30 | **1474** (target about 1480) | 1418 to 1530 | 160 |
+| Hard | up to 9 plies, 1.8 s | none | 4, as always | **1844** (target: unchanged) | 1756 to 1940 | 80, before the change |
+
+**How these were measured** (2026-10-08 and 09, `tools/ai-audit/`). Games against Stockfish 19 limited to fixed ratings (its
+`UCI_Elo` setting), standard rules, python-chess refereeing every move and result, balanced four-ply openings, alternating
+colours, Stockfish thinking 0.25 s a move; one rating per tier by maximum likelihood over its games
+(`tools/ai-audit/tier_elo.py`). Medium played Stockfish at 1320 (44 wins, 10 draws, 26 losses) and 1500 (42, 5, 33); Easy played
+1320 (14, 14, 172); Hard played 1500 (37, 2, 1) and 1750 (21, 3, 16). The full audit that preceded this, with the accuracy
+measurements and the reasons not to trust head-to-head games between tiers, is `_context/ai-audit/REPORT.md`.
+
+**Easy's number is below Stockfish's own scale.** Its weakest setting is 1320, so Easy's rating comes from how rarely Easy
+scores against that setting (10.5% of the points in 200 games), converted with the usual Elo formula; it is an extension of
+Stockfish's scale downward, not a measurement inside it. A straight line through all 880 depth-2 games at neighbouring
+temperatures puts the final setting at about 1000; the direct 200-game measurement says 948. Read it as about 1000, give or
+take 60.
+
+**Hard is unchanged, and that is proved, not argued.** The engine as it was at commit 69f47e2 (kept at
+`_context/ai-audit/engine-baseline-69f47e2.js`) and the engine now, called the way the page calls Hard, returned the same move,
+score, depth and node count in all **2,948** searches: the 478 audit positions at depths 3, 4 and 5 under both rule sets, plus 40
+Coriantumr positions (`tools/ai-audit/hard_equality_all.sh`). A control that gives the new engine a temperature produces
+differences in 46 of 50 searches, so the comparison can see a change. `tests/tiers.js` pins Hard's line in the page.
+
+**Why Easy searches 2 plies, not 1.** A one-ply search cannot see a mate in one move or a stalemate; at depth 1 Easy mated in 12
+of 30 king-and-queen endings and stalemated 9 of them. Depth 2 sees both.
+
+**How steep the knob is.** At depth 3 a temperature of 3 to 10 left Medium near 1540 to 1670 (40 games each, noisy), 12 gave
+1470, 15 gave 1450 and 20 gave about 1200. A few centipawns of temperature cost around a hundred Elo, which is why the settings
+were found by measurement and not by guessing.
+
+**What these ratings are not.** They are on Stockfish's scale (its source says its limited-strength setting "covers CCRL Blitz
+Elo from 1320 to 3190, approximately"), not Lichess, chess.com or FIDE, and they say how the engine fares against Stockfish at
+fixed handicaps, not against a particular person. They were measured under standard rules because Stockfish cannot judge
+self-capture; under Tyranny rules the tiers were only checked for order: in 36 games Medium beat Easy 16 to 0, Hard beat Medium 12 to 0 and Hard beat Easy 8 to 0 (head-to-head games overstate the size of a gap, so that shows order only, not distance). Easy and Medium search to a fixed depth, so
+their strength does not depend on how fast the computer is; Hard is limited by time, so its does.
+
+To measure a tier again: `python tools/ai-audit/match.py run --tier easy --elo 1320 --games 200 --name my-easy`, then
+`python tools/ai-audit/tier_elo.py my-`. It needs Stockfish; the path is in `tools/ai-audit/audit_lib.py`.
+
 ## Working on it
 
 There is exactly **one authored file**: `src/tyranny.html`. Everything else is generated
@@ -508,7 +565,8 @@ tools/coriantumr-ref.py independent Python reference for the Coriantumr rules; -
 tools/coriantumr-endgame.js retrograde solver for the small Coriantumr endings; --self-test checks it against the engine
 tools/coriantumr-selfplay.js plain counts for engine games under the Coriantumr rules
 tools/coriantumr-showdown.js exact solver for the last-piece rule; checks the engine against it
-tests/                  nine Node suites, run against src/ not the built page
+tests/                  ten Node suites, run against src/ not the built page
+tools/ai-audit/         the AI audit and tier calibration: Stockfish matches, accuracy, ratings, the Hard-unchanged proof
 tests/browser.js        SEPARATE runner: real DOM checks in headless Chrome, zero deps
 _context/               goal trees, run log, and the measurement records
 ```
@@ -597,14 +655,14 @@ The page has a **Run tests** button that executes 48 rule checks in the browser.
 suites, plus the puzzle validator, run under Node:
 
 ```
-node tests/run-all.js     800 checks, nine files   27 / 8 / 24 / 13 / 396 / 239 / 54 / 13 / 26
+node tests/run-all.js     858 checks, ten files    27 / 8 / 24 / 13 / 396 / 239 / 54 / 13 / 58 / 26
 node tests/browser.js     297 checks in headless Chrome, against the real DOM
 ```
 
-Both numbers were printed by those two commands on **2026-10-07**, and the in-page 48 was
+Both numbers were printed by those two commands on **2026-10-09**, and the in-page 48 was
 read off the page by clicking the button rather than inferred from the source. Before the
 Coriantumr work they were 494 and 166; the Tyranny and standard suites are unchanged and
-the rest are additions (`coriantumr.js` 239, `coriantumr-ai.js` 54, `coriantumr-showdown.js` 13, 131 more browser checks).
+the rest are additions (`coriantumr.js` 239, `coriantumr-ai.js` 54, `coriantumr-showdown.js` 13, `tiers.js` 58, 131 more browser checks).
 
 **CI runs both, and that is new.** It used to run only the Node suites — which meant the
 marker toggle, the puzzle-mode marker suppression and the Try again reset could all have
@@ -689,7 +747,7 @@ and a multistep that is really a one-mover.
   evaluation change is proposed off the back of it.**
 - **Its horizon is the limit, not the rule.** On a position where a quiet self-capture is
   the unique move forcing mate in two, **Easy misses it and Medium and Hard both find it** —
-  the same result with the clock removed and depth pinned.
+  the same result with the clock removed and depth pinned (re-run 2026-10-09 with the retuned tiers: the same result, as shipped and depth-pinned).
 - **The shed claim was retracted, not softened** — see the stalemate section above for the
   sweep that killed it, and its stated limit.
 - **Every survival puzzle offers exactly three ways out.** That is what the predicate

@@ -1,0 +1,131 @@
+{
+ "easy-sf1320": {
+  "games": 40,
+  "mate_wins": 27,
+  "mate_losses": 9,
+  "draws": {
+   "fifty-move rule": 2,
+   "threefold repetition": 2
+  },
+  "had_winning_draw": 2,
+  "draw_peaks": [
+   3000,
+   -91,
+   82,
+   3000
+  ]
+ },
+ "easy-sf1500": {
+  "games": 40,
+  "mate_wins": 15,
+  "mate_losses": 18,
+  "draws": {
+   "threefold repetition": 6,
+   "insufficient material": 1
+  },
+  "had_winning_draw": 1,
+  "draw_peaks": [
+   42,
+   -47,
+   70,
+   -54,
+   108,
+   506,
+   76
+  ]
+ },
+ "easy-v-medium": {
+  "games": 30,
+  "mate_wins": 0,
+  "mate_losses": 30,
+  "draws": {},
+  "had_winning_draw": 0,
+  "draw_peaks": []
+ },
+ "hard-sf1500": {
+  "games": 40,
+  "mate_wins": 37,
+  "mate_losses": 1,
+  "draws": {
+   "threefold repetition": 2
+  },
+  "had_winning_draw": 0,
+  "draw_peaks": [
+   32,
+   284
+  ]
+ },
+ "hard-sf1750": {
+  "games": 40,
+  "mate_wins": 21,
+  "mate_losses": 16,
+  "draws": {
+   "threefold repetition": 1,
+   "fifty-move rule": 1,
+   "move cap": 1
+  },
+  "had_winning_draw": 1,
+  "draw_peaks": [
+   -1,
+   258,
+   601
+  ]
+ },
+ "hard-v-medium": {
+  "games": 60,
+  "mate_wins": 36,
+  "mate_losses": 8,
+  "draws": {
+   "insufficient material": 5,
+   "threefold repetition": 10,
+   "fifty-move rule": 1
+  },
+  "had_winning_draw": 4,
+  "draw_peaks": [
+   545,
+   48,
+   295,
+   0,
+   361,
+   165,
+   225,
+   130,
+   704,
+   65,
+   278,
+   117,
+   62,
+   493,
+   227,
+   182
+  ]
+ },
+ "medium-sf1500": {
+  "games": 40,
+  "mate_wins": 33,
+  "mate_losses": 7,
+  "draws": {},
+  "had_winning_draw": 0,
+  "draw_peaks": []
+ },
+ "medium-sf1750": {
+  "games": 40,
+  "mate_wins": 21,
+  "mate_losses": 10,
+  "draws": {
+   "threefold repetition": 9
+  },
+  "had_winning_draw": 1,
+  "draw_peaks": [
+   277,
+   -16,
+   -30,
+   1,
+   32,
+   -32,
+   539,
+   214,
+   83
+  ]
+ }
+}

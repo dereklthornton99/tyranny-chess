@@ -1,0 +1,54 @@
+{
+ "positions": 32566,
+ "few_piece_positions": 4000,
+ "legal_mismatch": 0,
+ "check_mismatch": 0,
+ "insufficient_mismatch_random_games": 4,
+ "insufficient_mismatch_few_piece": 10,
+ "examples": {
+  "insufficient": [
+   {
+    "fen": "5b2/4k3/8/8/5bK1/8/8/8 w - - 0 145",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "8/1k6/8/8/8/8/3bK3/6b1 w - - 0 134",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "8/8/8/4KB2/8/8/4B3/6k1 w - - 0 154",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "8/8/b6k/8/1K6/8/8/3b4 w - - 0 155",
+    "page": false,
+    "python_chess": true
+   }
+  ],
+  "insufficient_few": [
+   {
+    "fen": "7k/8/4K3/b7/8/8/8/b7 w - - 0 1",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "2B5/3K4/2B5/3k4/8/8/8/8 b - - 0 1",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "8/2B1K3/1B6/8/k7/8/8/8 b - - 0 1",
+    "page": false,
+    "python_chess": true
+   },
+   {
+    "fen": "2B5/8/6B1/8/3k4/8/8/1K6 b - - 0 1",
+    "page": false,
+    "python_chess": true
+   }
+  ]
+ }
+}

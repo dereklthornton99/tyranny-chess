@@ -16,5 +16,5 @@ const f1 = src.indexOf('function runTests(){');
 engine += '\n' + src.slice(f0, f1);
 
 fs.writeFileSync(path.join(__dirname, 'engine.js'),
-  engine + '\nmodule.exports={startState,legal,pseudo,apply,inCheck,perft,fen,idx,rOf,cOf,sqName,san,FILES,attacked,insufficient,think,search,qsearch,evaluate,zkey,MATE,ai,crown,hasPieces,CPC,evaluateC,usedSquares,sacOf,legalGame,legalC,repKey};\n');
+  engine + '\nmodule.exports={startState,legal,pseudo,apply,inCheck,perft,fen,idx,rOf,cOf,sqName,san,FILES,attacked,insufficient,think,search,qsearch,evaluate,zkey,MATE,ai,crown,hasPieces,CPC,evaluateC,usedSquares,sacOf,legalGame,legalC,repKey,sampleRoot,mulberry32};\n');
 console.log('engine.js written');

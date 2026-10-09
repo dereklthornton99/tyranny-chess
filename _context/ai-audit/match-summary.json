@@ -1,0 +1,190 @@
+{
+ "easy-sf1320": {
+  "tier": "easy",
+  "opp": "sf1320",
+  "games": 40,
+  "w": 27,
+  "d": 4,
+  "l": 9,
+  "score": 0.725,
+  "elo_diff": 168.40212509629237,
+  "elo_diff_ci": [
+   67.25012955536961,
+   307.4140558063656
+  ],
+  "mean_plies": 95.55,
+  "reasons": {
+   "checkmate": 36,
+   "fifty-move rule": 2,
+   "threefold repetition": 2
+  },
+  "illegal_moves": 0,
+  "as_white": 0.675,
+  "as_black": 0.775,
+  "mean_depth": 1.9805864558494626
+ },
+ "easy-sf1500": {
+  "tier": "easy",
+  "opp": "sf1500",
+  "games": 40,
+  "w": 15,
+  "d": 7,
+  "l": 18,
+  "score": 0.4625,
+  "elo_diff": -26.106692605036564,
+  "elo_diff_ci": [
+   -129.1595188727917,
+   72.4374239221816
+  ],
+  "mean_plies": 106.875,
+  "reasons": {
+   "checkmate": 33,
+   "threefold repetition": 6,
+   "insufficient material": 1
+  },
+  "illegal_moves": 0,
+  "as_white": 0.575,
+  "as_black": 0.35,
+  "mean_depth": 1.9894781586322519
+ },
+ "easy-v-medium": {
+  "tier": "easy",
+  "opp": "medium",
+  "games": 30,
+  "w": 0,
+  "d": 0,
+  "l": 30,
+  "score": 0.0,
+  "elo_diff": -2399.9998262821205,
+  "elo_diff_ci": [
+   -2399.9998262821205,
+   -2399.9998262821205
+  ],
+  "mean_plies": 85.1,
+  "reasons": {
+   "checkmate": 30
+  },
+  "illegal_moves": 0,
+  "as_white": 0.0,
+  "as_black": 0.0,
+  "mean_depth": 2.0
+ },
+ "hard-sf1500": {
+  "tier": "hard",
+  "opp": "sf1500",
+  "games": 40,
+  "w": 37,
+  "d": 2,
+  "l": 1,
+  "score": 0.95,
+  "elo_diff": 511.50144038113183,
+  "elo_diff_ci": [
+   366.81686870579307,
+   2399.999826281142
+  ],
+  "mean_plies": 81.675,
+  "reasons": {
+   "threefold repetition": 2,
+   "checkmate": 38
+  },
+  "illegal_moves": 0,
+  "as_white": 0.95,
+  "as_black": 0.95,
+  "mean_depth": 5.152817370904834
+ },
+ "hard-sf1750": {
+  "tier": "hard",
+  "opp": "sf1750",
+  "games": 40,
+  "w": 21,
+  "d": 3,
+  "l": 16,
+  "score": 0.5625,
+  "elo_diff": 43.65778777002724,
+  "elo_diff_ci": [
+   -59.831774012154156,
+   155.76663447294175
+  ],
+  "mean_plies": 107.55,
+  "reasons": {
+   "checkmate": 37,
+   "threefold repetition": 1,
+   "fifty-move rule": 1,
+   "move cap": 1
+  },
+  "illegal_moves": 0,
+  "as_white": 0.725,
+  "as_black": 0.4,
+  "mean_depth": 5.181016846644548
+ },
+ "hard-v-medium": {
+  "tier": "hard",
+  "opp": "medium",
+  "games": 60,
+  "w": 36,
+  "d": 16,
+  "l": 8,
+  "score": 0.7333333333333333,
+  "elo_diff": 175.733077532105,
+  "elo_diff_ci": [
+   101.83204265205691,
+   268.37629972234464
+  ],
+  "mean_plies": 134.5,
+  "reasons": {
+   "checkmate": 44,
+   "insufficient material": 5,
+   "threefold repetition": 10,
+   "fifty-move rule": 1
+  },
+  "illegal_moves": 0,
+  "as_white": 0.75,
+  "as_black": 0.7166666666666667,
+  "mean_depth": 5.420431158278978
+ },
+ "medium-sf1500": {
+  "tier": "medium",
+  "opp": "sf1500",
+  "games": 40,
+  "w": 33,
+  "d": 0,
+  "l": 7,
+  "score": 0.825,
+  "elo_diff": 269.36635994545225,
+  "elo_diff_ci": [
+   153.2278825453971,
+   486.65815806344756
+  ],
+  "mean_plies": 90.525,
+  "reasons": {
+   "checkmate": 40
+  },
+  "illegal_moves": 0,
+  "as_white": 0.95,
+  "as_black": 0.7,
+  "mean_depth": 4.302671653289579
+ },
+ "medium-sf1750": {
+  "tier": "medium",
+  "opp": "sf1750",
+  "games": 40,
+  "w": 21,
+  "d": 9,
+  "l": 10,
+  "score": 0.6375,
+  "elo_diff": 98.06887127959205,
+  "elo_diff_ci": [
+   5.501111613836207,
+   207.05736801993697
+  ],
+  "mean_plies": 111.0,
+  "reasons": {
+   "checkmate": 31,
+   "threefold repetition": 9
+  },
+  "illegal_moves": 0,
+  "as_white": 0.7,
+  "as_black": 0.575,
+  "mean_depth": 4.507127302892156
+ }
+}

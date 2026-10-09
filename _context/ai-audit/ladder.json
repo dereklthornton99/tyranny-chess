@@ -1,0 +1,26 @@
+{
+ "easy": {
+  "mean_cpl": 80.5857740585774,
+  "elo_equivalent": 1383,
+  "range": [
+   "<1320",
+   1460
+  ]
+ },
+ "medium": {
+  "mean_cpl": 53.29916317991632,
+  "elo_equivalent": 1574,
+  "range": [
+   1506,
+   1682
+  ]
+ },
+ "hard": {
+  "mean_cpl": 52.75941422594142,
+  "elo_equivalent": 1579,
+  "range": [
+   1510,
+   1697
+  ]
+ }
+}

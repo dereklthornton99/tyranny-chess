@@ -1,0 +1,78 @@
+{
+ "easy-KQK": {
+  "games": 30,
+  "mated": 3,
+  "rate": 0.1,
+  "ci": [
+   0.0,
+   0.20735362127101256
+  ],
+  "mean_moves_to_mate": 23.666666666666668,
+  "max_moves_to_mate": 48,
+  "failures": {
+   "fifty-move rule": 27
+  }
+ },
+ "medium-KQK": {
+  "games": 30,
+  "mated": 30,
+  "rate": 1.0,
+  "ci": [
+   1.0,
+   1.0
+  ],
+  "mean_moves_to_mate": 6.633333333333334,
+  "max_moves_to_mate": 12,
+  "failures": {}
+ },
+ "hard-KQK": {
+  "games": 30,
+  "mated": 30,
+  "rate": 1.0,
+  "ci": [
+   1.0,
+   1.0
+  ],
+  "mean_moves_to_mate": 6.566666666666666,
+  "max_moves_to_mate": 12,
+  "failures": {}
+ },
+ "easy-KRK": {
+  "games": 30,
+  "mated": 11,
+  "rate": 0.36666666666666664,
+  "ci": [
+   0.19422296678282158,
+   0.5391103665505117
+  ],
+  "mean_moves_to_mate": 20.545454545454547,
+  "max_moves_to_mate": 41,
+  "failures": {
+   "fifty-move rule": 19
+  }
+ },
+ "medium-KRK": {
+  "games": 30,
+  "mated": 30,
+  "rate": 1.0,
+  "ci": [
+   1.0,
+   1.0
+  ],
+  "mean_moves_to_mate": 9.566666666666666,
+  "max_moves_to_mate": 13,
+  "failures": {}
+ },
+ "hard-KRK": {
+  "games": 30,
+  "mated": 30,
+  "rate": 1.0,
+  "ci": [
+   1.0,
+   1.0
+  ],
+  "mean_moves_to_mate": 8.933333333333334,
+  "max_moves_to_mate": 14,
+  "failures": {}
+ }
+}

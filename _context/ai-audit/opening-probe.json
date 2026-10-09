@@ -1,0 +1,1470 @@
+{
+ "tiers": [
+  {
+   "level": "easy",
+   "white": {
+    "first": "Nc3",
+    "first_is_knight": true,
+    "depth": 2,
+    "second_moves": [
+     {
+      "black_reply": "Nh6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "Nf6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "Nc6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "Na6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "h6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "g6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "f6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "e6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "d6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "c6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "b6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "a6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "h5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "g5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "f5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 2
+     },
+     {
+      "black_reply": "e5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "d5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "c5",
+      "second": "d4",
+      "second_is_knight": false,
+      "depth": 2
+     },
+     {
+      "black_reply": "b5",
+      "second": "Nxb5",
+      "second_is_knight": true,
+      "depth": 2
+     },
+     {
+      "black_reply": "a5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 2
+     }
+    ],
+    "second_knight_count": 18,
+    "both_knights_count": 18,
+    "distinct_second_moves": [
+     "Nf3",
+     "Nxb5",
+     "d4",
+     "e4"
+    ]
+   },
+   "black": {
+    "rows": [
+     {
+      "white_first": "Nh3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "Nf3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "Nc3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "Na3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "h3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "g3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "f3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "e3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "d3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "c3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "b3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "a3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "h4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "g4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "g5",
+      "second": "Nd5",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "f4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "Nf3",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "e4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "d4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d5",
+      "second": "Ne5",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "c4",
+      "reply": "d5",
+      "reply_is_knight": false,
+      "white_second": "cxd5",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "b4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "b5",
+      "second": "Ne5",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "a4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     }
+    ],
+    "reply_knight_count": 19,
+    "both_knights_count": 16,
+    "distinct_replies": [
+     "Nc6",
+     "Nf6",
+     "d5"
+    ]
+   },
+   "mechanism": {
+    "depth": 2,
+    "moves": [
+     {
+      "move": "Nc3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "Nf3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "d4",
+      "score": -10,
+      "static_after": 40
+     },
+     {
+      "move": "e4",
+      "score": -10,
+      "static_after": 40
+     },
+     {
+      "move": "d3",
+      "score": -30,
+      "static_after": 20
+     },
+     {
+      "move": "e3",
+      "score": -30,
+      "static_after": 20
+     },
+     {
+      "move": "Na3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "Nh3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "a3",
+      "score": -50,
+      "static_after": 0
+     },
+     {
+      "move": "h3",
+      "score": -50,
+      "static_after": 0
+     },
+     {
+      "move": "a4",
+      "score": -55,
+      "static_after": -5
+     },
+     {
+      "move": "h4",
+      "score": -55,
+      "static_after": -5
+     },
+     {
+      "move": "b4",
+      "score": -60,
+      "static_after": -10
+     },
+     {
+      "move": "c4",
+      "score": -60,
+      "static_after": -10
+     },
+     {
+      "move": "f4",
+      "score": -60,
+      "static_after": -10
+     },
+     {
+      "move": "g4",
+      "score": -60,
+      "static_after": -10
+     },
+     {
+      "move": "b3",
+      "score": -65,
+      "static_after": -15
+     },
+     {
+      "move": "g3",
+      "score": -65,
+      "static_after": -15
+     },
+     {
+      "move": "c3",
+      "score": -70,
+      "static_after": -20
+     },
+     {
+      "move": "f3",
+      "score": -70,
+      "static_after": -20
+     }
+    ]
+   },
+   "sample_line_as_white": [
+    {
+     "ply": 1,
+     "who": "AI",
+     "move": "Nc3",
+     "sf_eval_white": 7
+    },
+    {
+     "ply": 2,
+     "who": "SF",
+     "move": "d5",
+     "sf_eval_white": 0
+    },
+    {
+     "ply": 3,
+     "who": "AI",
+     "move": "Nf3",
+     "sf_eval_white": -8
+    },
+    {
+     "ply": 4,
+     "who": "SF",
+     "move": "d4",
+     "sf_eval_white": -10
+    },
+    {
+     "ply": 5,
+     "who": "AI",
+     "move": "Ne4",
+     "sf_eval_white": -16
+    },
+    {
+     "ply": 6,
+     "who": "SF",
+     "move": "e5",
+     "sf_eval_white": -19
+    },
+    {
+     "ply": 7,
+     "who": "AI",
+     "move": "Nxe5",
+     "sf_eval_white": -412
+    },
+    {
+     "ply": 8,
+     "who": "SF",
+     "move": "Qd5",
+     "sf_eval_white": -403
+    },
+    {
+     "ply": 9,
+     "who": "AI",
+     "move": "Nxf7",
+     "sf_eval_white": -400
+    },
+    {
+     "ply": 10,
+     "who": "SF",
+     "move": "Qxf7",
+     "sf_eval_white": -408
+    },
+    {
+     "ply": 11,
+     "who": "AI",
+     "move": "e3",
+     "sf_eval_white": -391
+    },
+    {
+     "ply": 12,
+     "who": "SF",
+     "move": "Nc6",
+     "sf_eval_white": -356
+    }
+   ]
+  },
+  {
+   "level": "medium",
+   "white": {
+    "first": "Nc3",
+    "first_is_knight": true,
+    "depth": 6,
+    "second_moves": [
+     {
+      "black_reply": "Nh6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "Nf6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "Nc6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "Na6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 5
+     },
+     {
+      "black_reply": "h6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "g6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "f6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "e6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 5
+     },
+     {
+      "black_reply": "d6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "c6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "b6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "a6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "h5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "g5",
+      "second": "d4",
+      "second_is_knight": false,
+      "depth": 5
+     },
+     {
+      "black_reply": "f5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "e5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "d5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 5
+     },
+     {
+      "black_reply": "c5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "b5",
+      "second": "Nxb5",
+      "second_is_knight": true,
+      "depth": 5
+     },
+     {
+      "black_reply": "a5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     }
+    ],
+    "second_knight_count": 8,
+    "both_knights_count": 8,
+    "distinct_second_moves": [
+     "Nf3",
+     "Nxb5",
+     "d4",
+     "e4"
+    ]
+   },
+   "black": {
+    "rows": [
+     {
+      "white_first": "Nh3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "Nf3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "Nc3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "Na3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "h3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "g3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "f3",
+      "reply": "e5",
+      "reply_is_knight": false,
+      "white_second": "e4",
+      "second": "Nc6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "e3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "d3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "c3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "b3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "a3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "h4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "g4",
+      "reply": "d5",
+      "reply_is_knight": false,
+      "white_second": "Bg2",
+      "second": "Bxg4",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "f4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "Nf3",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "e4",
+      "reply": "e5",
+      "reply_is_knight": false,
+      "white_second": "Nf3",
+      "second": "Nc6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "d4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "Nf3",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "c4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "Nf3",
+      "second": "Nc6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "b4",
+      "reply": "e5",
+      "reply_is_knight": false,
+      "white_second": "a3",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "a4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     }
+    ],
+    "reply_knight_count": 16,
+    "both_knights_count": 3,
+    "distinct_replies": [
+     "Nc6",
+     "Nf6",
+     "d5",
+     "e5"
+    ]
+   },
+   "mechanism": {
+    "depth": 6,
+    "moves": [
+     {
+      "move": "d4",
+      "score": 0,
+      "static_after": 40
+     },
+     {
+      "move": "e4",
+      "score": 0,
+      "static_after": 40
+     },
+     {
+      "move": "Nc3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "Nf3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "d3",
+      "score": -20,
+      "static_after": 20
+     },
+     {
+      "move": "e3",
+      "score": -20,
+      "static_after": 20
+     },
+     {
+      "move": "a3",
+      "score": -40,
+      "static_after": 0
+     },
+     {
+      "move": "h3",
+      "score": -40,
+      "static_after": 0
+     },
+     {
+      "move": "Na3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "Nh3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "a4",
+      "score": -45,
+      "static_after": -5
+     },
+     {
+      "move": "h4",
+      "score": -45,
+      "static_after": -5
+     },
+     {
+      "move": "c4",
+      "score": -50,
+      "static_after": -10
+     },
+     {
+      "move": "f4",
+      "score": -50,
+      "static_after": -10
+     },
+     {
+      "move": "b3",
+      "score": -55,
+      "static_after": -15
+     },
+     {
+      "move": "g3",
+      "score": -55,
+      "static_after": -15
+     },
+     {
+      "move": "c3",
+      "score": -70,
+      "static_after": -20
+     },
+     {
+      "move": "f3",
+      "score": -70,
+      "static_after": -20
+     },
+     {
+      "move": "b4",
+      "score": -75,
+      "static_after": -10
+     },
+     {
+      "move": "g4",
+      "score": -85,
+      "static_after": -10
+     }
+    ]
+   },
+   "sample_line_as_white": [
+    {
+     "ply": 1,
+     "who": "AI",
+     "move": "Nc3",
+     "sf_eval_white": -15
+    },
+    {
+     "ply": 2,
+     "who": "SF",
+     "move": "d5",
+     "sf_eval_white": -5
+    },
+    {
+     "ply": 3,
+     "who": "AI",
+     "move": "e4",
+     "sf_eval_white": -37
+    },
+    {
+     "ply": 4,
+     "who": "SF",
+     "move": "d4",
+     "sf_eval_white": -34
+    },
+    {
+     "ply": 5,
+     "who": "AI",
+     "move": "Nce2",
+     "sf_eval_white": -38
+    },
+    {
+     "ply": 6,
+     "who": "SF",
+     "move": "e5",
+     "sf_eval_white": -32
+    },
+    {
+     "ply": 7,
+     "who": "AI",
+     "move": "Nf3",
+     "sf_eval_white": -51
+    },
+    {
+     "ply": 8,
+     "who": "SF",
+     "move": "f6",
+     "sf_eval_white": -42
+    },
+    {
+     "ply": 9,
+     "who": "AI",
+     "move": "d3",
+     "sf_eval_white": -57
+    },
+    {
+     "ply": 10,
+     "who": "SF",
+     "move": "c5",
+     "sf_eval_white": -59
+    },
+    {
+     "ply": 11,
+     "who": "AI",
+     "move": "c3",
+     "sf_eval_white": -62
+    },
+    {
+     "ply": 12,
+     "who": "SF",
+     "move": "Nc6",
+     "sf_eval_white": -66
+    }
+   ]
+  },
+  {
+   "level": "hard",
+   "white": {
+    "first": "Nc3",
+    "first_is_knight": true,
+    "depth": 6,
+    "second_moves": [
+     {
+      "black_reply": "Nh6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "Nf6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "Nc6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "Na6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "h6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "g6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "f6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "e6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "d6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "c6",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "b6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "a6",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "h5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "g5",
+      "second": "d4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "f5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "e5",
+      "second": "d4",
+      "second_is_knight": false,
+      "depth": 6
+     },
+     {
+      "black_reply": "d5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "c5",
+      "second": "Nf3",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "b5",
+      "second": "Nxb5",
+      "second_is_knight": true,
+      "depth": 6
+     },
+     {
+      "black_reply": "a5",
+      "second": "e4",
+      "second_is_knight": false,
+      "depth": 5
+     }
+    ],
+    "second_knight_count": 7,
+    "both_knights_count": 7,
+    "distinct_second_moves": [
+     "Nf3",
+     "Nxb5",
+     "d4",
+     "e4"
+    ]
+   },
+   "black": {
+    "rows": [
+     {
+      "white_first": "Nh3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "Nf3",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "Nc3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "Na3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "h3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "g3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "f3",
+      "reply": "e5",
+      "reply_is_knight": false,
+      "white_second": "Nc3",
+      "second": "Nc6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "e3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "d3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "c4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "c3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "b3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "a3",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "h4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     },
+     {
+      "white_first": "g4",
+      "reply": "d5",
+      "reply_is_knight": false,
+      "white_second": "h3",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "f4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "e4",
+      "second": "e5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "e4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "d4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "c4",
+      "second": "e6",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "c4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "e6",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "b4",
+      "reply": "Nf6",
+      "reply_is_knight": true,
+      "white_second": "Nf3",
+      "second": "d5",
+      "second_is_knight": false
+     },
+     {
+      "white_first": "a4",
+      "reply": "Nc6",
+      "reply_is_knight": true,
+      "white_second": "d4",
+      "second": "Nf6",
+      "second_is_knight": true
+     }
+    ],
+    "reply_knight_count": 18,
+    "both_knights_count": 8,
+    "distinct_replies": [
+     "Nc6",
+     "Nf6",
+     "d5",
+     "e5"
+    ]
+   },
+   "mechanism": {
+    "depth": 6,
+    "moves": [
+     {
+      "move": "d4",
+      "score": 0,
+      "static_after": 40
+     },
+     {
+      "move": "e4",
+      "score": 0,
+      "static_after": 40
+     },
+     {
+      "move": "Nc3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "Nf3",
+      "score": 0,
+      "static_after": 50
+     },
+     {
+      "move": "d3",
+      "score": -20,
+      "static_after": 20
+     },
+     {
+      "move": "e3",
+      "score": -20,
+      "static_after": 20
+     },
+     {
+      "move": "a3",
+      "score": -40,
+      "static_after": 0
+     },
+     {
+      "move": "h3",
+      "score": -40,
+      "static_after": 0
+     },
+     {
+      "move": "Na3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "Nh3",
+      "score": -40,
+      "static_after": 10
+     },
+     {
+      "move": "a4",
+      "score": -45,
+      "static_after": -5
+     },
+     {
+      "move": "h4",
+      "score": -45,
+      "static_after": -5
+     },
+     {
+      "move": "c4",
+      "score": -50,
+      "static_after": -10
+     },
+     {
+      "move": "f4",
+      "score": -50,
+      "static_after": -10
+     },
+     {
+      "move": "b3",
+      "score": -55,
+      "static_after": -15
+     },
+     {
+      "move": "g3",
+      "score": -55,
+      "static_after": -15
+     },
+     {
+      "move": "c3",
+      "score": -70,
+      "static_after": -20
+     },
+     {
+      "move": "f3",
+      "score": -70,
+      "static_after": -20
+     },
+     {
+      "move": "b4",
+      "score": -75,
+      "static_after": -10
+     },
+     {
+      "move": "g4",
+      "score": -85,
+      "static_after": -10
+     }
+    ]
+   },
+   "sample_line_as_white": [
+    {
+     "ply": 1,
+     "who": "AI",
+     "move": "Nc3",
+     "sf_eval_white": -1
+    },
+    {
+     "ply": 2,
+     "who": "SF",
+     "move": "d5",
+     "sf_eval_white": -4
+    },
+    {
+     "ply": 3,
+     "who": "AI",
+     "move": "Nf3",
+     "sf_eval_white": -7
+    },
+    {
+     "ply": 4,
+     "who": "SF",
+     "move": "d4",
+     "sf_eval_white": -9
+    },
+    {
+     "ply": 5,
+     "who": "AI",
+     "move": "Nb5",
+     "sf_eval_white": -71
+    },
+    {
+     "ply": 6,
+     "who": "SF",
+     "move": "Nc6",
+     "sf_eval_white": -18
+    },
+    {
+     "ply": 7,
+     "who": "AI",
+     "move": "c3",
+     "sf_eval_white": -71
+    },
+    {
+     "ply": 8,
+     "who": "SF",
+     "move": "e5",
+     "sf_eval_white": -74
+    },
+    {
+     "ply": 9,
+     "who": "AI",
+     "move": "cxd4",
+     "sf_eval_white": -80
+    },
+    {
+     "ply": 10,
+     "who": "SF",
+     "move": "a6",
+     "sf_eval_white": -80
+    },
+    {
+     "ply": 11,
+     "who": "AI",
+     "move": "d5",
+     "sf_eval_white": -76
+    },
+    {
+     "ply": 12,
+     "who": "SF",
+     "move": "axb5",
+     "sf_eval_white": -75
+    }
+   ]
+  }
+ ]
+}
