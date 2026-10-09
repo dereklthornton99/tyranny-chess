@@ -310,7 +310,7 @@ h3{
     <div>
       <h1>Tyranny <em>Chess</em></h1>
       <p class="rule-line" id="ruleLineT">Ordinary chess with one addition: <b>the king may command the execution of his own citizens.</b> Same geometry, same board, same objective &mdash; but any piece standing in the crown&rsquo;s way can be removed, and the executioner is rarely the king himself.</p>
-      <p class="rule-line" id="ruleLineC" hidden><b>Last man standing is the king.</b> Kings and queens slide up to four squares in any direction. There is no check and no mate: capture a king and the game goes on, until one side has nothing left.</p>
+      <p class="rule-line" id="ruleLineC" hidden><b>Last man standing is the king.</b> Kings and queens slide up to four squares in any direction. There is no check, no mate and no castling: capture a king and the game goes on, until one side has nothing left.</p>
     </div>
     <button class="theme-btn" id="themeBtn" type="button">Theme</button>
   </header>
@@ -442,6 +442,7 @@ h3{
       <h3>Coriantumr rules</h3>
       <dl class="notes">
         <div class="note"><dt>King and queen</dt><dd>Each slides <b>up to four squares</b> in any of the eight directions. A piece in the way blocks it, an enemy on the last square can be captured, and a friend can never be. The two move identically.</dd></div>
+        <div class="note"><dt>No castling</dt><dd>The king here is an attacking piece, not one to tuck away: he slides like the queen, and taking him does not end the game. So castling does not exist. Moving the king two squares toward a rook (e1 to g1, say) is an ordinary king move, and <b>the rook stays where it is</b> instead of hopping across as it does in Tyranny and standard chess.</dd></div>
         <div class="note"><dt>Everything else</dt><dd>Moves as in chess: pawns double-step, capture en passant and promote. There is <b>no check, no checkmate and no castling</b>, and no self-capture. Any move is legal even if it leaves your king where it can be taken.</dd></div>
         <div class="note"><dt>A king falls</dt><dd>Capturing a king is an ordinary capture and does not end the game. If its queen is still alive she takes command <b>without changing</b>. With several queens none of them changes: once a queen, always a queen.</dd></div>
         <div class="note"><dt>Succession</dt><dd>When a capture leaves a side with pieces but <b>no king and no queen</b>, its closest bishop becomes a king. If it has no bishop, the closest knight; then rook; then pawn. Closest means the shortest straight-line distance to the square where the capture happened; a tie goes to the lower file, then the lower rank. A queen captured while the king lives changes nothing.</dd></div>

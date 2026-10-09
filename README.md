@@ -77,6 +77,10 @@ self-capture toggle, the Tyranny demos and puzzle mode are locked while it is on
 - **King and queen** both slide **up to four squares** in any of the eight directions.
   Pieces in the way block them, an enemy on the last square can be captured, a friend never
   can. They move identically.
+- **No castling.** The king here is an attacking piece, not one to tuck away: he slides
+  like the queen, and taking him does not end the game. Moving the king two squares toward
+  a rook (e1 to g1, say) is an ordinary king move, and **the rook stays where it is**
+  instead of hopping across as it does in Tyranny and standard chess.
 - Every other piece moves as in chess, including pawn double steps, en passant and
   promotion. **No self-capture. No check, no checkmate, no castling.** Any move is legal even
   if it leaves your king where it can be taken.
@@ -656,7 +660,7 @@ suites, plus the puzzle validator, run under Node:
 
 ```
 node tests/run-all.js     858 checks, ten files    27 / 8 / 24 / 13 / 396 / 239 / 54 / 13 / 58 / 26
-node tests/browser.js     297 checks in headless Chrome, against the real DOM
+node tests/browser.js     317 checks in headless Chrome, against the real DOM
 ```
 
 Both numbers were printed by those two commands on **2026-10-09**, and the in-page 48 was

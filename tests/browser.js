@@ -1338,6 +1338,62 @@ async function main(){
     chk('AC11  two clicks sacrifice the king, and the rook is crowned in its place',
       await ev('var b = window.hist[window.hist.length-1].b; return String(b[' + SQ('a1') + ']) + "/" + b[' + SQ('b1') + ']'), 'null/wk');
 
+    /* ---------------- castling, by real clicks, in each rule set ---------------- */
+    /*
+     * A tester reported that in Coriantumr the king "wouldn't castle". That is the rule, not a fault: the variant has no
+     * castling, so e1 to g1 is an ordinary king slide and the rook stays on h1. Until now only the engine was tested
+     * for castling; nothing clicked it. These checks click the king and then the destination, as a player does, and
+     * read the live board, so the same position castles in Tyranny and standard chess and does not in Coriantumr.
+     */
+    head('R6 castling by real clicks in Tyranny, standard chess and Coriantumr, and the explanation on the page');
+    const CASTLE_FEN = 'r3k2r/pppppppp/8/8/8/8/PPPPPPPP/R3K2R w KQkq - 0 1';
+    const rankOne = 'var b = window.hist[window.hist.length-1].b, r = []; for(var i = 56; i < 64; i++) r.push(b[i] || "--"); return r.join(" ");';
+    const castleMarks = 'return window.targets.filter(function(m){ return m.castle; }).map(function(m){ return m.castle; }).sort().join();';
+    const lastSan = 'return window.played.length ? window.played[window.played.length - 1].san : "-";';
+    // Select the king on e1, report which castles the page offers, click the destination, report what happened.
+    async function kingTo(dest){
+      await ev(setPos(CASTLE_FEN));
+      await ev(pick(SQ('e1')));
+      const offered = await ev(castleMarks);
+      await ev(pick(SQ(dest)));
+      return { offered, rank: await ev(rankOne), san: await ev(lastSan) };
+    }
+    await load();
+    await ev(clickBtn('[data-mode="hh"]'));
+    chk('R6  Tyranny: the page is on its default rules (no variant, self-capture on)',
+      await ev('return String(window.variant) + "/" + window.selfCap'), 'null/true');
+    let cs = await kingTo('g1');
+    chk('R6  Tyranny: selecting the king offers both castles', cs.offered, 'K,Q');
+    chk('R6  Tyranny: king e1 then g1 castles, the rook hops to f1', cs.rank, 'wr -- -- -- -- wr wk --');
+    chk('R6  Tyranny: and the move is written O-O', cs.san, 'O-O');
+    cs = await kingTo('c1');
+    chk('R6  Tyranny: king e1 then c1 castles, the rook hops to d1', cs.rank, '-- -- wk wr -- -- -- wr');
+    chk('R6  Tyranny: and the move is written O-O-O', cs.san, 'O-O-O');
+    await ev(clickBtn('#ruleBtn'));
+    chk('R6  standard chess: self-capture is off, still no variant',
+      await ev('return String(window.variant) + "/" + window.selfCap'), 'null/false');
+    cs = await kingTo('g1');
+    chk('R6  standard: selecting the king offers both castles', cs.offered, 'K,Q');
+    chk('R6  standard: king e1 then g1 castles, the rook hops to f1', cs.rank, 'wr -- -- -- -- wr wk --');
+    chk('R6  standard: and the move is written O-O', cs.san, 'O-O');
+    cs = await kingTo('c1');
+    chk('R6  standard: king e1 then c1 castles, the rook hops to d1', cs.rank, '-- -- wk wr -- -- -- wr');
+    chk('R6  standard: and the move is written O-O-O', cs.san, 'O-O-O');
+    await ev(clickBtn('[data-rules="c"]'));
+    chk('R6  Coriantumr: the page is on the variant rules', await ev('return window.variant'), 'c');
+    cs = await kingTo('g1');
+    chk('R6  Coriantumr: selecting the king offers no castle', cs.offered, '');
+    chk('R6  Coriantumr: king e1 then g1 is only a king slide, the rook stays on h1', cs.rank, 'wr -- -- -- -- -- wk wr');
+    chk('R6  Coriantumr: and the move is written Kg1', cs.san, 'Kg1');
+    cs = await kingTo('c1');
+    chk('R6  Coriantumr: king e1 then c1 is only a king slide, the rook stays on a1', cs.rank, 'wr -- wk -- -- -- -- wr');
+    chk('R6  Coriantumr: and the move is written Kc1', cs.san, 'Kc1');
+    chk('R6  Coriantumr: the rules panel says there is no castling and the rook stays where it is',
+      await ev('var t = document.getElementById("belowC").textContent; return /No castling/.test(t) && /the rook stays where it is/.test(t)'), true);
+    chk('R6  Coriantumr: the line above the board says so too',
+      await ev('return /no castling/.test(document.getElementById("ruleLineC").textContent)'), true);
+    await ev(clickBtn('[data-rules="t"]'));
+
     /* ---------------- the in-page suite, actually run ---------------- */
     /*
      * M1-T1-AC5 pins the in-page suite at "48 passed, 0 failed". Reading the
